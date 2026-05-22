@@ -50,7 +50,7 @@ h1, h2, h3, h4,
 .hero-photo img {
   width: 100%;
   height: auto;
-  aspect-ratio: 2 / 3;          /* zoom in by cropping the source sides */
+  aspect-ratio: 5 / 8;          /* zoom in by cropping the source sides */
   object-fit: cover;
   object-position: center 30%;  /* slight upward bias to keep the face well-framed */
   border-radius: 18px;
@@ -80,9 +80,9 @@ h1, h2, h3, h4,
 /* About page: photo floats right, text wraps around it */
 .about-photo {
   float: right;
-  width: 38%;
-  max-width: 300px;
-  aspect-ratio: 2 / 3;          /* matches hero crop for visual consistency */
+  width: 45%;
+  max-width: 360px;
+  aspect-ratio: 3 / 5;          /* tighter crop than the homepage to match the subject's visual proportion */
   object-fit: cover;
   object-position: center 30%;
   border-radius: 14px;
@@ -141,6 +141,108 @@ h1, h2, h3, h4,
 .terms-tags a {
   background: var(--accent-soft);
   border-radius: 999px;
+}
+
+/* Notes: search input + "coming soon" section */
+.notes-search {
+  position: relative;
+  margin: 1rem 0 1.6rem;
+}
+.notes-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary);
+  pointer-events: none;
+  display: inline-flex;
+}
+.notes-search input {
+  width: 100%;
+  padding: .75rem 1rem .75rem 2.6rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--primary);
+  background: var(--theme);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color .2s ease, box-shadow .2s ease;
+  box-sizing: border-box;
+}
+.notes-search input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.notes-search input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.notes-empty {
+  text-align: center;
+  color: var(--secondary);
+  padding: 1.4rem;
+  font-style: italic;
+}
+
+.notes-coming-soon {
+  margin-top: 3rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--border);
+}
+.notes-coming-soon h2 {
+  font-size: 1.4rem;
+  margin: 0 0 .3rem;
+}
+.coming-soon-intro {
+  color: var(--secondary);
+  margin: 0 0 1.2rem;
+}
+.coming-soon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+.coming-soon-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: .6rem 1rem;
+  padding: 1rem 1.2rem;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  background: var(--accent-soft);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.coming-soon-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+}
+.coming-soon-status {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: .25rem .65rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  white-space: nowrap;
+}
+.coming-soon-title {
+  font-weight: 600;
+  color: var(--primary);
+  line-height: 1.35;
+}
+.coming-soon-teaser {
+  grid-column: 1 / -1;
+  color: var(--secondary);
+  font-size: .95rem;
+  margin: 0;
+  line-height: 1.5;
 }
 
 /* Gentle page-load animation (respects reduced-motion) */

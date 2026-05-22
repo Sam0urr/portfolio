@@ -1,0 +1,97 @@
+{{- define "main" }}
+
+<header class="page-header">
+  {{- partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{- if .Description }}
+  <div class="post-description">{{ .Description | markdownify }}</div>
+  {{- end }}
+</header>
+
+{{- if .Content }}
+<div class="post-content md-content">
+  {{ .Content }}
+</div>
+{{- end }}
+
+<div class="notes-search">
+  <span class="notes-search-icon" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7"></circle>
+      <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
+    </svg>
+  </span>
+  <input type="search" id="notes-search-input"
+         placeholder="Search notes…"
+         aria-label="Search notes"
+         autocomplete="off">
+</div>
+
+<div id="notes-list">
+{{- range .RegularPages }}
+<article class="post-entry" data-search="{{ printf "%s %s" .Title (delimit .Params.tags " ") | lower }}">
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">{{ .Title }}</h2>
+  </header>
+  {{- if (ne (.Param "hideSummary") true) }}
+  <div class="entry-content">
+    <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+  </div>
+  {{- end }}
+  {{- if not (.Param "hideMeta") }}
+  <footer class="entry-footer">
+    {{- partial "post_meta.html" . -}}
+  </footer>
+  {{- end }}
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+</div>
+
+<p class="notes-empty" hidden>No notes match that search.</p>
+
+<section class="notes-coming-soon" aria-label="Coming soon">
+  <h2>Coming soon</h2>
+  <p class="coming-soon-intro">Drafts and topics I'm working on next.</p>
+  <ul class="coming-soon-list">
+    <li>
+      <span class="coming-soon-status">Drafting</span>
+      <span class="coming-soon-title">How the AI Act's general-purpose AI rules play out in practice</span>
+      <p class="coming-soon-teaser">Mapping GPAI obligations onto how foundation-model providers actually operate.</p>
+    </li>
+    <li>
+      <span class="coming-soon-status">Researching</span>
+      <span class="coming-soon-title">CSRD's first reporting cycle: what the data is showing</span>
+      <p class="coming-soon-teaser">Reading the first wave of CSRD-aligned reports for signal vs. signalling.</p>
+    </li>
+    <li>
+      <span class="coming-soon-status">Planned</span>
+      <span class="coming-soon-title">Beyond the EU: where digital regulation is converging globally</span>
+      <p class="coming-soon-teaser">On Brussels-style frameworks finding their way into other jurisdictions.</p>
+    </li>
+  </ul>
+</section>
+
+<script>
+(function(){
+  var input = document.getElementById('notes-search-input');
+  var list  = document.getElementById('notes-list');
+  var empty = document.querySelector('.notes-empty');
+  if (!input || !list) return;
+  var entries = Array.prototype.slice.call(list.querySelectorAll('.post-entry'));
+  function filter(){
+    var q = input.value.trim().toLowerCase();
+    var visible = 0;
+    entries.forEach(function(el){
+      var hay = el.getAttribute('data-search') || '';
+      var match = !q || hay.indexOf(q) !== -1;
+      el.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    if (empty) empty.hidden = (visible !== 0);
+  }
+  input.addEventListener('input', filter);
+})();
+</script>
+
+{{- end }}{{- /* end main */ -}}
