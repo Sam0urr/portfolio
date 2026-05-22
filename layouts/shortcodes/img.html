@@ -1,0 +1,8 @@
+{{- $src := .Get 0 -}}
+{{- $alt := .Get 1 | default "" -}}
+{{- $class := .Get 2 | default "" -}}
+{{- if $class -}}
+<img src="{{ $src | relURL }}" alt="{{ $alt }}" class="{{ $class }}">
+{{- else -}}
+<img src="{{ $src | relURL }}" alt="{{ $alt }}" style="max-width:260px;width:100%;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.12);margin:.2rem 0 1.4rem;">
+{{- end -}}

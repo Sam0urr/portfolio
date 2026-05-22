@@ -1,0 +1,83 @@
+baseURL = "https://your-username.github.io/portfolio/"   # update after you know your URL
+title = "Sam Lamrabte"
+theme = "PaperMod"
+
+enableRobotsTXT = true
+enableEmoji = true
+pagination.pagerSize = 8
+
+[markup.goldmark.renderer]
+  unsafe = true          # allow the welcome photo / raw HTML in content
+
+[params]
+  env = "production"
+  description = "Sam Lamrabte — political economist and analyst working on EU digital & sustainability regulation, AI governance, and political economy."
+  author = "Sam Lamrabte"
+  defaultTheme = "auto"          # follows the visitor's system; toggle below lets them switch
+  disableThemeToggle = false     # shows the sun/moon day–night switch
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowBreadCrumbs = true
+  ShowPostNavLinks = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  TocOpen = false
+  mainSections = ["notes"]       # only Notes appear in the homepage list
+
+  [params.homeInfoParams]
+    Title = "Welcome 👋"
+    Content = """
+<div class="home-hero">
+<div class="hero-text">
+
+My name is Sam Lamrabte — I'm a young political economist and analyst interested in the macroeconomy, geopolitics, financial markets, and the regulation shaping all three.
+
+This site is an introduction to who I am, and a record of what I'm reading, building, and working on. I tend to spend my time reading on a topic, organising what I've read into notes, or playing with ideas and models I'm trying to build — so a slightly more formal way of documenting that felt useful (for my own retention as much as anyone else's).
+
+My [CV](cv/) has the detail. The short version: studying between Amsterdam and New York and working across policy, research, and the private sector, I kept circling the same question — how complex regulation and political-economic forces actually shape the way institutions behave. That's the thread I'm building a career around, at the intersection of governance, technology, and markets.
+
+Thanks for visiting — if anything here strikes a chord, please [reach out](mailto:sabers.maps_2s@icloud.com).
+
+</div>
+<div class="hero-photo">
+<img src="profile.jpg" alt="Sam Lamrabte">
+</div>
+</div>
+"""
+
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/sam-lamrabte-571690122/"
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:sabers.maps_2s@icloud.com"
+
+  [params.assets]
+    favicon = "profile.jpg"
+    disableHLJS = false
+
+[menu]
+  [[menu.main]]
+    name = "About"
+    pageRef = "/about"
+    weight = 10
+  [[menu.main]]
+    name = "Projects"
+    pageRef = "/projects"
+    weight = 20
+  [[menu.main]]
+    name = "Notes"
+    pageRef = "/notes"
+    weight = 30
+  [[menu.main]]
+    name = "References"
+    pageRef = "/references"
+    weight = 40
+  [[menu.main]]
+    name = "CV"
+    pageRef = "/cv"
+    weight = 50
+  [[menu.main]]
+    name = "Contact"
+    pageRef = "/contact"
+    weight = 60
