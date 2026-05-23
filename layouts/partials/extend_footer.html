@@ -1,11 +1,10 @@
 {{/* Custom site enhancements — loaded on every page by PaperMod */}}
 <script>
+/* ─── 1. Scroll-triggered reveals ─────────────────────────────── */
 (function(){
-  // Respect reduced-motion preference and bail on older browsers
   if (!('IntersectionObserver' in window)) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // Elements worth a gentle reveal on entry
   var selectors = [
     '.first-entry',
     '.post-entry',
@@ -17,8 +16,6 @@
   var els = document.querySelectorAll(selectors);
   if (!els.length) return;
 
-  // Tag them for the CSS hide-then-reveal transition.
-  // Stagger sibling cards so a row of notes cascades in.
   var siblingCount = 0;
   var lastParent = null;
   els.forEach(function(el){
@@ -43,5 +40,53 @@
   }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
 
   els.forEach(function(el){ obs.observe(el); });
+})();
+
+/* ─── 2. Sticky nav: add .is-scrolled past a threshold ─────────── */
+(function(){
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+
+  var update = function(){
+    if (window.scrollY > 24) {
+      nav.classList.add('is-scrolled');
+    } else {
+      nav.classList.remove('is-scrolled');
+    }
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+/* ─── 3. Mark single note pages with a body class ───────────────
+   We use this class to gate the article-specific styling (drop caps,
+   refined byline, reading progress) so it doesn't leak onto About,
+   CV, Contact, or the Notes listing itself. */
+(function(){
+  if (!document.querySelector('.post-single')) return;
+  var path = window.location.pathname;
+  // Match anything below /notes/ that isn't the listing itself.
+  if (/\/notes\/[^/]+\/?$/.test(path)) {
+    document.body.classList.add('is-note-page');
+  }
+})();
+
+/* ─── 4. Reading-progress bar (only on note pages) ─────────────── */
+(function(){
+  if (!document.body.classList.contains('is-note-page')) return;
+
+  var bar = document.createElement('div');
+  bar.className = 'reading-progress';
+  document.body.appendChild(bar);
+
+  var update = function(){
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+    bar.style.width = (progress * 100) + '%';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
+  update();
 })();
 </script>

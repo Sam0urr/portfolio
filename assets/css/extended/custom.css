@@ -354,3 +354,110 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
   [data-reveal][data-reveal-delay="3"] { transition-delay: .18s; }
   [data-reveal][data-reveal-delay="4"] { transition-delay: .24s; }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Tier 2 — editorial article treatment + sticky nav + wordmark
+   ───────────────────────────────────────────────────────────────── */
+
+/* Sticky navigation with backdrop blur on scroll.
+   Default state: normal at the top. Scrolled state: frosted-glass
+   pill with a soft hairline border underneath. Apple/Stripe style. */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--theme);
+  transition: background-color .25s ease,
+              backdrop-filter .25s ease,
+              -webkit-backdrop-filter .25s ease,
+              box-shadow .25s ease,
+              padding .25s ease;
+}
+.nav.is-scrolled {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: saturate(180%) blur(18px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+.dark .nav.is-scrolled {
+  background: rgba(21, 20, 15, 0.78);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Wordmark refinement — give the brand name an accent terminator
+   so it reads more like a publication masthead than a label. */
+.logo a {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: 1.15rem;
+}
+.logo a::after {
+  content: ".";
+  color: var(--accent);
+  margin-left: 0.04em;
+  font-weight: 700;
+}
+
+/* Reading-progress bar (only on single note pages).
+   A thin accent line at the very top of the viewport that fills as
+   you read. JS controls width; CSS controls everything else. */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 200;
+  pointer-events: none;
+  transition: width .12s linear;
+  will-change: width;
+}
+
+/* Editorial article treatment — applies only on individual note pages,
+   gated by the `is-note-page` body class added by the footer JS so we
+   don't accidentally stylise the About / CV / Contact pages. */
+
+/* Refined byline: small-caps date/reading-time strip under the title */
+.is-note-page .post-meta {
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--secondary);
+  margin-top: 0.6rem;
+}
+.is-note-page .post-title {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.024em;
+}
+
+/* Drop cap on the opening paragraph — a single Newsreader display
+   letter in the accent colour. Float-left so the paragraph wraps. */
+.is-note-page .post-content > p:first-of-type::first-letter {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 4em;
+  font-weight: 600;
+  line-height: 0.85;
+  float: left;
+  margin: 0.12em 0.1em 0 0;
+  padding-right: 0.04em;
+  color: var(--accent);
+}
+
+/* Slightly more confident pull-quote / blockquote on notes
+   — bigger, italic, with a deeper accent rule. */
+.is-note-page .post-content blockquote {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  padding: 0.4rem 0 0.4rem 1.4rem;
+  margin: 2rem 0 2rem 0;
+  color: var(--primary);
+  max-width: 65ch;
+}
+.is-note-page .post-content blockquote p { margin: 0; }
