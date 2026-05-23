@@ -40,7 +40,7 @@ Thanks for visiting. If anything here strikes a chord, please [reach out](mailto
 
 </div>
 <div class="hero-photo">
-<div class="hero-monogram" aria-label="Sam Lamrabte">SL</div>
+<img src="profile.jpg" alt="Sam Lamrabte">
 </div>
 </div>
 
@@ -55,7 +55,10 @@ Thanks for visiting. If anything here strikes a chord, please [reach out](mailto
     url = "mailto:sabers.maps_2s@icloud.com"
 
   [params.assets]
-    favicon = "profile.jpg"
+    favicon = "favicon.svg"
+    favicon32x32 = "favicon.svg"
+    favicon16x16 = "favicon.svg"
+    apple_touch_icon = "favicon.svg"
     disableHLJS = false
 
 [menu]

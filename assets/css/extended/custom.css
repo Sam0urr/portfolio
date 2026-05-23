@@ -508,36 +508,6 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
    sticky nav: drop caps, refined byline, and reading-progress bar.
    ───────────────────────────────────────────────────────────────── */
 
-/* Hero monogram — large serif "SL" sitting where the photo used to be.
-   Uses the same .hero-photo container so the home-hero grid stays
-   intact and the responsive stacking rules continue to work. */
-.hero-monogram {
-  width: 100%;
-  aspect-ratio: 5 / 8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Newsreader", Georgia, serif;
-  font-size: clamp(5.5rem, 11vw, 9rem);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: transparent;
-  transition: color .25s ease, border-color .25s ease;
-}
-@media (max-width: 768px) {
-  .hero-monogram {
-    aspect-ratio: auto;
-    height: 180px;
-    max-width: 260px;
-    margin: 0 auto;
-    font-size: 5rem;
-  }
-}
-
 /* Wordmark refinement — small accent dot after the brand text in the
    nav, so the logo reads more like a publication masthead. */
 .logo a {
