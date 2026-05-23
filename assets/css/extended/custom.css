@@ -501,3 +501,109 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
     font-size: 13px;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Tier 3.5 — SL monogram (replaces the homepage photo), wordmark
+   accent, and the editorial article treatment from Tier 2 minus the
+   sticky nav: drop caps, refined byline, and reading-progress bar.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Hero monogram — large serif "SL" sitting where the photo used to be.
+   Uses the same .hero-photo container so the home-hero grid stays
+   intact and the responsive stacking rules continue to work. */
+.hero-monogram {
+  width: 100%;
+  aspect-ratio: 5 / 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(5.5rem, 11vw, 9rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: transparent;
+  transition: color .25s ease, border-color .25s ease;
+}
+@media (max-width: 768px) {
+  .hero-monogram {
+    aspect-ratio: auto;
+    height: 180px;
+    max-width: 260px;
+    margin: 0 auto;
+    font-size: 5rem;
+  }
+}
+
+/* Wordmark refinement — small accent dot after the brand text in the
+   nav, so the logo reads more like a publication masthead. */
+.logo a {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: 1.15rem;
+}
+.logo a::after {
+  content: ".";
+  color: var(--accent);
+  margin-left: 0.04em;
+  font-weight: 700;
+}
+
+/* Reading-progress bar (only on single note pages, gated by JS).
+   A thin accent line at the very top of the viewport that fills as
+   you read. */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 200;
+  pointer-events: none;
+  transition: width .12s linear;
+  will-change: width;
+}
+
+/* Editorial article treatment for single note pages, gated by the
+   `is-note-page` body class added by the footer JS so it doesn't
+   leak onto About / CV / Contact / the Notes listing. */
+.is-note-page .post-meta {
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--secondary);
+  margin-top: 0.6rem;
+}
+.is-note-page .post-title {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.024em;
+}
+.is-note-page .post-content > p:first-of-type::first-letter {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 4em;
+  font-weight: 600;
+  line-height: 0.85;
+  float: left;
+  margin: 0.12em 0.1em 0 0;
+  padding-right: 0.04em;
+  color: var(--accent);
+}
+.is-note-page .post-content blockquote {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  padding: 0.4rem 0 0.4rem 1.4rem;
+  margin: 2rem 0 2rem 0;
+  color: var(--primary);
+  max-width: 65ch;
+}
+.is-note-page .post-content blockquote p { margin: 0; }

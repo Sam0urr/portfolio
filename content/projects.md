@@ -18,8 +18,8 @@ A few things I'm building alongside study and work.
 
 <article class="project-case">
   <span class="project-status project-status--live">Live</span>
-  <h2 class="project-title">Global Affairs Unpacked — Egmont Institute</h2>
-  <p class="project-desc">A project I helped launch at the EGMONT Royal Institute for International Relations: <em>Global Affairs Unpacked</em>, the institute's podcast breaking down the forces shaping international relations — grand strategy, emerging technologies, and global power dynamics — across its Africa, Europe in the World, and European Affairs programmes.</p>
+  <h2 class="project-title">Global Affairs Unpacked: Egmont Institute</h2>
+  <p class="project-desc">A project I helped launch at the EGMONT Royal Institute for International Relations: <em>Global Affairs Unpacked</em>, the institute's podcast breaking down the forces shaping international relations (grand strategy, emerging technologies, and global power dynamics) across its Africa, Europe in the World, and European Affairs programmes.</p>
   <dl class="project-meta">
     <div><dt>Role</dt><dd>Launch contributor</dd></div>
     <div><dt>Format</dt><dd>Audio · long-form interviews</dd></div>
@@ -30,7 +30,7 @@ A few things I'm building alongside study and work.
 <article class="project-case">
   <span class="project-status project-status--early">In development</span>
   <h2 class="project-title">In Actuality</h2>
-  <p class="project-desc">A podcast I'm currently developing, where I talk about innovation and the ideas shaping it. Still in its early days — more to come soon.</p>
+  <p class="project-desc">A podcast I'm currently developing, where I talk about innovation and the ideas shaping it. Still in its early days. More to come soon.</p>
   <dl class="project-meta">
     <div><dt>Role</dt><dd>Host &amp; producer</dd></div>
     <div><dt>Status</dt><dd>Pre-launch</dd></div>
