@@ -1,0 +1,47 @@
+{{/* Custom site enhancements — loaded on every page by PaperMod */}}
+<script>
+(function(){
+  // Respect reduced-motion preference and bail on older browsers
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Elements worth a gentle reveal on entry
+  var selectors = [
+    '.first-entry',
+    '.post-entry',
+    '.notes-coming-soon',
+    '.post-content > h2',
+    '.post-content > h3'
+  ].join(', ');
+
+  var els = document.querySelectorAll(selectors);
+  if (!els.length) return;
+
+  // Tag them for the CSS hide-then-reveal transition.
+  // Stagger sibling cards so a row of notes cascades in.
+  var siblingCount = 0;
+  var lastParent = null;
+  els.forEach(function(el){
+    el.setAttribute('data-reveal', '');
+    var parent = el.parentNode;
+    if (parent === lastParent && el.classList.contains('post-entry')) {
+      siblingCount = Math.min(siblingCount + 1, 4);
+      el.setAttribute('data-reveal-delay', String(siblingCount));
+    } else {
+      siblingCount = 0;
+    }
+    lastParent = parent;
+  });
+
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-revealed');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
+
+  els.forEach(function(el){ obs.observe(el); });
+})();
+</script>
