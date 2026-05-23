@@ -4,7 +4,7 @@ ShowToc: false
 ShowReadingTime: false
 ---
 
-I'm always open to conversations — about opportunities, collaborations, research, or just ideas.
+I'm always open to conversations about opportunities, collaborations, research, or just ideas.
 
 <a class="cv-download" href="mailto:sabers.maps_2s@icloud.com">Email me</a>
 

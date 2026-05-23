@@ -11,7 +11,7 @@ pagination.pagerSize = 8
 
 [params]
   env = "production"
-  description = "Sam Lamrabte — political economist and analyst working on EU digital & sustainability regulation, AI governance, and political economy."
+  description = "Sam Lamrabte: political economist and analyst working on EU digital & sustainability regulation, AI governance, and political economy."
   author = "Sam Lamrabte"
   defaultTheme = "auto"          # follows the visitor's system; toggle below lets them switch
   disableThemeToggle = false     # shows the sun/moon day–night switch
@@ -30,19 +30,21 @@ pagination.pagerSize = 8
 <div class="home-hero">
 <div class="hero-text">
 
-My name is Sam Lamrabte — I'm a young political economist and analyst interested in the macroeconomy, geopolitics, financial markets, and the regulation shaping all three.
+My name is Sam Lamrabte. I'm a young political economist and analyst interested in the macroeconomy, geopolitics, financial markets, and the regulation shaping all three.
 
-This site is an introduction to who I am, and a record of what I'm reading, building, and working on. I tend to spend my time reading on a topic, organising what I've read into notes, or playing with ideas and models I'm trying to build — so a slightly more formal way of documenting that felt useful (for my own retention as much as anyone else's).
+This site is an introduction to who I am, and a record of what I'm reading, building, and working on. I tend to spend my time reading on a topic, organising what I've read into notes, or playing with ideas and models I'm trying to build, so a slightly more formal way of documenting that felt useful (for my own retention as much as anyone else's).
 
-My [CV](cv/) has the detail. The short version: studying between Amsterdam and New York and working across policy, research, and the private sector, I kept circling the same question — how complex regulation and political-economic forces actually shape the way institutions behave. That's the thread I'm building a career around, at the intersection of governance, technology, and markets.
+My [CV](cv/) has the detail. The short version: studying between Amsterdam and New York and working across policy, research, and the private sector, I kept circling the same question of how complex regulation and political-economic forces actually shape the way institutions behave. That's the thread I'm building a career around, at the intersection of governance, technology, and markets.
 
-Thanks for visiting — if anything here strikes a chord, please [reach out](mailto:sabers.maps_2s@icloud.com).
+Thanks for visiting. If anything here strikes a chord, please [reach out](mailto:sabers.maps_2s@icloud.com).
 
 </div>
 <div class="hero-photo">
 <img src="profile.jpg" alt="Sam Lamrabte">
 </div>
 </div>
+
+<h2 class="home-section-title">Recent writing</h2>
 """
 
   [[params.socialIcons]]
@@ -53,7 +55,10 @@ Thanks for visiting — if anything here strikes a chord, please [reach out](mai
     url = "mailto:sabers.maps_2s@icloud.com"
 
   [params.assets]
-    favicon = "profile.jpg"
+    favicon = "favicon.svg"
+    favicon32x32 = "favicon.svg"
+    favicon16x16 = "favicon.svg"
+    apple_touch_icon = "favicon.svg"
     disableHLJS = false
 
 [menu]

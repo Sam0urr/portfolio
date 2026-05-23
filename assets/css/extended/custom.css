@@ -354,3 +354,226 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
   [data-reveal][data-reveal-delay="3"] { transition-delay: .18s; }
   [data-reveal][data-reveal-delay="4"] { transition-delay: .24s; }
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Tier 3 — structural polish: case-study Projects, Recent-writing
+   homepage divider, and a subtle geographic-arc SVG on About.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Homepage section divider: small-caps magazine-style heading
+   that separates the hero block from the post listing below. */
+.home-section-title {
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--secondary);
+  margin: 3.6rem 0 1.4rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--border);
+  line-height: 1;
+}
+
+/* Project case studies — each project rendered as a rich card.
+   Editorial structure: status pill, serif title, body, meta strip,
+   and an optional outbound link. */
+.project-case {
+  position: relative;
+  margin: 0 0 2rem;
+  padding: 1.7rem 1.8rem 1.6rem;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 16px;
+  background: transparent;
+  transition: transform .25s cubic-bezier(.2,.7,.2,1),
+              box-shadow .3s ease,
+              border-color .25s ease,
+              background-color .25s ease;
+}
+.project-case:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .08);
+}
+.dark .project-case:hover {
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .42);
+  background: var(--entry);
+}
+
+.project-status {
+  display: inline-block;
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: .3rem .7rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+}
+.project-status--live      { /* default accent works */ }
+.project-status--ongoing   { /* default accent works */ }
+.project-status--early {
+  background: transparent;
+  border: 1px dashed var(--accent);
+}
+
+.project-title {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(1.4rem, 2.4vw, 1.65rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  margin: 0 0 .8rem;
+}
+.project-desc {
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0 0 1.2rem;
+  color: var(--content);
+}
+
+/* Compact role / scope / format meta-strip — small caps, two columns */
+.project-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .8rem 2rem;
+  margin: 0 0 1.2rem;
+  padding: 1rem 0 0;
+  border-top: 1px dashed var(--border);
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+}
+.project-meta dt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 0.2rem;
+}
+.project-meta dd {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--primary);
+}
+
+/* Outbound link — pill-style, accent-bordered */
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  padding: .55rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  transition: background .25s ease, color .25s ease, transform .2s ease;
+}
+.project-link:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.dark .project-link:hover { color: var(--theme); }
+
+/* Geographic arc on About — a thin dotted line connecting the four
+   cities I've studied/worked in. Set as currentColor so it picks up
+   the accent variable in both light and dark modes. */
+.journey-arc {
+  display: block;
+  margin: 3.5rem auto 1.4rem;
+  max-width: 700px;
+  color: var(--accent);
+  padding: 0;
+}
+.journey-arc svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+@media (max-width: 520px) {
+  .journey-arc text {
+    font-size: 13px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Tier 3.5 — SL monogram (replaces the homepage photo), wordmark
+   accent, and the editorial article treatment from Tier 2 minus the
+   sticky nav: drop caps, refined byline, and reading-progress bar.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Wordmark refinement — small accent dot after the brand text in the
+   nav, so the logo reads more like a publication masthead. */
+.logo a {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: 1.15rem;
+}
+.logo a::after {
+  content: ".";
+  color: var(--accent);
+  margin-left: 0.04em;
+  font-weight: 700;
+}
+
+/* Reading-progress bar (only on single note pages, gated by JS).
+   A thin accent line at the very top of the viewport that fills as
+   you read. */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 200;
+  pointer-events: none;
+  transition: width .12s linear;
+  will-change: width;
+}
+
+/* Editorial article treatment for single note pages, gated by the
+   `is-note-page` body class added by the footer JS so it doesn't
+   leak onto About / CV / Contact / the Notes listing. */
+.is-note-page .post-meta {
+  font-family: "IBM Plex Sans", -apple-system, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--secondary);
+  margin-top: 0.6rem;
+}
+.is-note-page .post-title {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.024em;
+}
+.is-note-page .post-content > p:first-of-type::first-letter {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 4em;
+  font-weight: 600;
+  line-height: 0.85;
+  float: left;
+  margin: 0.12em 0.1em 0 0;
+  padding-right: 0.04em;
+  color: var(--accent);
+}
+.is-note-page .post-content blockquote {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  padding: 0.4rem 0 0.4rem 1.4rem;
+  margin: 2rem 0 2rem 0;
+  color: var(--primary);
+  max-width: 65ch;
+}
+.is-note-page .post-content blockquote p { margin: 0; }

@@ -44,4 +44,34 @@
 
   els.forEach(function(el){ obs.observe(el); });
 })();
+
+/* ─── 2. Mark single note pages with a body class ───────────────
+   Used to gate the article-only styling (drop caps, refined byline,
+   reading progress) so it can't leak onto About / CV / Contact or
+   the Notes listing. Matches /notes/<slug>/ for any depth of baseURL. */
+(function(){
+  if (!document.querySelector('.post-single')) return;
+  if (/\/notes\/[^/]+\/?$/.test(window.location.pathname)) {
+    document.body.classList.add('is-note-page');
+  }
+})();
+
+/* ─── 3. Reading-progress bar (only on note pages) ─────────────── */
+(function(){
+  if (!document.body.classList.contains('is-note-page')) return;
+
+  var bar = document.createElement('div');
+  bar.className = 'reading-progress';
+  document.body.appendChild(bar);
+
+  var update = function(){
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+    bar.style.width = (progress * 100) + '%';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
+  update();
+})();
 </script>
