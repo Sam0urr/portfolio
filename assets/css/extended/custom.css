@@ -97,43 +97,29 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
   line-height: 1.7;
 }
 
-/* Editorial two-column hero: text left, photo right */
-.home-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 2.5rem;
-  align-items: start;
-  margin-top: .4rem;
-}
-.hero-text > *:first-child { margin-top: 0; }
-.hero-text > *:last-child  { margin-bottom: 0; }
-.hero-photo img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 5 / 8;          /* zoom in by cropping the source sides */
+/* Homepage: photo floats right; text wraps alongside the first paragraphs
+   and continues full-width below the image. */
+.home-photo {
+  float: right;
+  width: 38%;
+  max-width: 320px;
+  aspect-ratio: 5 / 8;
   object-fit: cover;
-  object-position: center 30%;  /* slight upward bias to keep the face well-framed */
+  object-position: center 30%;
   border-radius: 18px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, .18);
-  display: block;
+  margin: .3rem 0 1.4rem 2rem;
 }
-.dark .hero-photo img {
+.dark .home-photo {
   box-shadow: 0 12px 36px rgba(0, 0, 0, .55);
 }
-
-/* Stack on tablet/phone, photo first so it appears above the text */
-@media (max-width: 768px) {
-  .home-hero {
-    grid-template-columns: 1fr;
-    gap: 1.4rem;
-  }
-  .hero-photo {
-    order: -1;
-    text-align: center;
-  }
-  .hero-photo img {
+@media (max-width: 640px) {
+  .home-photo {
+    float: none;
+    display: block;
+    width: 100%;
     max-width: 260px;
-    margin: 0 auto;
+    margin: 0 auto 1.4rem;
   }
 }
 
