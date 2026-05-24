@@ -33,6 +33,18 @@ ShowReadingTime: false
 - **Operations Specialist** · Just Eat Takeaway, Amsterdam · Oct 2021–Apr 2023
   Managed departmental workflow and optimised daily operations through data tracking, performance analysis, and KPI reporting in a high-volume environment.
 
+## Awards & Activities
+
+**Grants & scholarships**
+- **UvA Talent Fonds & Graeve Francken Fonds** — €8,000 grant (2025)
+- **Merit Scholarship, Stichting Bekker-la Bastide-Fonds** — €2,500 (2025)
+
+**Volunteering**
+- **Community of Sant'Egidio — School of Peace** — integration and language support for migrant children; foodbank and fundraising (2015–2019)
+
+**Memberships**
+- Studievereniging Machiavelli (Political Science, UvA) · UvA Invest
+
 ## Languages
 
 Italian (native) · French (native) · English (C2) · German (C1, Goethe-certified) · Dutch (B2) · Spanish (B2) · Arabic (A2)
