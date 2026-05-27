@@ -131,6 +131,32 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
   }
 }
 
+/* Notes: side photo floats right, text wraps around it across the first
+   paragraphs and continues full-width below the image. Mirrors the
+   homepage/about float pattern. */
+.note-side-photo {
+  float: right;
+  width: 28%;
+  max-width: 200px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+  margin: .3rem 0 1.2rem 1.6rem;
+  background: #fff;          /* keeps white-bg cutouts looking intentional in dark mode */
+  padding: .4rem;
+}
+.dark .note-side-photo {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+}
+@media (max-width: 640px) {
+  .note-side-photo {
+    float: none;
+    display: block;
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto 1.2rem;
+  }
+}
+
 /* About page: photo floats right, text wraps around it */
 .about-photo {
   float: right;
