@@ -10,8 +10,6 @@ I'm an early-career analyst and political economist working at the intersection 
 
 I hold a double bachelor's from the University of Amsterdam (in Political Science and in Media & Information), complemented by a minor in Economic Analysis of Public Policy at the Bert W. Wasserman Department of Economics and Finance, Zicklin School of Business, Baruch College (City University of New York), and a master's in Political Economy back in Amsterdam. The mix is deliberate: it lets me look at governance through several lenses at once, public policy, AI and data governance, computational and qualitative research methods, and international regulatory systems.
 
-My areas of focus are EU digital and sustainability regulation: frameworks like the **AI Act**, the **Digital Services Act (DSA)**, **GDPR**, the **Corporate Sustainability Reporting Directive (CSRD)**, and the **Corporate Sustainability Due Diligence Directive (CSDDD)**, and how these regimes actually shape organisational behaviour, compliance strategy, and the broader politics of governance.
-
 A bit of the path that got me here:
 
 - At the **United Nations Global Compact** in New York, I worked with the Leadership & Policy team on corporate sustainability and responsible business conduct, contributing research toward high-level outputs including the 2025 CEO Study, and supporting stakeholder engagement during UN General Assembly High-Level Week.
