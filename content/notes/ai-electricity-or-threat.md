@@ -8,6 +8,8 @@ ShowReadingTime: true
 
 *Originally written as a creative commentary for the *Politics and Artificial Intelligence* course at the University of Amsterdam.*
 
+<img src="../edison-lightbulb.png" alt="An early Edison incandescent lightbulb with brass screw base." class="note-side-photo">
+
 When [Thomas Edison's](https://en.wikipedia.org/wiki/Thomas_Edison) first lightbulb flashed to life in his lab [in 1879](https://en.wikipedia.org/wiki/Incandescent_light_bulb#Edison_and_Swan), it marked the beginning of a new era in which human ingenuity triumphed over darkness. That flash of light hinted at a time when electricity would then permeate every part of our society and power it silently, much like air. We are currently experiencing another epochal transition, quite similar, this one signaled by the muted hum of data centers and the gentle light of computer screens: the age of *artificial intelligence as a service* (AIaaS).
 
 The rise of AI is like when electricity was first invented: a flow of innovation that is about to burst into an ocean and will eventually seep into every aspect of our lives. The goal of AI is to make AI more accessible to all people by integrating it into our daily lives in the same way that turning on a light switch illuminates our surroundings. However, AI's ripple effect across society contains the potential for both great benefit and serious peril, much as electricity's current may both brighten and burn. It is an extraordinary tool, and placed in the wrong hands it can cause extraordinary disasters.
