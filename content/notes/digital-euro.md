@@ -10,7 +10,10 @@ ShowReadingTime: true
 ShowToc: false
 ---
 
-<img src="../yap-rai-stone.jpg" alt="A large rai stone disc with a central hole, set on a stone base in the Yap forest." class="note-side-photo">
+<figure class="note-side-photo">
+  <img src="../yap-rai-stone.jpg" alt="A large rai stone disc with a central hole, set on a stone base in the Yap forest.">
+  <figcaption>Source: <a href="https://en.wikipedia.org/wiki/Rai_stones">Wikipedia, <em>Rai stones</em></a>.</figcaption>
+</figure>
 
 On the Pacific island of Yap, money was a stone. Not a coin or a note, but a limestone disc called *rai*, some as wide as a person is tall, far too heavy to lift. When a disc changed hands, nobody moved it. The islanders simply remembered, collectively, that ownership had passed. One famous stone, the story goes, sank to the bottom of the sea during a storm, and everyone agreed it still belonged to its owner and could still be spent. The money was never really the stone. It was the shared ledger in everyone's heads.
 
@@ -26,7 +29,10 @@ To prevent a permanent "digital bank run," the ECB has built in guardrails: hold
 
 **Why it matters.** Here is the paradox the guardrails expose. Make the digital euro too attractive, with high limits and interest, and it drains commercial banks, starves private lending, and centralises financial power in Frankfurt. Make it too restrictive, with low caps, no programmability and friction everywhere, and it becomes a ghost in the payments system, a solution to a problem citizens don't feel, ignored in favour of the card in their pocket that already works perfectly well. The ECB is trying to thread a needle between irrelevance and instability.
 
-<img src="../yap-rai-stones-row.jpg" alt="A row of rai stones of varying sizes lined up along a path on Yap." class="note-side-photo-left">
+<figure class="note-side-photo-left">
+  <img src="../yap-rai-stones-row.jpg" alt="A row of rai stones of varying sizes lined up along a path on Yap.">
+  <figcaption>Source: <a href="https://www.instagram.com/p/DMAVpqhtf_C/?img_index=1">@thisisancient on Instagram</a> — worth scrolling through the carousel.</figcaption>
+</figure>
 
 And this is where the Yap stones return. The deeper question isn't the cap size. It is who keeps the ledger, and what they can see written in it. A [recent OMFIF commentary](https://www.omfif.org/2026/05/the-digital-euro-approaches-but-the-ecb-has-gaps-to-fill/) put the citizen's objection bluntly: the ECB can answer every *"why not?"* (it won't hold your data, banks still intermediate, there's no spending-control "programmable money") and still have no convincing answer to *"why bother?"* The honest, awkward truth is that Europeans have so little payment privacy left to lose. Visa, Mastercard and PayPal already read and monetise the ledger; they have already cut people off. The digital euro doesn't obviously worsen that. What it changes is *whose* hands the ledger sits in: a relatively accountable public institution rather than a foreign private duopoly. Whether that is reassuring or alarming is, fittingly, a political question, not a technical one.
 
