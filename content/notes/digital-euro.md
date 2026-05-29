@@ -10,6 +10,8 @@ ShowReadingTime: true
 ShowToc: false
 ---
 
+<img src="../yap-rai-stone.jpg" alt="A large rai stone disc with a central hole, set on a stone base in the Yap forest." class="note-side-photo">
+
 On the Pacific island of Yap, money was a stone. Not a coin or a note, but a limestone disc called *rai*, some as wide as a person is tall, far too heavy to lift. When a disc changed hands, nobody moved it. The islanders simply remembered, collectively, that ownership had passed. One famous stone, the story goes, sank to the bottom of the sea during a storm, and everyone agreed it still belonged to its owner and could still be spent. The money was never really the stone. It was the shared ledger in everyone's heads.
 
 I think about Yap whenever someone insists the digital euro is a "technical" question. Money has always been a social and political technology before it is a material one: a collective agreement about who owes what to whom, and who gets to keep the books. The debate over a retail Central Bank Digital Currency (CBDC) is usually framed as monetary plumbing. The more interesting questions are political-economic: how you design a digital euro determines how far it pulls deposits away from commercial banks, who keeps the ledger, and who ultimately pays for the change.
@@ -23,6 +25,8 @@ I think about Yap whenever someone insists the digital euro is a "technical" que
 To prevent a permanent "digital bank run," the ECB has built in guardrails: holding limits floated in the region of [€3,000](https://cepr.org/voxeu/columns/digital-euro-after-investigation-phase-demystifying-fears-about-bank) per citizen, no interest paid on balances, and a *reverse waterfall* that automatically sweeps anything above the cap into a linked commercial account. The design is deliberately unattractive as a store of value: a wallet, not a savings vault.
 
 **Why it matters.** Here is the paradox the guardrails expose. Make the digital euro too attractive, with high limits and interest, and it drains commercial banks, starves private lending, and centralises financial power in Frankfurt. Make it too restrictive, with low caps, no programmability and friction everywhere, and it becomes a ghost in the payments system, a solution to a problem citizens don't feel, ignored in favour of the card in their pocket that already works perfectly well. The ECB is trying to thread a needle between irrelevance and instability.
+
+<img src="../yap-rai-stones-row.jpg" alt="A row of rai stones of varying sizes lined up along a path on Yap." class="note-side-photo-left">
 
 And this is where the Yap stones return. The deeper question isn't the cap size. It is who keeps the ledger, and what they can see written in it. A [recent OMFIF commentary](https://www.omfif.org/2026/05/the-digital-euro-approaches-but-the-ecb-has-gaps-to-fill/) put the citizen's objection bluntly: the ECB can answer every *"why not?"* (it won't hold your data, banks still intermediate, there's no spending-control "programmable money") and still have no convincing answer to *"why bother?"* The honest, awkward truth is that Europeans have so little payment privacy left to lose. Visa, Mastercard and PayPal already read and monetise the ledger; they have already cut people off. The digital euro doesn't obviously worsen that. What it changes is *whose* hands the ledger sits in: a relatively accountable public institution rather than a foreign private duopoly. Whether that is reassuring or alarming is, fittingly, a political question, not a technical one.
 

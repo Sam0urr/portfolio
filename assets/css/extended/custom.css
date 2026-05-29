@@ -133,22 +133,32 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
 
 /* Notes: side photo floats right, text wraps around it across the first
    paragraphs and continues full-width below the image. Mirrors the
-   homepage/about float pattern. */
-.note-side-photo {
-  float: right;
+   homepage/about float pattern. Use .note-side-photo-left for the
+   mirrored variant. */
+.note-side-photo,
+.note-side-photo-left {
   width: 28%;
-  max-width: 200px;
+  max-width: 220px;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
-  margin: .3rem 0 1.2rem 1.6rem;
   background: #fff;          /* keeps white-bg cutouts looking intentional in dark mode */
   padding: .4rem;
 }
-.dark .note-side-photo {
+.note-side-photo {
+  float: right;
+  margin: .3rem 0 1.2rem 1.6rem;
+}
+.note-side-photo-left {
+  float: left;
+  margin: .3rem 1.6rem 1.2rem 0;
+}
+.dark .note-side-photo,
+.dark .note-side-photo-left {
   box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
 }
 @media (max-width: 640px) {
-  .note-side-photo {
+  .note-side-photo,
+  .note-side-photo-left {
     float: none;
     display: block;
     width: 100%;
