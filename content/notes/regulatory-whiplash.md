@@ -1,7 +1,7 @@
 ---
 title: "The Cost of a Moving Deadline: Regulatory Whiplash as a Governance Problem"
-date: 2026-05-29
-lastmod: 2026-05-29
+date: 2026-05-14
+lastmod: 2026-05-14
 summary: "Two EU omnibus packages rewrote the AI and sustainability rulebooks in the space of months. The hidden cost isn't the rules themselves, it's what constant rule-changing does to the organisations trying to comply."
 tags: ["Political Economy", "Governance", "Regulation", "Compliance"]
 keywords: ["EU regulation", "AI Act", "CSRD", "CSDDD", "compliance", "governance", "Draghi report", "regulatory uncertainty"]
@@ -9,8 +9,6 @@ canonical: "https://sam0urr.github.io/portfolio/notes/regulatory-whiplash/"
 ShowReadingTime: true
 ShowToc: false
 ---
-
-*29 May 2026*
 
 Imagine you are the compliance lead at a mid-sized European manufacturer. Eighteen months ago your board, reading the headlines, told you to get the company ready for three things: the EU Deforestation Regulation, the new sustainability reporting rules, and the AI Act. You did what good compliance leads do. You hired two people. You bought a reporting tool. You commissioned a consultancy to map your value chain. You built a project plan with the deadlines circled in red.
 
