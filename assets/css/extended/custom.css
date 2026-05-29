@@ -137,8 +137,8 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
    mirrored variant. */
 .note-side-photo,
 .note-side-photo-left {
-  width: 28%;
-  max-width: 220px;
+  width: 36%;
+  max-width: 300px;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
   background: #fff;          /* keeps white-bg cutouts looking intentional in dark mode */
@@ -146,11 +146,11 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
 }
 .note-side-photo {
   float: right;
-  margin: .3rem 0 1.2rem 1.6rem;
+  margin: .3rem 0 1.2rem 1.8rem;
 }
 .note-side-photo-left {
   float: left;
-  margin: .3rem 1.6rem 1.2rem 0;
+  margin: .3rem 1.8rem 1.2rem 0;
 }
 .dark .note-side-photo,
 .dark .note-side-photo-left {
@@ -162,7 +162,7 @@ h3 { font-weight: 500; letter-spacing: -0.012em; }
     float: none;
     display: block;
     width: 100%;
-    max-width: 220px;
+    max-width: 280px;
     margin: 0 auto 1.2rem;
   }
 }
