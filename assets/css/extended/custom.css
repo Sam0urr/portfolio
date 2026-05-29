@@ -189,14 +189,14 @@ figure.note-side-photo-left > figcaption {
 /* About page: photo floats right, text wraps around it */
 .about-photo {
   float: right;
-  width: 32%;
-  max-width: 240px;
+  width: 36%;
+  max-width: 280px;
   aspect-ratio: 4 / 5;          /* less elongated than 3/5 — reads as a magazine byline portrait */
   object-fit: cover;
   object-position: center 25%;  /* slight upward bias so the face sits well after the gentler crop */
   border-radius: 14px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, .15);
-  margin: .3rem 0 1.4rem 2rem;
+  margin: .7rem 0 1.6rem 2.2rem; /* a touch more breathing room around the photo */
 }
 .dark .about-photo {
   box-shadow: 0 10px 28px rgba(0, 0, 0, .5);
@@ -206,8 +206,8 @@ figure.note-side-photo-left > figcaption {
     float: none;
     display: block;
     width: 100%;
-    max-width: 260px;
-    margin: 0 auto 1.4rem;
+    max-width: 280px;
+    margin: 0 auto 1.6rem;
   }
 }
 
