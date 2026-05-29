@@ -1,7 +1,7 @@
 ---
 title: "Reading Log: Three Capitals, One Chip"
-date: 2026-05-29
-lastmod: 2026-05-29
+date: 2026-05-28
+lastmod: 2026-05-28
 summary: "Trump took Silicon Valley to Beijing, the US reopened the chip tap, and Europe watched. A reading log on US-China-EU tech geopolitics, the Draghi report one year on, and where the money is actually going."
 tags: ["Political Economy", "Governance", "Geopolitics", "Technology"]
 keywords: ["US-China", "EU competitiveness", "Draghi report", "rare earths", "AI spending", "Political Economy", "industrial policy"]
@@ -9,8 +9,6 @@ canonical: "https://sam0urr.github.io/portfolio/notes/tech-sovereignty/"
 ShowReadingTime: true
 ShowToc: false
 ---
-
-*29 May 2026*
 
 A fortnight ago Trump flew to Beijing and brought Silicon Valley with him: Jensen Huang, Tim Cook, Elon Musk, plus the Wall Street contingent. A few days later Washington quietly cleared Nvidia to ship H200s to Chinese firms. The same export controls the US spent two years building were loosened in the space of a state visit. The following is a compilation of what I've been reading on the US-China-EU triangle, the Draghi report a year and a half on, and the question underneath all of it: who actually controls the technology stack, and what is Europe doing while the other two decide?
 

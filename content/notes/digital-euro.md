@@ -1,7 +1,7 @@
 ---
 title: "The Digital Euro and Bank Disintermediation: The Oldest Tension in Money"
 date: 2026-05-15
-lastmod: 2026-05-29
+lastmod: 2026-05-15
 summary: "From the stone money of Yap to ECB holding limits: why the design of a digital euro is a political choice about who keeps the ledger, not a technical one."
 tags: ["Political Economy", "Governance", "Digital Euro", "CBDC"]
 keywords: ["Digital Euro", "CBDC", "Political Economy", "Bank Disintermediation", "European Central Bank"]
