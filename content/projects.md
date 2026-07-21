@@ -6,6 +6,10 @@ ShowReadingTime: false
 
 A few things I'm building alongside study and work.
 
+## The Visible Hand (2026)
+
+Research paper (my MSc thesis at the University of Amsterdam): *The Visible Hand: Funding Regimes and Retained Control in Multi-Level Integration Governance — Antwerp and Rotterdam Compared*. It compares how Antwerp and Rotterdam fund local integration policy and asks which level of government ends up holding control.
+
 ## ITA–MENA Business Council
 
 I designed the governance and operational framework for a cross-regional initiative connecting Italian and MENA-based young professionals and institutions, to enable structured economic cooperation across trade, investment, and policy. I'm currently growing the network and expanding the collaboration infrastructure so that knowledge and opportunity can move more easily across borders.

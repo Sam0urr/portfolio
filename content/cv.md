@@ -7,30 +7,28 @@ ShowReadingTime: false
 
 {{< dl "cv.pdf" "Download full CV (PDF)" >}}
 
-<small>To enable the button above, drop your `cv.pdf` into the project's `static` folder.</small>
-
 ## Education
 
-- **MSc, Political Economy**, University of Amsterdam, 2025–2026. Specialisation in Corporate Social Responsibility. Thesis: *Evaluating the Challenges in Compliance with GDPR in EU Organisations: a cross-sectional analysis.*
-- **Minor, Economic Analysis of Public Policy**, Bert W. Wasserman Department of Economics and Finance, Zicklin School of Business, Baruch College, City University of New York (CUNY), 2025. Coursework: Economic Analysis of Public Policy; Current Economic Problems.
-- **BSc, Political Science**, University of Amsterdam, 2020–2024. Specialisation in Public Policy & Governance; Lobbying & Advocacy; Politics & AI; Law & Politics. Thesis: *Supply Chain Divergence and Due Diligence: the case of Brazil.*
-- **BA, Media & Information**, University of Amsterdam, 2022–2026. Specialisation in Information Studies. Core: Information & Society; Critical Perspectives on Data & AI; AI, Media & Democracy; Digital Methods & Information Analytics.
+- **MSc, Political Economy**, [University of Amsterdam](https://www.uva.nl/en/programmes/masters/political-science-political-economy/political-economy.html), 2025–2026. Specialisation in Corporate Social Responsibility. Thesis: *The Visible Hand: Funding Regimes and Retained Control in Multi-Level Integration Governance — Antwerp and Rotterdam Compared.*
+- **Minor, Economic Analysis of Public Policy**, Bert W. Wasserman Department of Economics and Finance, [Zicklin School of Business](https://zicklin.baruch.cuny.edu/), Baruch College, City University of New York (CUNY), 2025. Coursework: Economic Analysis of Public Policy; Current Economic Problems.
+- **BSc, Political Science**, [University of Amsterdam](https://www.uva.nl/en/programmes/bachelors/political-science/political-science.html), 2020–2024. Specialisation in Public Policy & Governance; Lobbying & Advocacy; Politics & AI; Law & Politics. Thesis: *Supply Chain Divergence and Due Diligence: the case of Brazil.*
+- **BA, Media & Information**, [University of Amsterdam](https://www.uva.nl/en/programmes/bachelors/media-and-information/media-and-information.html), 2022–2026. Specialisation in Information Studies. Core: Information & Society; Critical Perspectives on Data & AI; AI, Media & Democracy; Digital Methods & Information Analytics.
 
 ## Experience
 
-- **Leadership & Policy Advocacy: Governance, Risk & Compliance (intern)** · United Nations Global Compact, New York · Jun–Oct 2025
-  Supported the Leadership & Policy team on corporate sustainability and responsible business conduct; contributed research toward high-level outputs including the 2025 CEO Study; designed standardised cross-departmental reporting structures; supported stakeholder engagement during UN General Assembly High-Level Week.
+- **Leadership & Policy Advocacy: Governance, Risk & Compliance (intern)** · [United Nations Global Compact](https://unglobalcompact.org/), New York · Jun–Oct 2025
+  Supported the Leadership & Policy team on corporate sustainability and responsible business conduct; contributed research toward high-level outputs including the [2025 CEO Study](https://info.unglobalcompact.org/ceo-study-2025) and the [Gen AI for the Global Goals](https://unglobalcompact.org/library/6238) report (UNGC × Accenture), which reached 20,000+ companies in 160+ countries through the UN Global Compact network; designed standardised cross-departmental reporting structures; supported stakeholder engagement during UN General Assembly High-Level Week.
 
-- **Communications & Public Relations (intern)** · EGMONT Royal Institute for International Relations, Brussels · Sep 2024–Jan 2025
+- **Communications & Public Relations (intern)** · [EGMONT Royal Institute for International Relations](https://www.egmontinstitute.be/), Brussels · Sep 2024–Jan 2025
   Coordinated communications across five departments; engaged with diplomats, parliamentarians, and policy actors in the European policy environment; helped launch the *Global Affairs Unpacked* podcast.
 
-- **Client Responsible, Accounts Analyst** · TKB, Amsterdam · Oct 2023–Mar 2025
+- **Client Responsible, Accounts Analyst** · [TKB](https://www.tkb.nl/en/), Amsterdam · Oct 2023–Mar 2025
   Managed a B2B portfolio across Dutch, Belgian, French, German, and Italian markets with consistent on-time SLA delivery; reduced outstanding balances through structured follow-up and cross-functional escalation; produced monthly management reports for senior leadership using Excel dashboards and CRM data; coordinated a small team.
 
-- **Junior Researcher, Regulatory Risk & Corporate Due Diligence** · University of Amsterdam RBC-Lab, Amsterdam · Mar–Jul 2024
+- **Junior Researcher, Regulatory Risk & Corporate Due Diligence** · [University of Amsterdam RBC-Lab](https://www.rbc-lab.org/), Amsterdam · Mar–Jul 2024
   Built an original analytical framework and coding taxonomy to compare EU regulatory instruments (GDPR, CSRD, CSDDD, EUDR) across jurisdictions, using qualitative and computational methods.
 
-- **Operations Specialist** · Just Eat Takeaway, Amsterdam · Oct 2021–Apr 2023
+- **Operations Specialist** · [Just Eat Takeaway](https://justeattakeaway.com/), Amsterdam · Oct 2021–Apr 2023
   Managed departmental workflow and optimised daily operations through data tracking, performance analysis, and KPI reporting in a high-volume environment.
 
 ## Languages
