@@ -20,6 +20,6 @@ Written references are available below; further references on request.
 
 ## Certificate of Appreciation, United Nations Global Compact
 
-*Awarded in recognition of my contribution to the UN Global Compact Leadership & Policy team during my internship (Jun–Oct 2025).*
+*Awarded in recognition of my contribution to the UN Global Compact Leadership & Policy team.*
 
 {{< dl "un-certificate-appreciation.pdf" "View the certificate (PDF)" >}}
