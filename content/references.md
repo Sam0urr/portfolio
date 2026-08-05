@@ -17,3 +17,9 @@ Written references are available below; further references on request.
 *Professor during my minor in Economic Analysis of Public Policy.*
 
 {{< dl "reference-2.pdf" "Read the reference (PDF)" >}}
+
+## Certificate of Appreciation, United Nations Global Compact
+
+*Awarded in recognition of my contribution to the UN Global Compact Leadership & Policy team during my internship (Jun–Oct 2025).*
+
+{{< dl "un-certificate-appreciation.pdf" "View the certificate (PDF)" >}}
