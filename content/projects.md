@@ -12,10 +12,6 @@ An interactive map I built to show how much geopolitical risk each country actua
 
 [Explore the map →](https://sam0urr.github.io/ribat/)
 
-## Transparency in Transition (2025, in progress)
-
-Research paper in progress (drafted 24 Oct 2025): *Transparency in Transition: Lobbying Regulation after Brexit*. Examines how the UK's withdrawal from the EU has affected the transparency of lobbying practices compared to EU member states, and tests whether the loss of supranational oversight has functionally eroded institutional accountability in the post-Brexit political order.
-
 ## The Visible Hand (2026)
 
 Research paper (my MSc thesis at the University of Amsterdam): *The Visible Hand: Funding Regimes and Retained Control in Multi-Level Integration Governance — Antwerp and Rotterdam Compared*. It compares how Antwerp and Rotterdam fund local integration policy and asks which level of government ends up holding control.
