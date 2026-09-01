@@ -10,11 +10,11 @@ A few things I'm building alongside study and work.
 
 An interactive map I built to show how much geopolitical risk each country actually *bears* through its trade, rather than where the risk is *emitted*. It combines the Caldara–Iacoviello GPR index with WITS/Comtrade trade weights across four channels (all trade, energy, critical materials, and shipping chokepoints), so you can see who is most exposed and toggle between channels to understand why.
 
-[Explore the map →](https://sam0urr.github.io/ribat/)
+[Read the story, then explore the map →](https://sam0urr.github.io/ribat/story.html)
 
-## The Visible Hand (2026)
+## The Visible Hand: Funding Regimes and Retained Control in Multi-Level Integration Governance — Antwerp and Rotterdam Compared (2026)
 
-Research paper (my MSc thesis at the University of Amsterdam): *The Visible Hand: Funding Regimes and Retained Control in Multi-Level Integration Governance — Antwerp and Rotterdam Compared*. It compares how Antwerp and Rotterdam fund local integration policy and asks which level of government ends up holding control.
+Research paper (my MSc thesis at the University of Amsterdam). It compares how Antwerp and Rotterdam fund local integration policy and asks which level of government ends up holding control.
 
 ## ITA–MENA Business Council
 
