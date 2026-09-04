@@ -6,6 +6,8 @@ summary: "A working note on my current paper: when the UK left the EU it didn't 
 tags: ["Political Economy", "Governance", "Lobbying", "Brexit", "Transparency", "Work in Progress"]
 keywords: ["Lobbying Regulation", "Brexit", "De-Europeanisation", "Transparency Register", "Transparency of Lobbying Act 2014", "Interest Groups"]
 canonical: "https://sam0urr.github.io/portfolio/notes/lobbying-after-brexit/"
+# This note replaces the earlier "(in progress)" stub; keep its URL working.
+aliases: ["/notes/brexit-lobbying-transparency/"]
 ShowReadingTime: true
 ShowToc: false
 draft: false
