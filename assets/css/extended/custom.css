@@ -619,3 +619,51 @@ figure.note-side-photo-left > figcaption {
   max-width: 65ch;
 }
 .is-note-page .post-content blockquote p { margin: 0; }
+
+/* Project pages: hero image, full-width figures and a two-column photo grid. */
+.project-meta {
+  font-size: .9rem;
+  line-height: 1.55;
+  color: var(--secondary);
+  border-left: 3px solid var(--accent);
+  padding: .3rem 0 .3rem 1.1rem;
+  margin: 0 0 1.8rem 0;
+}
+.project-meta strong { color: var(--primary); font-weight: 600; }
+figure.project-figure {
+  margin: 1.6rem 0 1.8rem 0;
+}
+figure.project-figure > img {
+  display: block;
+  width: 100%;
+  margin: 0;
+  border-radius: 12px;
+}
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.6rem 0 1.8rem 0;
+}
+.project-gallery figure { margin: 0; }
+.project-gallery figure > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  margin: 0;
+  border-radius: 12px;
+}
+.project-gallery figure.tall > img { aspect-ratio: 3 / 4; }
+.post-content figure.project-figure > figcaption,
+.post-content .project-gallery figure > figcaption {
+  font-size: .78rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--secondary);
+  text-align: center;
+  margin-top: .5rem;
+}
+@media (max-width: 600px) {
+  .project-gallery { grid-template-columns: 1fr; }
+}
