@@ -250,12 +250,39 @@ figure.note-side-photo-left > figcaption {
 }
 
 /* Nav: subtle accent on hover */
-.nav .menu li a {
+.menu li a {
   transition: color .2s ease;
 }
-.nav .menu li a:hover,
-.nav .logo a:hover {
+.menu li a:hover,
+.logo a:hover {
   color: var(--accent);
+}
+
+/* Nav on narrow screens: PaperMod makes .menu a horizontal scroller
+   (overflow-x: auto; nowrap) but gives no hint that anything is off-screen,
+   so the last item just clips at the viewport edge. When the JS in
+   extend_footer.html detects overflow it adds .has-overflow plus .at-start /
+   .at-end, and we fade the edge that still has content beyond it — a scroll
+   edge effect instead of a hard cut. The mask sits on the scroller's box, so
+   it stays put while the items scroll underneath. */
+.menu {
+  overscroll-behavior-x: contain;   /* don't hand a menu swipe to browser back */
+  scrollbar-width: none;
+}
+.menu::-webkit-scrollbar {
+  display: none;
+}
+.menu.has-overflow {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent);
+          mask-image: linear-gradient(to right, transparent, #000 36px, #000 calc(100% - 36px), transparent);
+}
+.menu.has-overflow.at-start {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+          mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+}
+.menu.has-overflow.at-end {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 36px);
+          mask-image: linear-gradient(to right, transparent, #000 36px);
 }
 
 /* Download / action buttons (CV, references) */
@@ -299,6 +326,56 @@ figure.note-side-photo-left > figcaption {
 .terms-tags a {
   background: var(--accent-soft);
   border-radius: 999px;
+}
+
+/* Press feedback — acknowledge pointer-DOWN, not just the outcome.
+   Hover states only exist for mice; on touch the only feedback a user got
+   was the page changing. Press-in is fast (~80ms ease-out) so it reads as
+   instant; release rides the element's normal, softer transition. These
+   rules come after the matching :hover rules on purpose so they win while
+   the pointer is down. iOS needs a touchstart listener before it applies
+   :active to non-link elements — see extend_footer.html. */
+.post-entry:active {
+  transform: translateY(-1px) scale(.985);
+  transition-duration: .08s;
+  transition-timing-function: ease-out;
+}
+.cv-download:active {
+  transform: translateY(0) scale(.97);
+  box-shadow: 0 2px 8px var(--accent-soft);
+  transition-duration: .08s;
+}
+.post-tags a:active,
+.terms-tags a:active {
+  transform: scale(.95);
+  transition: transform .08s ease-out;
+}
+.theme-toggle:active {
+  transform: scale(.88);
+  transition-duration: .08s;
+}
+.menu li a:active,
+.logo a:active {
+  color: var(--accent);
+  opacity: .55;
+  transition: opacity .08s ease-out, color .08s ease-out;
+}
+/* Reduced motion: still acknowledge the press, just without movement —
+   a tint is a non-vestibular equivalent, not an absence of feedback. */
+@media (prefers-reduced-motion: reduce) {
+  .post-entry:active,
+  .cv-download:active,
+  .post-tags a:active,
+  .terms-tags a:active,
+  .theme-toggle:active {
+    transform: none;
+  }
+  .post-entry:active {
+    background: var(--accent-soft);
+  }
+  .theme-toggle:active {
+    opacity: .55;
+  }
 }
 
 /* Notes: search input + "coming soon" section */
@@ -407,21 +484,23 @@ figure.note-side-photo-left > figcaption {
    then toggles .is-revealed when they enter the viewport. Above-fold
    elements reveal instantly on load; below-fold ones fade in as you scroll. */
 @media (prefers-reduced-motion: no-preference) {
+  /* 450ms sits in the range UI motion reads as responsive; the previous
+     700ms (+ up to 240ms stagger) felt leisurely rather than deliberate. */
   [data-reveal] {
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity .7s cubic-bezier(.2,.7,.2,1),
-                transform .7s cubic-bezier(.2,.7,.2,1);
+    transform: translateY(12px);
+    transition: opacity .45s cubic-bezier(.2,.7,.2,1),
+                transform .45s cubic-bezier(.2,.7,.2,1);
   }
   [data-reveal].is-revealed {
     opacity: 1;
     transform: none;
   }
   /* Stagger sibling cards so they cascade in instead of all at once */
-  [data-reveal][data-reveal-delay="1"] { transition-delay: .06s; }
-  [data-reveal][data-reveal-delay="2"] { transition-delay: .12s; }
-  [data-reveal][data-reveal-delay="3"] { transition-delay: .18s; }
-  [data-reveal][data-reveal-delay="4"] { transition-delay: .24s; }
+  [data-reveal][data-reveal-delay="1"] { transition-delay: .05s; }
+  [data-reveal][data-reveal-delay="2"] { transition-delay: .10s; }
+  [data-reveal][data-reveal-delay="3"] { transition-delay: .15s; }
+  [data-reveal][data-reveal-delay="4"] { transition-delay: .20s; }
 }
 
 /* ─────────────────────────────────────────────────────────────────

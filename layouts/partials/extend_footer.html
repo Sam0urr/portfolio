@@ -74,4 +74,31 @@
   window.addEventListener('resize', update, { passive: true });
   update();
 })();
+
+/* ─── 4. Press feedback on iOS ──────────────────────────────────
+   Mobile Safari only applies :active to non-link elements (e.g. the
+   .post-entry cards) once the document has a touchstart listener. A
+   passive no-op is the canonical way to switch that on. */
+document.addEventListener('touchstart', function(){}, { passive: true });
+
+/* ─── 5. Nav scroll-edge hint ───────────────────────────────────
+   On narrow screens PaperMod's .menu scrolls horizontally. Flag whether it
+   overflows and which edge still has content beyond it, so the CSS can fade
+   that edge instead of clipping the last item with no affordance. */
+(function(){
+  var menu = document.querySelector('#menu, .menu');
+  if (!menu) return;
+
+  var update = function(){
+    var overflow = menu.scrollWidth - menu.clientWidth > 1;
+    menu.classList.toggle('has-overflow', overflow);
+    if (!overflow) { menu.classList.remove('at-start', 'at-end'); return; }
+    var max = menu.scrollWidth - menu.clientWidth;
+    menu.classList.toggle('at-start', menu.scrollLeft <= 1);
+    menu.classList.toggle('at-end', menu.scrollLeft >= max - 1);
+  };
+  menu.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
+  update();
+})();
 </script>
