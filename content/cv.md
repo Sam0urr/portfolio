@@ -18,7 +18,7 @@ Political Economy MSc graduate working where EU regulation meets commercial and 
 
 ## Experience
 
-- **Policy and Advocacy Intern, Leadership and Policy Advocacy** · [United Nations Global Compact](https://unglobalcompact.org/), New York · Jul–Oct 2025
+- **Policy and Advocacy (Economic Affairs), Leadership and Policy Advocacy** · [United Nations Global Compact](https://unglobalcompact.org/), New York · Jul–Oct 2025
   - Contributed substantive content to two publications launched at the UN General Assembly, the [2025 CEO Study](https://info.unglobalcompact.org/ceo-study-2025) with Accenture and [Gen AI for the Global Goals](https://unglobalcompact.org/library/6238), distributed across a network of 20,000+ companies in 160+ countries.
   - Translated dense regulatory and governance frameworks into concise briefs and concept notes for C-suite and UN audiences under short turnarounds during UNGA High-Level Week.
   - Prepared the briefing material framing the [UN Private Sector Forum](https://www.un.org/ldc5/psf/about) (150 senior leaders, including around 50 global CEOs) and the [Dilemmas Forum](https://unglobalcompact.org/library/6105) (60 executives).
