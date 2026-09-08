@@ -20,30 +20,21 @@ Political Economy MSc graduate working where EU regulation meets commercial and 
 
 - **Policy and Advocacy (Economic Affairs), Leadership and Policy Advocacy** · [United Nations Global Compact](https://unglobalcompact.org/), New York · Jul–Oct 2025
   - Contributed substantive content to two publications launched at the UN General Assembly, the [2025 CEO Study](https://info.unglobalcompact.org/ceo-study-2025) with Accenture and [Gen AI for the Global Goals](https://unglobalcompact.org/library/6238), distributed across a network of 20,000+ companies in 160+ countries.
-  - Translated dense regulatory and governance frameworks into concise briefs and concept notes for C-suite and UN audiences under short turnarounds during UNGA High-Level Week.
   - Prepared the briefing material framing the [UN Private Sector Forum](https://www.un.org/ldc5/psf/about) (150 senior leaders, including around 50 global CEOs) and the [Dilemmas Forum](https://unglobalcompact.org/library/6105) (60 executives).
-  - Built Power BI dashboards and a centralised mandate-tracking database, standardising cross-departmental reporting and improving data quality for decision-makers.
 
 - **Accounts Analyst, promoted to Client Responsible** · [TKB (Trust Krediet Beheer)](https://www.tkb.nl/en/), Amsterdam · Oct 2023–Mar 2025
   - Owned a portfolio of 20+ international B2B corporate accounts across the Dutch, Belgian, French, German and Italian markets, acting as primary point of contact through the full client lifecycle.
-  - Negotiated payment and settlement arrangements directly with corporate clients and their advisers, reducing outstanding balances materially across the account base.
-  - Held 100% on-time reporting and zero missed service-level commitments over 18 consecutive months by designing standardised tracking and escalation workflows in Excel and CRM systems.
   - Supervised a team of three, setting workflow ownership and quality standards, and produced portfolio reporting used by senior management.
 
 - **Research and Communications Intern** · [EGMONT, Royal Institute for International Relations](https://www.egmontinstitute.be/), Brussels · Sep 2024–Jan 2025
-  - Monitored EU regulatory and inter-institutional files and synthesised them into briefings for diplomats, parliamentarians and journalists, under institutional review.
-  - Coordinated analytical output across five institutional units and served as a point of contact for 50+ external stakeholders, working transversally without hierarchical authority.
   - Ran 40+ editions of two EU policy newsletters, [European Affairs](https://www.linkedin.com/newsletters/european-affairs-7373321736232144898/) and [EU in the World](https://www.linkedin.com/newsletters/europe-in-the-world-7272193855423229952/) (6,100 and 6,700 subscribers), contributing to an engagement uplift of around 20% across web and social channels.
   - Proposed and launched the [Global Affairs Unpacked](https://sam0urr.github.io/portfolio/projects/) podcast, adding a new institutional media channel.
 
 - **Junior Researcher, Regulatory and Comparative Policy Analysis** · [University of Amsterdam, Responsible Business Conduct Lab](https://www.rbc-lab.org/), Amsterdam · Mar–Jul 2024
-  - Designed a coding framework to compare regulatory instruments across 10+ jurisdictions (GDPR, CSRD and AI Act provisions), mapping compliance obligations and identifying implementation gaps.
   - Analysed regulatory and firm-level data in Stata, R and SPSS, translating results into structured briefs and [position papers](https://www.rbc-lab.org/reports) for policy and practitioner audiences.
-  - Assessed corporate due-diligence and supply-chain obligations (CSDDD, EUDR) against actual firm disclosure practice.
 
 - **Live Operations Specialist, Italian Market** · [Just Eat Takeaway](https://justeattakeaway.com/), Amsterdam · May 2021–Jan 2023
   - Ran live operational workflow and KPI monitoring for the Italian market on a high-volume platform, triaging incidents against service targets under time pressure.
-  - Identified and implemented process improvements that raised throughput and data quality across the department.
 
 ## Awards & Scholarships
 
@@ -68,14 +59,6 @@ Political Economy MSc graduate working where EU regulation meets commercial and 
   A country-level geopolitical-risk incidence index weighting the Caldara–Iacoviello GPR series by trade, energy, raw-material and chokepoint dependency across around 40 economies; Python pipeline over UN Comtrade/WITS and OECD TiVA data, [interactive MapLibre map](https://sam0urr.github.io/portfolio/projects/), weekly and monthly auto-refresh via GitHub Actions.
 - **ITA-MENA Business Council, Governance and Operating Framework** · 2024–present
   Designed the governance and operating-model framework — roles, decision rights and coordination processes — for a [cross-regional initiative](https://sam0urr.github.io/portfolio/projects/) connecting Italian and MENA-based institutions and young professionals across trade, investment and policy.
-
-## Skills
-
-- **EU regulation and governance:** AI Act · DSA · GDPR and data protection · NIS2 · DORA · CSRD, CSDDD and EUDR · EU legislative and decision-making processes · regulatory and impact analysis.
-- **Advisory and consulting:** client-facing advisory · stakeholder engagement · structured problem solving · briefing and report writing · project coordination · executive-level communication.
-- **Risk, compliance and controls:** control design, monitoring and escalation · third-party and supply-chain due diligence · policy and standards drafting · regulatory gap analysis · information security governance (CISM domains).
-- **Data and analysis:** Stata · R · SPSS · Python · SQL · Power BI · Excel (advanced) · ATLAS.ti · applied econometrics · KPI dashboards and monitoring.
-- **Commercial and operations:** B2B account ownership · negotiation and settlement · portfolio reporting · CRM systems · process design and standardisation.
 
 ## Languages
 
