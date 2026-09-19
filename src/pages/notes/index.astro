@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import NotesExplorer from '../../components/islands/NotesExplorer';
+import type { NoteSummary, UpcomingNote } from '../../components/islands/NotesExplorer';
+import { readingTime, toISODate } from '../../scripts/format';
+
+// Intro carried over from the Hugo notes/_index.md, verbatim.
+const intro =
+  "A running record of what I'm reading, thinking about, and building, mostly around EU digital and sustainability regulation, AI governance, payments, and political economy. New pieces appear below.";
+
+const notes: NoteSummary[] = (await getCollection('notes', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((note) => ({
+    slug: note.id,
+    title: note.data.title,
+    summary: note.data.summary,
+    date: toISODate(note.data.date),
+    tags: note.data.tags,
+    readingTime: readingTime(note.body ?? '', 230),
+  }));
+
+const upcoming: UpcomingNote[] = (await getCollection('upcoming')).map(({ data }) => ({
+  status: data.status,
+  title: data.title,
+  teaser: data.teaser,
+}));
+
+const count = `${String(notes.length).padStart(2, '0')} ${notes.length === 1 ? 'entry' : 'entries'}`;
+---
+
+<Base title="Notes" description={intro}>
+  <PageHeader title="Notes" count={count} lede={intro} />
+  <NotesExplorer client:visible notes={notes} upcoming={upcoming} />
+</Base>

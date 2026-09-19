@@ -17,9 +17,9 @@ If we think about all the cyber technologies once used for warfare, those techno
 
 The end of *WarGames* is quite remarkable; the supercomputer suggests that ["the only winning move is not to play."](https://www.youtube.com/watch?v=NHWjlCaIrQo)
 
-<figure style="margin:1.5rem auto;max-width:640px;">
-  <img src="/images/notes/wargames-winning-move.png" alt="WOPR terminal in WarGames displaying: GREETINGS PROFESSOR FALKEN / HELLO / A STRANGE GAME. THE ONLY WINNING MOVE IS NOT TO PLAY." style="width:100%;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);" />
-  <figcaption style="font-size:.85rem;opacity:.75;text-align:center;margin-top:.5rem;"><em>WarGames</em> (1983), dir. John Badham, MGM/UA Entertainment Co. Screenshot taken from <a href="https://www.youtube.com/watch?v=NHWjlCaIrQo">YouTube</a>.</figcaption>
+<figure class="fig">
+  <img src="/images/notes/wargames-winning-move.png" alt="WOPR terminal in WarGames displaying: GREETINGS PROFESSOR FALKEN / HELLO / A STRANGE GAME. THE ONLY WINNING MOVE IS NOT TO PLAY." loading="lazy" decoding="async" />
+  <figcaption><em>WarGames</em> (1983), dir. John Badham, MGM/UA Entertainment Co. Screenshot taken from <a href="https://www.youtube.com/watch?v=NHWjlCaIrQo">YouTube</a>.</figcaption>
 </figure>
 
 AI-driven systems could worsen wars in unexpected ways, since their algorithms might not prioritise political ties or human lives in the same manner as us. Artificial intelligence systems run the possibility of misinterpreting data or acting on erroneous information based on algorithms. Sometimes the best decision might not be the most efficient: think about what would have happened if, instead of General Petrov, an automated system of detection and alarm had managed the situation. Consequences would have been catastrophic. It might have resulted in unintentional conflict, or even worse, the end of humanity. His decision underscores the critical role of human oversight in the nuclear age.

@@ -1,0 +1,41 @@
+---
+import { getEntry, render } from 'astro:content';
+import Page from '../layouts/Page.astro';
+import { SITE } from '../consts';
+
+const entry = await getEntry('pages', 'contact');
+if (!entry) throw new Error('Missing content entry: pages/contact');
+const { Content, headings } = await render(entry);
+const description = entry.data.summary ?? 'How to reach Sam Lamrabte: email and LinkedIn. Based in Amsterdam.';
+---
+
+<Page title={entry.data.title} description={description} kicker={SITE.dateline} lede={entry.data.summary} headings={headings}>
+  <div slot="before" class="contact-address">
+    <a class="contact-email" href={`mailto:${SITE.email}`} data-load-reveal style="--i: 2">{SITE.email}</a>
+    <a class="ui-link contact-linkedin" href={SITE.linkedin} rel="me" data-load-reveal style="--i: 3">LinkedIn ↗</a>
+  </div>
+  <Content />
+</Page>
+
+<style>
+  /* The address is the page's largest element; LinkedIn sits beneath it. */
+  .contact-address {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-12);
+  }
+  .contact-email {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    line-height: 1.2;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.16em;
+    overflow-wrap: anywhere;
+  }
+  .contact-email:hover { color: var(--color-accent); }
+</style>

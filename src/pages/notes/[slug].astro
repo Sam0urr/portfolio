@@ -1,0 +1,27 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Note from '../../layouts/Note.astro';
+import { readingTime } from '../../scripts/format';
+
+export async function getStaticPaths() {
+  const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  );
+  // Newest first: the entry before is newer ("Next →"), the one after is older ("← Previous").
+  return notes.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: { entry, next: notes[index - 1], prev: notes[index + 1] },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+const minutes = readingTime(entry.body ?? '', 230);
+---
+
+<Note entry={entry} prev={prev} next={next} readingTime={minutes}>
+  <Content />
+</Note>

@@ -25,12 +25,24 @@ export default defineConfig({
   // the served files keep `opsz` and `font-optical-sizing: auto` does the rest.
   fonts: [
     {
-      // Display — wordmark, headings, ledes (italic), pull quotes.
+      // Display — wordmark (500), headings, pull quotes.
+      name: 'Newsreader',
+      cssVariable: '--font-display',
+      provider: fontProviders.google(),
+      weights: ['400 500'],
+      styles: ['normal'],
+      subsets,
+      fallbacks: ['Iowan Old Style', 'Palatino', 'Georgia', 'serif'],
+      optimizedFallbacks: true,
+      options: { experimental: { variableAxis: { opsz: [['6', '72']] } } },
+    },
+    {
+      // Display italic — ledes, blockquotes, the headline's italic phrase.
       name: 'Newsreader',
       cssVariable: '--font-display',
       provider: fontProviders.google(),
       weights: [400],
-      styles: ['normal', 'italic'],
+      styles: ['italic'],
       subsets,
       fallbacks: ['Iowan Old Style', 'Palatino', 'Georgia', 'serif'],
       optimizedFallbacks: true,

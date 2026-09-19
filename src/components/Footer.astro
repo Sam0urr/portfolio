@@ -1,6 +1,10 @@
 ---
-import { SITE } from '../consts';
+import { NAV, SITE } from '../consts';
 
+/**
+ * Footer: double rule, three mono xs columns (one under 640px) — colophon line,
+ * the six routes, external links — then the set-in line with the year.
+ */
 const year = new Date().getFullYear();
 ---
 
@@ -8,13 +12,20 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <div class="rule-double rule-draw-on-reveal" aria-hidden="true"></div>
     <div class="footer-grid">
-      <p>Set in Newsreader and Source Serif. Built with <a href="https://astro.build/">Astro</a>.</p>
-      <p>
-        <a href={SITE.linkedin} rel="me">LinkedIn</a> · <a href={`mailto:${SITE.email}`}>Email</a>
-      </p>
-      <p>
-        <a href="/rss.xml">RSS</a> · <a href="/sitemap-index.xml">Sitemap</a> · © {year} {SITE.name}
-      </p>
+      <p class="footer-colophon">{SITE.name} · {SITE.dateline}</p>
+      <nav aria-label="Footer">
+        <ul class="footer-list">
+          {
+            NAV.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <p><a href={SITE.linkedin} rel="me">LinkedIn</a> · <a href={`mailto:${SITE.email}`}>Email</a> · <a href="/rss.xml">RSS</a> · <a href="/cv.pdf">CV (PDF)</a></p>
     </div>
+    <p class="footer-line">Set in Newsreader, Source Serif and IBM Plex Mono · © {year} · Built with <a href="https://astro.build/">Astro</a></p>
   </div>
 </footer>

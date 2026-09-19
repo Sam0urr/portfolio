@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export type NoteCardProps = {
   slug: string;
   title: string;
@@ -5,6 +7,10 @@ export type NoteCardProps = {
   /** ISO date string, e.g. "2026-05-12". */
   date: string;
   tags: string[];
+  /** Minutes; rendered as "· 9 min" after the date. */
+  readingTime?: number;
+  /** Search terms (already lower-cased) to wrap in <mark>. */
+  terms?: string[];
 };
 
 /**
@@ -24,44 +30,60 @@ export function formatNoteDate(iso: string): string {
   return dateFormatter.format(parsed);
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
- * One note in the list. The whole card is clickable via the title link's
- * ::after pseudo-element, which keeps a single focus stop per card.
+ * Wraps every case-insensitive occurrence of any term in <mark>. Longer terms are
+ * tried first so a longer match wins when one term is a prefix of another.
  */
-export default function NoteCard({ slug, title, summary, date, tags }: NoteCardProps) {
+export function highlight(text: string, terms: string[] = []): ReactNode {
+  const clean = [...new Set(terms.filter((term) => term.length > 0))].sort((a, b) => b.length - a.length);
+  if (clean.length === 0 || text.length === 0) return text;
+  const pattern = new RegExp(clean.map(escapeRegExp).join('|'), 'gi');
+  const parts: ReactNode[] = [];
+  let last = 0;
+  for (const match of text.matchAll(pattern)) {
+    const start = match.index ?? 0;
+    const end = start + match[0].length;
+    if (end <= start) continue;
+    if (start > last) parts.push(text.slice(last, start));
+    parts.push(<mark key={start}>{text.slice(start, end)}</mark>);
+    last = end;
+  }
+  if (parts.length === 0) return text;
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
+
+/**
+ * One note as a hairline ledger row: mono date + read time, display-face title
+ * linking to /notes/<slug>/, summary, tags on the right. Same markup and classes
+ * as NoteCardStatic.astro so the Notes index and the home page read as one ledger.
+ */
+export default function NoteCard({ slug, title, summary, date, tags, readingTime, terms }: NoteCardProps) {
   const href = `/notes/${slug}/`;
-  const formattedDate = formatNoteDate(date);
 
   return (
-    <article className="group relative rounded-lg border border-line bg-surface p-5 transition-colors duration-200 hover:border-accent focus-within:border-accent focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-2 focus-within:ring-offset-paper sm:p-6">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h2 className="font-display text-xl leading-snug text-ink sm:text-2xl">
-          <a
-            href={href}
-            className="transition-colors duration-200 group-hover:text-accent focus-visible:outline-none after:absolute after:inset-0 after:rounded-lg after:content-['']"
-          >
-            {title}
-          </a>
-        </h2>
-        <time dateTime={date} className="font-mono text-xs text-muted">
-          {formattedDate}
-        </time>
+    <li className="row">
+      <div className="row-meta">
+        <time dateTime={date}>{formatNoteDate(date)}</time>
+        {readingTime ? <span> · {readingTime} min</span> : null}
       </div>
-
-      {summary ? <p className="mt-2 font-body text-base leading-relaxed text-muted">{summary}</p> : null}
-
+      <div className="row-body">
+        <h2 className="row-title">
+          <a href={href}>{highlight(title, terms)}</a>
+        </h2>
+        {summary ? <p className="row-summary">{highlight(summary, terms)}</p> : null}
+      </div>
       {tags.length > 0 ? (
-        <ul className="mt-4 flex flex-wrap gap-2" aria-label="Tags">
+        <ul className="row-aside" aria-label="Tags">
           {tags.map((tag) => (
-            <li
-              key={tag}
-              className="rounded-full border border-line px-2.5 py-0.5 font-mono text-xs text-muted"
-            >
-              {tag}
-            </li>
+            <li key={tag}>{highlight(tag, terms)}</li>
           ))}
         </ul>
       ) : null}
-    </article>
+    </li>
   );
 }

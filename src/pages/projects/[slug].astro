@@ -1,0 +1,25 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Project from '../../layouts/Project.astro';
+import { readingTime } from '../../scripts/format';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Fact row: only what the entry actually carries, never invented.
+const facts: { term: string; detail: string }[] = [];
+if (entry.data.year) facts.push({ term: 'Year', detail: String(entry.data.year) });
+facts.push({ term: 'Length', detail: `${readingTime(entry.body ?? '', 230)} min read` });
+---
+
+<Project entry={entry} facts={facts}>
+  <Content />
+</Project>

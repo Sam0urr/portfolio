@@ -48,7 +48,7 @@
   --text-xs--line-height: 1.5;
   --text-sm: 0.875rem;
   --text-sm--line-height: 1.5;
-  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);
+  --text-base: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
   --text-base--line-height: 1.6;
   --text-md: 1.1875rem; /* lede */
   --text-md--line-height: 1.5;
@@ -59,14 +59,14 @@
   --text-2xl: clamp(2.25rem, 1.6rem + 3vw, 3.5rem); /* note h1 */
   --text-2xl--line-height: 1.1;
   --text-2xl--letter-spacing: -0.015em;
-  --text-3xl: clamp(2.75rem, 1.8rem + 4.5vw, 5rem); /* home hero */
+  --text-3xl: clamp(2.75rem, 1.6rem + 4.5vw, 5.5rem); /* home hero */
   --text-3xl--line-height: 1.05;
   --text-3xl--letter-spacing: -0.015em;
 
   /* Measures → max-w-prose / max-w-wide / max-w-hero / max-w-page. */
   --container-prose: 36rem;
   --container-wide: 48rem;
-  --container-hero: 30ch;
+  --container-hero: 18ch;
   --container-page: 72rem;
 
   /* The one easing. */
@@ -85,7 +85,7 @@
 
     --measure-prose: 36rem;
     --measure-wide: 48rem;
-    --measure-hero: 30ch;
+    --measure-hero: 18ch;
     --page-max: 72rem;
     --page-gutter: clamp(1rem, 4vw, 3rem);
 
@@ -191,6 +191,12 @@
     background-color: var(--color-accent-soft);
     color: var(--color-ink);
   }
+  /* Search hits and highlights share the selection ink. */
+  mark {
+    background-color: var(--color-accent-soft);
+    color: var(--color-ink);
+    padding: 0 0.08em;
+  }
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
@@ -275,7 +281,7 @@
     color: var(--color-muted);
     font-feature-settings: "lnum", "tnum";
   }
-  .kicker-sm { font-size: var(--text-sm); }
+  .kicker-sm { font-size: var(--text-sm); letter-spacing: 0.08em; }
 
   /* Mono running text: dates, bylines, counts, datelines. */
   .meta {
@@ -285,7 +291,6 @@
     color: var(--color-muted);
     font-feature-settings: "lnum", "tnum";
   }
-  .byline { composes: none; }
   .byline, .dateline {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
@@ -352,6 +357,7 @@
   .wordmark {
     font-family: var(--font-display);
     font-size: var(--text-md);
+    font-weight: 500;
     line-height: 1.3;
     color: var(--color-ink);
     text-decoration: none;
@@ -383,7 +389,7 @@
     font-size: var(--text-sm);
     font-weight: 500;
     line-height: 1.5;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-ink);
     text-decoration: none;
@@ -463,8 +469,20 @@
     font-feature-settings: "lnum", "tnum";
   }
   .footer-grid p { margin: 0; }
-  .footer-grid a { color: inherit; text-decoration: none; }
-  .footer-grid a:hover { color: var(--color-accent); }
+  .footer-list { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: 0; padding: 0; list-style: none; }
+  .footer-colophon { color: var(--color-ink); }
+  .site-footer a { color: inherit; text-decoration: none; transition: color 150ms var(--ease); }
+  .site-footer a:hover { color: var(--color-accent); }
+  .footer-line {
+    margin: var(--space-8) 0 0;
+    padding-top: var(--space-3);
+    border-top: var(--rule);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1.6;
+    color: var(--color-muted);
+    font-feature-settings: "lnum", "tnum";
+  }
   @media (max-width: 39.9375rem) {
     .footer-grid { grid-template-columns: 1fr; }
   }
@@ -483,8 +501,13 @@
   .page-header .lede { margin-top: var(--space-4); }
   .page-header-count { margin-left: var(--space-3); }
 
-  /* Numbered sections: "§ 01 · Recent writing". */
+  /* Numbered sections: "§ 01 · Recent writing". 6rem gap, 4rem under 768px; 8rem after the hero. */
   .section { margin-top: var(--space-24); }
+  .hero + .section, .section-after-hero { margin-top: var(--space-32); }
+  @media (max-width: 47.9375rem) {
+    .section { margin-top: var(--space-16); }
+    .hero + .section, .section-after-hero { margin-top: var(--space-24); }
+  }
   .section-head {
     margin: 0 0 var(--space-6);
     padding-top: var(--space-3);
@@ -493,7 +516,7 @@
     font-size: var(--text-sm);
     font-weight: 500;
     line-height: 1.5;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-muted);
     font-feature-settings: "lnum", "tnum";
@@ -626,6 +649,36 @@
     border: var(--rule);
   }
   .plate img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  /* Home portrait: 4:5 plate pulled up 2rem to break the dateline rule (the one grid break). */
+  .hero-plate {
+    aspect-ratio: 4 / 5;
+    margin-top: calc(-1 * var(--space-8));
+  }
+  .hero-plate img { aspect-ratio: 4 / 5; }
+  /* Home hero: 12 columns, text 1–8, plate 9–12; stacks under 1024px. */
+  .hero {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-8) var(--space-6);
+    align-items: start;
+  }
+  .hero-text { grid-column: 1 / span 8; min-width: 0; }
+  .hero-aside { grid-column: 9 / span 4; min-width: 0; }
+  .hero-headline {
+    margin: var(--space-4) 0 0;
+    max-width: var(--measure-hero);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--text-3xl);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  @media (max-width: 63.9375rem) {
+    .hero-text, .hero-aside { grid-column: 1 / -1; }
+    .hero-aside { max-width: 20rem; }
+    .hero-plate { margin-top: 0; }
+  }
 
   .fig { margin: 0; }
   .fig img {
@@ -904,6 +957,20 @@
 
   .prose .download { max-width: none; }
 
+  /* Article body grid: margin / prose (36rem) / margin. Children sit in the middle column;
+     the essay's "§ n" numerals hang into the left margin, side figures into the right. */
+  .article-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure-prose)) minmax(0, 1fr);
+  }
+  .article-grid > * { grid-column: 2; min-width: 0; }
+  .article-grid > .article-wide { grid-column: 1 / -1; max-width: var(--measure-wide); }
+  .article-grid > .article-full { grid-column: 1 / -1; }
+  @media (max-width: 63.9375rem) {
+    .article-grid { grid-template-columns: minmax(0, var(--measure-prose)); justify-content: start; }
+    .article-grid > *, .article-grid > .article-wide, .article-grid > .article-full { grid-column: 1; }
+  }
+
   /* Essays (Note.astro): print paragraphing and "§ n" margin numerals. */
   .prose-essay { counter-reset: section; }
   .prose-essay p { margin-block: 0; }
@@ -1015,6 +1082,15 @@
   .note-side-photo-left { float: left; margin: 0.25rem var(--space-6) var(--space-5) 0; }
   .note-side-photo img, .note-side-photo-left img { display: block; width: 100%; border: var(--rule); }
   .note-side-photo figcaption, .note-side-photo-left figcaption { text-indent: 0; }
+  /* Inside the article grid at ≥1200px the right-hand figure hangs into the margin. */
+  @media (min-width: 75rem) {
+    .article-grid .note-side-photo {
+      width: 32%;
+      max-width: 220px;
+      margin-right: calc(-32% - var(--space-8));
+      margin-left: var(--space-6);
+    }
+  }
 
   .project-meta {
     margin: 0 0 var(--space-8);

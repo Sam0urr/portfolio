@@ -7,14 +7,8 @@ tags: ["Political Economy", "Governance", "Lobbying", "Brexit", "Transparency", 
 keywords: ["Lobbying Regulation", "Brexit", "De-Europeanisation", "Transparency Register", "Transparency of Lobbying Act 2014", "Interest Groups"]
 draft: false
 # This note replaces the earlier "(in progress)" stub; keep its URL working.
-# Hugo `aliases: ["/notes/brexit-lobbying-transparency/"]` has no Astro equivalent in frontmatter.
-# REDIRECT REQUIRED in astro.config.mjs (owned by the Foundation/Integration agent) per
-# docs/superpowers/specs/2026-09-18-astro-migration-design.md, "URL contract":
-#   /notes/brexit-lobbying-transparency/ -> redirect
-# Add inside defineConfig({ ... }):
-#   redirects: { '/notes/brexit-lobbying-transparency/': '/notes/lobbying-after-brexit/' }
-# As of 2026-09-19 astro.config.mjs has no `redirects` block; the old URL 404s until it is added.
-# Remove this comment once the redirect lands.
+# Hugo `aliases: ["/notes/brexit-lobbying-transparency/"]` is served by the
+# `redirects` entry in astro.config.mjs (/notes/brexit-lobbying-transparency/ -> this note).
 ---
 
 *This is a working note on a paper I'm still writing. The argument is load-bearing but the scaffolding is still up.*

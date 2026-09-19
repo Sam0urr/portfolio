@@ -8,6 +8,8 @@ export type NoteSummary = {
   /** ISO date string, e.g. "2026-05-12". */
   date: string;
   tags: string[];
+  /** Minutes; optional, shown after the date as "· 9 min". */
+  readingTime?: number;
 };
 
 export type UpcomingNote = {
@@ -74,6 +76,10 @@ function writeUrlState(query: string, tags: string[]): void {
  * Notes index: search + tag filter over a static list of notes, plus a
  * "Coming soon" section. Hydrated with client:visible; safe to render on the
  * server (no window access at module scope).
+ *
+ * Styling reuses the shell's component classes (.field-rule, .chips/.chip,
+ * .rows/.row, .section-head, .meta, .kicker, .ui-link) so the list is the same
+ * ledger as the home page; Tailwind utilities only add vertical rhythm.
  */
 export default function NotesExplorer({ notes, upcoming }: Props) {
   const inputId = useId();
@@ -140,8 +146,10 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
     setSelectedTags([]);
   }
 
+  // Every term must appear somewhere in title + summary + tags (AND semantics).
+  const terms = useMemo(() => normalise(debouncedQuery).split(' ').filter(Boolean), [debouncedQuery]);
+
   const filteredNotes = useMemo(() => {
-    const terms = normalise(debouncedQuery).split(' ').filter(Boolean);
     return notes.filter((note) => {
       if (selectedTags.length > 0 && !selectedTags.every((tag) => note.tags.includes(tag))) {
         return false;
@@ -150,88 +158,57 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
       const haystack = normalise(`${note.title} ${note.summary} ${note.tags.join(' ')}`);
       return terms.every((term) => haystack.includes(term));
     });
-  }, [notes, debouncedQuery, selectedTags]);
+  }, [notes, terms, selectedTags]);
 
-  const isFiltering = debouncedQuery.trim().length > 0 || selectedTags.length > 0;
+  const isFiltering = terms.length > 0 || selectedTags.length > 0;
   const total = notes.length;
   const shown = filteredNotes.length;
+  const noun = total === 1 ? 'note' : 'notes';
   const resultText = isFiltering
     ? shown === 0
-      ? `No notes match. ${total} ${total === 1 ? 'note' : 'notes'} in total.`
-      : `Showing ${shown} of ${total} ${total === 1 ? 'note' : 'notes'}.`
-    : `${total} ${total === 1 ? 'note' : 'notes'}.`;
+      ? `No notes match. ${total} ${noun} in total.`
+      : `Showing ${shown} of ${total} ${noun}.`
+    : `${total} ${noun}.`;
 
   return (
-    <div className="font-body text-ink">
-      {/* Search */}
-      <div className="relative">
-        <label htmlFor={inputId} className="sr-only">
-          Search notes
+    <div className="notes-explorer">
+      {/* Search: a bare rule with a mono label above it. */}
+      <div className="mt-2">
+        <label htmlFor={inputId} className="kicker">
+          Search
         </label>
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <line x1="20" y1="20" x2="16.65" y2="16.65" />
-          </svg>
-        </span>
         <input
           id={inputId}
           type="search"
+          className="field-rule mt-2"
           value={query}
           onChange={handleQueryChange}
-          placeholder="Search notes…"
+          placeholder="Title, summary or tag"
           autoComplete="off"
           spellCheck={false}
           aria-describedby={countId}
-          className="w-full rounded-lg border border-line bg-surface py-2.5 pl-11 pr-4 text-base text-ink placeholder:text-muted transition-colors duration-200 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-paper"
         />
       </div>
 
-      {/* Tag chips */}
+      {/* Tag chips: multi-select, AND. */}
       {allTags.length > 0 ? (
-        <div className="mt-4">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span id={tagsHeadingId} className="font-mono text-xs uppercase tracking-wider text-muted">
+        <div className="mt-8">
+          <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
+            <span id={tagsHeadingId} className="kicker">
               Filter by tag
             </span>
             {selectedTags.length > 0 ? (
-              <button
-                type="button"
-                onClick={() => setSelectedTags([])}
-                className="font-mono text-xs text-accent underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper rounded-sm"
-              >
+              <button type="button" className="ui-link cursor-pointer" onClick={() => setSelectedTags([])}>
                 Clear tags
               </button>
             ) : null}
           </div>
-          <ul aria-labelledby={tagsHeadingId} className="mt-2 flex flex-wrap gap-2">
+          <ul aria-labelledby={tagsHeadingId} className="chips mt-3">
             {allTags.map((tag) => {
               const pressed = selectedTags.includes(tag);
               return (
                 <li key={tag}>
-                  <button
-                    type="button"
-                    aria-pressed={pressed}
-                    onClick={() => toggleTag(tag)}
-                    className={
-                      pressed
-                        ? 'rounded-full border border-ink bg-ink px-3 py-1 text-sm text-paper transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper'
-                        : 'rounded-full border border-line bg-surface px-3 py-1 text-sm text-muted transition-colors duration-200 hover:border-accent hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper'
-                    }
-                  >
+                  <button type="button" className="chip" aria-pressed={pressed} onClick={() => toggleTag(tag)}>
                     {tag}
                   </button>
                 </li>
@@ -242,60 +219,60 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
       ) : null}
 
       {/* Result count (live region) */}
-      <p id={countId} aria-live="polite" aria-atomic="true" className="mt-6 font-mono text-xs text-muted">
+      <p id={countId} aria-live="polite" aria-atomic="true" className="meta mt-10 mb-3">
         {resultText}
       </p>
 
-      {/* Notes list */}
+      {/* The ledger */}
       {shown > 0 ? (
-        <ul className="mt-4 grid gap-4 sm:gap-5">
+        <ul className="rows">
           {filteredNotes.map((note) => (
-            <li key={note.slug}>
-              <NoteCard
-                slug={note.slug}
-                title={note.title}
-                summary={note.summary}
-                date={note.date}
-                tags={note.tags}
-              />
-            </li>
+            <NoteCard
+              key={note.slug}
+              slug={note.slug}
+              title={note.title}
+              summary={note.summary}
+              date={note.date}
+              tags={note.tags}
+              readingTime={note.readingTime}
+              terms={terms}
+            />
           ))}
         </ul>
       ) : (
-        <div className="mt-4 rounded-lg border border-dashed border-line px-6 py-10 text-center">
-          <p className="font-display text-lg text-ink">
-            {total === 0 ? 'No notes yet.' : 'No notes match that search.'}
-          </p>
-          {isFiltering ? (
-            <>
-              <p className="mt-2 text-sm text-muted">Try a different word, or remove a tag.</p>
-              <button
-                type="button"
-                onClick={clearAll}
-                className="mt-4 rounded-full border border-line bg-surface px-4 py-1.5 text-sm text-ink transition-colors duration-200 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
-              >
-                Clear search and tags
-              </button>
-            </>
-          ) : null}
+        <div className="rows">
+          <div className="row row-last row-muted">
+            <p className="row-meta">{total === 0 ? 'Nothing yet' : 'No match'}</p>
+            <div className="row-body">
+              <p className="row-title">{total === 0 ? 'No notes yet.' : 'No notes match that search.'}</p>
+              {isFiltering ? (
+                <p className="row-summary">
+                  Try a different word, or remove a tag.{' '}
+                  <button type="button" className="ui-link cursor-pointer" onClick={clearAll}>
+                    Clear search and tags →
+                  </button>
+                </p>
+              ) : null}
+            </div>
+          </div>
         </div>
       )}
 
       {/* Coming soon */}
       {upcoming.length > 0 ? (
-        <section aria-labelledby={comingSoonHeadingId} className="mt-14 border-t border-line pt-8">
-          <h2 id={comingSoonHeadingId} className="font-display text-2xl text-ink">
+        <section className="section" aria-labelledby={comingSoonHeadingId}>
+          <h2 id={comingSoonHeadingId} className="section-head">
             Coming soon
           </h2>
-          <p className="mt-1 text-sm text-muted">Drafts and topics I&rsquo;m working on next.</p>
-          <ul className="mt-6 grid gap-6">
+          <p className="meta mb-3">Drafts and topics I&rsquo;m working on next.</p>
+          <ul className="rows">
             {upcoming.map((item) => (
-              <li key={`${item.status}-${item.title}`} className="grid gap-1">
-                <span className="inline-flex w-fit items-center rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-xs uppercase tracking-wider text-accent">
-                  {item.status}
-                </span>
-                <h3 className="font-display text-lg leading-snug text-ink">{item.title}</h3>
-                {item.teaser ? <p className="text-sm leading-relaxed text-muted">{item.teaser}</p> : null}
+              <li key={`${item.status}-${item.title}`} className="row row-muted">
+                <p className="row-meta">{item.status}</p>
+                <div className="row-body">
+                  <h3 className="row-title">{item.title}</h3>
+                  {item.teaser ? <p className="row-summary">{item.teaser}</p> : null}
+                </div>
               </li>
             ))}
           </ul>
