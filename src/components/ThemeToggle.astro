@@ -1,0 +1,54 @@
+---
+/**
+ * "Night" / "Day" as a word in the nav. The visible word is CSS-generated from
+ * [data-theme] so it is correct before any script runs; aria-label + aria-pressed
+ * carry the accessible state. Hidden entirely when JS is unavailable.
+ */
+---
+
+<button type="button" class="theme-toggle" aria-label="Dark theme" aria-pressed="false">
+  <span class="theme-toggle-word" aria-hidden="true"></span>
+</button>
+
+<script>
+  const STORAGE_KEY = 'theme';
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.theme-toggle');
+
+  type Theme = 'light' | 'dark';
+
+  const stored = (): string | null => {
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  };
+  const current = (): Theme => (root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  const apply = (theme: Theme) => {
+    root.setAttribute('data-theme', theme);
+    buttons.forEach((button) => button.setAttribute('aria-pressed', String(theme === 'dark')));
+  };
+
+  // Sync aria-pressed with the pre-paint state.
+  apply(current());
+
+  buttons.forEach((button) =>
+    button.addEventListener('click', () => {
+      const next: Theme = current() === 'dark' ? 'light' : 'dark';
+      apply(next);
+      try {
+        localStorage.setItem(STORAGE_KEY, next);
+      } catch {
+        /* private mode: the choice lasts for this page only */
+      }
+    }),
+  );
+
+  // Follow the system while no explicit choice is stored.
+  media.addEventListener('change', (event) => {
+    const choice = stored();
+    if (choice !== 'light' && choice !== 'dark') apply(event.matches ? 'dark' : 'light');
+  });
+</script>

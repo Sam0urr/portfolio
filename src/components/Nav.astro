@@ -1,0 +1,39 @@
+---
+import { NAV } from '../consts';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  /** Pin the masthead to the top of the viewport (note pages). */
+  sticky?: boolean;
+  /** Render the reading-progress rule in the band's lower hairline (note pages). */
+  progress?: boolean;
+}
+
+const { sticky = false, progress = false } = Astro.props;
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path.startsWith(href);
+---
+
+<header class:list={['masthead', { 'masthead-sticky': sticky }]}>
+  <div class="wrap">
+    <div class="rule-double rule-draw" aria-hidden="true"></div>
+    <div class="masthead-band">
+      <a class="wordmark" href="/">Sam Lamrabte</a>
+      <nav class="masthead-nav" aria-label="Primary">
+        <ul class="nav-list">
+          {
+            NAV.map((item) => (
+              <li>
+                <a class="nav-link" href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <ThemeToggle />
+      {progress && <span class="masthead-progress" data-reading-progress aria-hidden="true"></span>}
+    </div>
+  </div>
+</header>

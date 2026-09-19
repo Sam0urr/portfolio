@@ -1,0 +1,22 @@
+---
+/**
+ * Content image: <figure> with a hairline-bordered <img loading="lazy"> and an
+ * optional mono caption. `class` lands on the <figure> so content can float or size it.
+ * `src` is a public path such as /images/notes/x.png.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+}
+
+const { src, alt, class: className, caption, width, height } = Astro.props;
+---
+
+<figure class:list={['fig', className]}>
+  <img src={src} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

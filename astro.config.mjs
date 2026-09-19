@@ -1,41 +1,77 @@
 // @ts-check
-
 import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, fontProviders } from 'astro/config';
 
-import react from '@astrojs/react';
-import tailwindcss from '@tailwindcss/vite';
+const subsets = /** @type {[string, ...string[]]} */ (['latin', 'latin-ext']);
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
-  integrations: [mdx(), sitemap(), react()],
+  site: 'https://samlamrabte.com',
+  trailingSlash: 'always',
+  build: { format: 'directory' },
 
+  integrations: [mdx(), react(), sitemap()],
+
+  redirects: {
+    '/notes/brexit-lobbying-transparency/': '/notes/lobbying-after-brexit/',
+    '/analysis/': '/notes/',
+  },
+
+  // Fonts API. Google serves variable fonts with only the requested axes, so the
+  // optical-size axis is requested explicitly (unifont's experimental `variableAxis`);
+  // the served files keep `opsz` and `font-optical-sizing: auto` does the rest.
   fonts: [
-      {
-          provider: fontProviders.local(),
-          name: 'Atkinson',
-          cssVariable: '--font-atkinson',
-          fallbacks: ['sans-serif'],
-          options: {
-              variants: [
-                  {
-                      src: ['./src/assets/fonts/atkinson-regular.woff'],
-                      weight: 400,
-                      style: 'normal',
-                      display: 'swap',
-                  },
-                  {
-                      src: ['./src/assets/fonts/atkinson-bold.woff'],
-                      weight: 700,
-                      style: 'normal',
-                      display: 'swap',
-                  },
-              ],
-          },
-      },
-	],
+    {
+      // Display — wordmark, headings, ledes (italic), pull quotes.
+      name: 'Newsreader',
+      cssVariable: '--font-display',
+      provider: fontProviders.google(),
+      weights: [400],
+      styles: ['normal', 'italic'],
+      subsets,
+      fallbacks: ['Iowan Old Style', 'Palatino', 'Georgia', 'serif'],
+      optimizedFallbacks: true,
+      options: { experimental: { variableAxis: { opsz: [['6', '72']] } } },
+    },
+    {
+      // Body — all prose; the 400–600 range covers <strong> (600).
+      name: 'Source Serif 4',
+      cssVariable: '--font-body',
+      provider: fontProviders.google(),
+      weights: ['400 600'],
+      styles: ['normal'],
+      subsets,
+      fallbacks: ['Charter', 'Iowan Old Style', 'Georgia', 'serif'],
+      optimizedFallbacks: true,
+      options: { experimental: { variableAxis: { opsz: [['8', '60']] } } },
+    },
+    {
+      // Body italic — 400 only.
+      name: 'Source Serif 4',
+      cssVariable: '--font-body',
+      provider: fontProviders.google(),
+      weights: [400],
+      styles: ['italic'],
+      subsets,
+      fallbacks: ['Charter', 'Iowan Old Style', 'Georgia', 'serif'],
+      optimizedFallbacks: true,
+      options: { experimental: { variableAxis: { opsz: [['8', '60']] } } },
+    },
+    {
+      // Meta — nav, kickers, dates, bylines, chips, captions, footer (500 = uppercase labels).
+      name: 'IBM Plex Mono',
+      cssVariable: '--font-mono',
+      provider: fontProviders.google(),
+      weights: [400, 500],
+      styles: ['normal'],
+      subsets,
+      fallbacks: ['SF Mono', 'Menlo', 'Consolas', 'monospace'],
+      optimizedFallbacks: true,
+    },
+  ],
 
   vite: {
     plugins: [tailwindcss()],
