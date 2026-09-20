@@ -451,9 +451,19 @@
     cursor: pointer;
     color: var(--color-muted);
   }
-  /* The word is set by CSS so it is right before JS runs; aria-label carries the name. */
+  /* Both words are set by CSS so the right one shows before JS runs; aria-label carries
+     the name. They share one grid cell and crossfade with the theme colours, so the
+     control keeps a constant width and never swaps text abruptly. */
+  .theme-toggle-word { display: inline-grid; justify-items: end; }
+  .theme-toggle-word::before,
+  .theme-toggle-word::after {
+    grid-area: 1 / 1;
+    transition: opacity 200ms var(--ease);
+  }
   .theme-toggle-word::before { content: "Night"; }
-  [data-theme="dark"] .theme-toggle-word::before { content: "Day"; }
+  .theme-toggle-word::after { content: "Day"; opacity: 0; }
+  [data-theme="dark"] .theme-toggle-word::before { opacity: 0; }
+  [data-theme="dark"] .theme-toggle-word::after { opacity: 1; }
   html:not(.js) .theme-toggle { display: none; }
 
   /* Reading progress: the band's lower hairline filling with oxblood (scaled by motion.ts). */
@@ -766,8 +776,10 @@
     color: var(--color-muted);
     font-feature-settings: "lnum", "tnum";
   }
-  /* Content photos dim slightly at night; the hero does not (.no-dim). */
+  /* Content photos dim slightly at night; the hero does not (.no-dim). The dim crossfades
+     with the theme colours (same 200ms) instead of snapping after them. */
   [data-theme="dark"] :is(.fig img, .prose img, .plate img):not(.no-dim) { filter: brightness(0.92); }
+  html.theme-ready :is(.fig img, .prose img, .plate img):not(.no-dim) { transition: filter 200ms var(--ease); }
   [data-theme="dark"] .hero-plate img { filter: none; }
 
   /* 12-column figure grid (projects): 8+4, then 4+4+4; one full-width lead allowed. */
