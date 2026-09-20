@@ -21,11 +21,15 @@ const notes: NoteSummary[] = (await getCollection('notes', ({ data }) => !data.d
     readingTime: readingTime(note.body ?? '', 230),
   }));
 
-const upcoming: UpcomingNote[] = (await getCollection('upcoming')).map(({ data }) => ({
-  status: data.status,
-  title: data.title,
-  teaser: data.teaser,
-}));
+// Nearest first: the file loader hands entries back by id, which is no order at all.
+const STATUS_ORDER: UpcomingNote['status'][] = ['Drafting', 'Researching', 'Planned'];
+const upcoming: UpcomingNote[] = (await getCollection('upcoming'))
+  .map(({ data }) => ({
+    status: data.status,
+    title: data.title,
+    teaser: data.teaser,
+  }))
+  .sort((a, b) => STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status));
 
 const count = `${String(notes.length).padStart(2, '0')} ${notes.length === 1 ? 'entry' : 'entries'}`;
 ---

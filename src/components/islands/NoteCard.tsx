@@ -69,7 +69,16 @@ export default function NoteCard({ slug, title, summary, date, tags, readingTime
     <li className="row">
       <div className="row-meta">
         <time dateTime={date}>{formatNoteDate(date)}</time>
-        {readingTime ? <span> · {readingTime} min</span> : null}
+        {/* The separator is inline under 768px and hidden from 768px, where the read time
+            takes its own line (global.css .row-meta-time). */}
+        {readingTime ? (
+          <span className="row-meta-time">
+            <span className="row-meta-sep" aria-hidden="true">
+              {' · '}
+            </span>
+            {readingTime} min
+          </span>
+        ) : null}
       </div>
       <div className="row-body">
         <h3 className="row-title">

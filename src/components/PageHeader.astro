@@ -17,9 +17,17 @@ const { title, kicker, count, lede, class: className } = Astro.props;
 
 <header class:list={['page-header', className]}>
   {kicker && <span class="kicker" data-load-reveal style="--i: 0">{kicker}</span>}
-  <h1 data-load-reveal style="--i: 1">
+  <!-- "rise": the title is the page's largest text, so it settles into place without an
+       opacity fade Chrome would refuse to count as the LCP. The space before the count keeps
+       the accessible name "Notes 06 entries", not "Notes06 entries". -->
+  <h1 data-load-reveal="rise" style="--i: 1">
     {title}
-    {count && <span class="meta page-header-count">{count}</span>}
+    {count && (
+      <>
+        {' '}
+        <span class="meta page-header-count">{count}</span>
+      </>
+    )}
   </h1>
   {lede && <p class="lede" data-load-reveal style="--i: 2">{lede}</p>}
   <slot />

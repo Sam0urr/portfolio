@@ -138,6 +138,15 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
     );
   }
 
+  /** Back to the full ledger: clears the search and every tag at once (the empty state's way out). */
+  function reset() {
+    if (debounceTimer.current !== null) clearTimeout(debounceTimer.current);
+    debounceTimer.current = null;
+    setQuery('');
+    setDebouncedQuery('');
+    setSelectedTags([]);
+  }
+
   // Every term must appear somewhere in title + summary + tags (AND semantics).
   const terms = useMemo(() => normalise(debouncedQuery).split(' ').filter(Boolean), [debouncedQuery]);
 
@@ -216,8 +225,13 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
           § 01 · Notes
         </h2>
         {/* Result count: a live region for assistive tech, visible only while filtering
-            (the h1 already carries the total). */}
-        <p id={countId} aria-live="polite" aria-atomic="true" className={isFiltering ? 'meta mb-4' : 'sr-only'}>
+            with results (the h1 carries the total; the empty state below says the rest). */}
+        <p
+          id={countId}
+          aria-live="polite"
+          aria-atomic="true"
+          className={isFiltering && shown > 0 ? 'meta mb-4' : 'sr-only'}
+        >
           {resultText}
         </p>
         {shown > 0 ? (
@@ -235,8 +249,18 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
               />
             ))}
           </ul>
+        ) : total === 0 ? (
+          <p className="lede">Nothing here yet.</p>
         ) : (
-          <p className="lede">{total === 0 ? 'Nothing here yet.' : 'Nothing matches that yet.'}</p>
+          /* Empty result: what happened, then the one way out (both filters at once). */
+          <div className="notes-empty">
+            <p className="lede">Nothing matches that yet.</p>
+            <p className="mt-3 mb-0">
+              <button type="button" className="ui-link cursor-pointer" onClick={reset}>
+                Show all {total} {noun} →
+              </button>
+            </p>
+          </div>
         )}
       </section>
 

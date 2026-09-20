@@ -14,7 +14,12 @@ export default defineConfig({
   // One stylesheet for the whole site (~8 KB gz): inlined so no render-blocking request precedes first paint.
   build: { format: 'directory', inlineStylesheets: 'always' },
 
-  integrations: [mdx(), react(), sitemap()],
+  integrations: [
+    mdx(),
+    react(),
+    // /publications/ stays reachable but unlisted (and noindex) until its entries are real.
+    sitemap({ filter: (page) => !page.endsWith('/publications/') }),
+  ],
 
   redirects: {
     '/notes/brexit-lobbying-transparency/': '/notes/lobbying-after-brexit/',

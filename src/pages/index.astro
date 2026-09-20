@@ -19,11 +19,7 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 ---
 
 <Base title={SITE.homeTitle} description={SITE.description}>
-  <p class="dateline home-dateline">
-    <span class="home-dateline-text">
-      <span>{SITE.dateline}</span>
-    </span>
-  </p>
+  <p class="dateline">{SITE.dateline}</p>
 
   <section class="hero home-hero" aria-labelledby="hero-headline" data-hero-stage>
     <div class="hero-text">
@@ -120,22 +116,6 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
   .hero-headline { font-family: var(--font-headline); font-weight: 400; letter-spacing: -0.015em; }
   .hero-headline em { font-style: italic; }
 
-  /* The plate breaks the rule over cols 9–12, so the dateline's text keeps to the
-     headline's cols 1–8 on the same grid: "Updated …" ends where the plate begins. */
-  .home-dateline {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--space-6);
-  }
-  .home-dateline-text {
-    grid-column: 1 / span 8;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: var(--space-2) var(--space-6);
-    min-width: 0;
-  }
-
   .intro { margin-top: var(--space-16); }
   .intro .lede { max-width: var(--measure-wide); }
   .intro-prose { margin-top: var(--space-8); }
@@ -145,7 +125,6 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 
   @media (max-width: 63.9375rem) {
     .home-hero .hero-plate { margin-top: 0; }
-    .home-dateline-text { grid-column: 1 / -1; }
   }
   @media (max-width: 47.9375rem) {
     .intro { margin-top: var(--space-12); }

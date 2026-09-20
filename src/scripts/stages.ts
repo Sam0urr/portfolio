@@ -62,18 +62,25 @@ function setupProjectStage(wrap: HTMLElement, gsap: Gsap, signal: AbortSignal): 
     // stage is never empty between scenes; the exit blur masks the double exposure.
     const at = i === 0 ? 0 : i - 0.12;
 
-    // Enter: far layers barely move, near layers rise further and settle later.
-    tl.fromTo(scene, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, at);
-    for (const layer of layers) {
-      const d = depth(layer);
-      tl.fromTo(
-        layer,
-        { y: 40 + 80 * d, scale: 1.04 + 0.06 * d, filter: 'blur(6px)' },
-        { y: 0, scale: 1, filter: 'blur(0px)', duration: 0.35 + 0.1 * d, ease: 'power2.out' },
-        at,
-      );
+    if (i === 0) {
+      // The stage pins with its first scene already composed: the reader arrives on the
+      // picture, not on an empty frame that fills after a quarter-screen of scroll.
+      gsap.set(scene, { autoAlpha: 1 });
+      if (caption) gsap.set(caption, { autoAlpha: 1 });
+    } else {
+      // Enter: far layers barely move, near layers rise further and settle later.
+      tl.fromTo(scene, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, at);
+      for (const layer of layers) {
+        const d = depth(layer);
+        tl.fromTo(
+          layer,
+          { y: 40 + 80 * d, scale: 1.04 + 0.06 * d, filter: 'blur(6px)' },
+          { y: 0, scale: 1, filter: 'blur(0px)', duration: 0.35 + 0.1 * d, ease: 'power2.out' },
+          at,
+        );
+      }
+      if (caption) tl.fromTo(caption, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3 }, at + 0.12);
     }
-    if (caption) tl.fromTo(caption, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3 }, at + 0.12);
 
     // Hold until 0.62, then exit upwards with the same depth ordering; the last scene stays.
     if (!last) {

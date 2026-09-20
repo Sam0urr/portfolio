@@ -22,15 +22,17 @@ interface Props {
   variant?: 'page' | 'essay' | 'cv' | 'project';
   /** Optional mono count rendered after the title ("06 entries"). */
   count?: string;
+  /** Keep the page out of search engines (see Base). */
+  noindex?: boolean;
 }
 
-const { title, description, kicker, lede, headings = [], variant = 'page', count } = Astro.props;
+const { title, description, kicker, lede, headings = [], variant = 'page', count, noindex = false } = Astro.props;
 const sections = headings.filter((heading) => heading.depth === 2);
 const showContents = sections.length >= 4;
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
-<Base title={title} description={description}>
+<Base title={title} description={description} noindex={noindex}>
   <PageHeader title={title} kicker={kicker} lede={lede} count={count} />
   {
     showContents && (
