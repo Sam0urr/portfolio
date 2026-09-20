@@ -385,7 +385,7 @@
     border-bottom: var(--rule);
   }
   .wordmark {
-    font-family: var(--font-display);
+    font-family: var(--font-headline);
     font-size: var(--text-md);
     font-weight: 500;
     line-height: 1.3;

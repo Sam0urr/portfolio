@@ -113,10 +113,9 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 </Base>
 
 <style>
-  /* The hero sits 2rem under the dateline; the plate is pulled up 4rem so it crosses
-     the rule by a full 2rem (the one grid break) while the kicker stays clear of it. */
+  /* The hero sits 2rem under the dateline; the plate starts level with the kicker. */
   .home-hero { padding-top: var(--space-8); }
-  .home-hero .hero-plate { margin-top: calc(-1 * var(--space-16)); }
+  .home-hero .hero-plate { margin-top: 0; }
   /* The headline keeps the first edition's serif and its italic phrase. */
   .hero-headline { font-family: var(--font-headline); font-weight: 400; letter-spacing: -0.015em; }
   .hero-headline em { font-style: italic; }

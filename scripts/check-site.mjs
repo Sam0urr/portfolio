@@ -39,7 +39,6 @@ const CONTRACT_PAGES = [
   '/publications/',
 ];
 const CONTRACT_FILES = [
-  'rss.xml',
   'sitemap-index.xml',
   'robots.txt',
   'CNAME',

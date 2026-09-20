@@ -26,7 +26,7 @@ Create `src/content/notes/<slug>.md`. The filename is the URL: `/notes/<slug>/`.
 title: "The title"
 date: 2026-05-14          # YYYY-MM-DD
 updated: 2026-05-15       # optional
-summary: "One or two sentences; shown in lists, as the standfirst, and in the RSS feed."
+summary: "One or two sentences; shown in lists and as the standfirst."
 tags: ["Political Economy", "Governance"]
 keywords: ["optional", "search terms"]
 draft: false              # optional; true hides the note from every list, the feed and the build
@@ -50,7 +50,7 @@ src/
     upcoming.json            "Coming soon" entries for the Notes index
   content.config.ts          collection schemas (zod)
   layouts/                   Base (html shell), Page, Note, Project
-  pages/                     one file per route, plus rss.xml.ts and 404.astro
+  pages/                     one file per route, plus 404.astro
   components/                Nav, Footer, ThemeToggle, Img, Download, NoteCardStatic, Prose, PageHeader
   components/islands/        NotesExplorer.tsx (React, hydrated on the Notes index)
   scripts/                   motion.ts (Lenis + GSAP), format.ts (dates, reading time)
