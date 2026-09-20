@@ -17,10 +17,14 @@
   const STORAGE_KEY = 'theme';
   const root = document.documentElement;
   const media = window.matchMedia('(prefers-color-scheme: dark)');
-  const buttons = document.querySelectorAll<HTMLButtonElement>('.theme-toggle');
+  // Buttons that already carry the click handler. The document is swapped by the client
+  // router, so the buttons are looked up again on every astro:page-load; a removed button
+  // takes its listener with it, a surviving one is not bound twice.
+  const bound = new WeakSet<HTMLButtonElement>();
 
   type Theme = 'light' | 'dark';
 
+  const buttons = () => Array.from(document.querySelectorAll<HTMLButtonElement>('.theme-toggle'));
   const stored = (): string | null => {
     try {
       return localStorage.getItem(STORAGE_KEY);
@@ -33,23 +37,33 @@
   const label = (theme: Theme) => (theme === 'dark' ? 'Day theme' : 'Night theme');
   const apply = (theme: Theme) => {
     root.setAttribute('data-theme', theme);
-    buttons.forEach((button) => button.setAttribute('aria-label', label(theme)));
+    for (const button of buttons()) button.setAttribute('aria-label', label(theme));
   };
 
-  // Sync the label with the pre-paint state.
-  apply(current());
+  const onClick = () => {
+    const next: Theme = current() === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      /* private mode: the choice lasts for this page only */
+    }
+  };
 
-  buttons.forEach((button) =>
-    button.addEventListener('click', () => {
-      const next: Theme = current() === 'dark' ? 'light' : 'dark';
-      apply(next);
-      try {
-        localStorage.setItem(STORAGE_KEY, next);
-      } catch {
-        /* private mode: the choice lasts for this page only */
-      }
-    }),
-  );
+  const bind = () => {
+    // Sync the label with the pre-paint state (or the state carried across the swap).
+    apply(current());
+    for (const button of buttons()) {
+      if (bound.has(button)) continue;
+      bound.add(button);
+      button.addEventListener('click', onClick);
+    }
+  };
+
+  // Now (so the control works before the load event), then after every client navigation
+  // (astro:page-load also fires on the first load; bind() is idempotent).
+  bind();
+  document.addEventListener('astro:page-load', bind);
 
   // Follow the system while no explicit choice is stored.
   media.addEventListener('change', (event) => {

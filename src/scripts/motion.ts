@@ -12,18 +12,29 @@
  *
  * Reduced motion, or no IntersectionObserver: only reading progress runs; nothing is
  * hidden, nothing is imported. Otherwise, once the page has loaded, its first frame has
- * been painted and the main thread is idle, Lenis + GSAP load on demand and <html> gains
- * .motion-ok (the imports never precede the first paint, so they stay off the LCP path
- * even when the network is instant). Reveals are driven
+ * been painted and the main thread is idle (scripts/settled.ts), Lenis + GSAP load on
+ * demand and <html> gains .motion-ok (the imports never precede the first paint, so they
+ * stay off the LCP path even when the network is instant). Reveals are driven
  * by one IntersectionObserver; ScrollTrigger is imported only for pages with a
  * [data-parallax] element (the home plate). If anything throws, every element is made
  * visible again.
+ *
+ * Lifecycle with the view-transition router (scripts/transitions.ts): `initMotion()` runs
+ * for the first document and on every `astro:page-load`, `teardownMotion()` on every
+ * `astro:before-swap`, so each document
+ * owns exactly one Lenis, one ticker callback and one set of listeners. On a client
+ * navigation the first-paint gate is skipped (the paint entry is the initial load's, the
+ * modules are already cached) and Lenis is created after the router has restored scroll,
+ * so a back navigation lands where the reader left.
  */
 
 type GsapModule = typeof import('gsap');
 type ScrollTriggerModule = typeof import('gsap/ScrollTrigger');
 type Gsap = GsapModule['gsap'];
 type ScrollTriggerStatic = ScrollTriggerModule['ScrollTrigger'];
+type LenisInstance = InstanceType<typeof import('lenis').default>;
+
+import { afterSettled } from './settled';
 
 const EASE_NAME = 'broadsheet';
 /** "top 88%": an element counts as entered once its top crosses 88% of the viewport height. */
@@ -31,65 +42,125 @@ const REVEAL_ROOT_MARGIN = '0px 0px -12% 0px';
 const REVEAL_VIEWPORT_FRACTION = 0.88;
 const STAGGER_MS = 60;
 const STAGGER_CAP = 6;
-const IDLE_TIMEOUT_MS = 1500;
-const FIRST_PAINT_TIMEOUT_MS = 2000;
 
-let started = false;
+/** Debug/diagnostic counters (read by the smoke test as `window.__motion`). */
+type MotionDebug = {
+  /** The live Lenis instance, or null between teardown and the next start. */
+  lenis: LenisInstance | null;
+  /** Lenis instances alive right now (must be 0 or 1). */
+  lenisAlive: number;
+  /** Lenis instances created since the document loaded. */
+  lenisCreated: number;
+  /** gsap.ticker callbacks alive right now (must be 0 or 1). */
+  tickers: number;
+  /** Times initMotion() ran for a document. */
+  inits: number;
+};
+declare global {
+  interface Window {
+    __motion?: MotionDebug;
+  }
+}
+const debug: MotionDebug = { lenis: null, lenisAlive: 0, lenisCreated: 0, tickers: 0, inits: 0 };
+if (typeof window !== 'undefined') window.__motion = debug;
+
+/** Everything one document's motion owns; `teardownMotion()` releases it all. */
+type Session = {
+  /** Every DOM/window listener registers with this signal. */
+  controller: AbortController;
+  /** Bumped by teardown so late async work (imports, fonts.ready) finds it stale. */
+  generation: number;
+  lenis: LenisInstance | null;
+  ticker: ((time: number) => void) | null;
+  gsap: Gsap | null;
+  scrollTrigger: ScrollTriggerStatic | null;
+  observers: IntersectionObserver[];
+  /** Cancels the load → first paint → idle gate of a first-load boot still waiting. */
+  cancelBoot: (() => void) | null;
+};
+
+let generation = 0;
+let session: Session | null = null;
+/** True once a document has finished its first paint and load — later inits are client navigations. */
+let firstInitDone = false;
 
 export function initMotion(): void {
-  if (started) return;
-  started = true;
+  if (session) return;
+  session = {
+    controller: new AbortController(),
+    generation: ++generation,
+    lenis: null,
+    ticker: null,
+    gsap: null,
+    scrollTrigger: null,
+    observers: [],
+    cancelBoot: null,
+  };
+  debug.inits += 1;
+  const current = session;
+  const clientNavigation = firstInitDone;
+  firstInitDone = true;
 
-  initReadingProgress();
+  initReadingProgress(current);
 
   const root = document.documentElement;
   if (root.classList.contains('reduced-motion') || !('IntersectionObserver' in window)) return;
 
+  if (clientNavigation) {
+    // The document was reached by the client router: it is loaded and painted, the
+    // modules are cached, and the router has already restored scroll. Start on the next
+    // frame so the swap has been presented.
+    requestAnimationFrame(() => {
+      if (session === current) void start(root, current);
+    });
+    return;
+  }
+
   // Off the critical path: nothing below the fold needs motion before the page has loaded
-  // and painted.
-  const boot = () => afterFirstPaint(() => whenIdle(() => void start(root)));
-  if (document.readyState === 'complete') boot();
-  else window.addEventListener('load', boot, { once: true });
+  // and painted (scripts/settled.ts).
+  current.cancelBoot = afterSettled(() => {
+    if (session === current) void start(root, current);
+  });
 }
 
 /**
- * Runs once the first contentful paint has been presented (Paint Timing), so the motion
- * imports never queue ahead of it; a frame later as a fallback, and no later than
- * FIRST_PAINT_TIMEOUT_MS regardless.
+ * Releases everything `initMotion()` set up for the current document: ScrollTriggers,
+ * the ticker callback, Lenis, listeners, observers, timers and the <html> classes.
+ * Safe to call when nothing is running.
  */
-function afterFirstPaint(fn: () => void): void {
-  let done = false;
-  const run = () => {
-    if (done) return;
-    done = true;
-    fn();
-  };
-  try {
-    if (PerformanceObserver.supportedEntryTypes.includes('paint')) {
-      const observer = new PerformanceObserver((list) => {
-        if (list.getEntriesByName('first-contentful-paint').length === 0) return;
-        observer.disconnect();
-        run();
-      });
-      observer.observe({ type: 'paint', buffered: true });
-      window.setTimeout(run, FIRST_PAINT_TIMEOUT_MS);
-      return;
-    }
-  } catch {
-    // Fall through: no Paint Timing, use the next frame.
-  }
-  requestAnimationFrame(() => window.setTimeout(run, 0));
-}
+export function teardownMotion(): void {
+  const current = session;
+  if (!current) return;
+  session = null;
+  generation += 1;
 
-function whenIdle(fn: () => void): void {
-  if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(fn, { timeout: IDLE_TIMEOUT_MS });
-  else window.setTimeout(fn, 1);
+  current.controller.abort();
+  current.cancelBoot?.();
+  for (const observer of current.observers) observer.disconnect();
+
+  try {
+    current.scrollTrigger?.getAll().forEach((trigger) => trigger.kill());
+    if (current.ticker && current.gsap) {
+      current.gsap.ticker.remove(current.ticker);
+      debug.tickers -= 1;
+    }
+    if (current.lenis) {
+      current.lenis.destroy();
+      debug.lenisAlive -= 1;
+    }
+  } catch (error) {
+    console.warn('[motion] teardown:', error);
+  }
+  debug.lenis = null;
+
+  const root = document.documentElement;
+  root.classList.remove('lenis', 'lenis-smooth', 'lenis-scrolling', 'lenis-stopped', 'motion-ok');
 }
 
 /* ---------------------------------------------------------------------------
    Reading progress — plain scroll listener + rAF, no easing, every mode.
    --------------------------------------------------------------------------- */
-function initReadingProgress(): void {
+function initReadingProgress(current: Session): void {
   const bars = Array.from(document.querySelectorAll<HTMLElement>('[data-reading-progress]'));
   if (bars.length === 0) return;
 
@@ -110,6 +181,7 @@ function initReadingProgress(): void {
 
   const update = () => {
     queued = false;
+    if (session !== current) return;
     const progress = Math.min(1, Math.max(0, measure()));
     for (const bar of bars) bar.style.transform = `scaleX(${progress})`;
   };
@@ -119,15 +191,16 @@ function initReadingProgress(): void {
     requestAnimationFrame(update);
   };
 
-  window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule, { passive: true });
+  const { signal } = current.controller;
+  window.addEventListener('scroll', schedule, { passive: true, signal });
+  window.addEventListener('resize', schedule, { passive: true, signal });
   update();
 }
 
 /* ---------------------------------------------------------------------------
    Smooth scroll + scroll-driven reveals (motion-ok only).
    --------------------------------------------------------------------------- */
-async function start(root: HTMLElement): Promise<void> {
+async function start(root: HTMLElement, current: Session): Promise<void> {
   try {
     // The reader may have switched reduced motion on while we waited for idle.
     if (root.classList.contains('reduced-motion')) return;
@@ -139,11 +212,15 @@ async function start(root: HTMLElement): Promise<void> {
       import('gsap/CustomEase'),
       wantsParallax ? import('gsap/ScrollTrigger') : Promise.resolve(null),
     ]);
+    // Torn down while the modules loaded (a navigation mid-import): leave nothing behind.
+    if (session !== current) return;
     const ScrollTrigger = scrollTriggerModule?.ScrollTrigger ?? null;
 
     gsap.registerPlugin(CustomEase);
     if (ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
     CustomEase.create(EASE_NAME, '0.22, 1, 0.36, 1');
+    current.gsap = gsap;
+    current.scrollTrigger = ScrollTrigger;
 
     // Lenis drives native scroll; GSAP's ticker drives Lenis.
     const lenis = new Lenis({
@@ -153,32 +230,52 @@ async function start(root: HTMLElement): Promise<void> {
       autoRaf: false,
       anchors: true,
     });
+    current.lenis = lenis;
+    debug.lenis = lenis;
+    debug.lenisAlive += 1;
+    debug.lenisCreated += 1;
     if (ScrollTrigger) lenis.on('scroll', () => ScrollTrigger.update());
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    const ticker = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(ticker);
+    current.ticker = ticker;
+    debug.tickers += 1;
     gsap.ticker.lagSmoothing(0);
 
     root.classList.add('motion-ok');
-    setupReveals(gsap);
+    setupReveals(gsap, current);
 
+    const { signal } = current.controller;
     if (ScrollTrigger) {
       setupParallax(gsap, ScrollTrigger);
       // Late layout shifts (fonts, images) move trigger positions.
-      window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
-      document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => {});
+      window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true, signal });
+      document.fonts?.ready
+        .then(() => {
+          if (session === current) ScrollTrigger.refresh();
+        })
+        .catch(() => {});
     }
 
     // Back/forward cache restores mid-page: make sure nothing stays hidden.
-    window.addEventListener('pageshow', (event) => {
-      if (event.persisted) revealEverything();
-    });
+    window.addEventListener(
+      'pageshow',
+      (event) => {
+        if (event.persisted) revealEverything();
+      },
+      { signal },
+    );
     // Reduced motion switched on mid-visit: show everything, stop hiding.
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    reduce.addEventListener?.('change', (event) => {
-      if (!event.matches) return;
-      root.classList.add('reduced-motion');
-      root.classList.remove('motion-ok');
-      revealEverything();
-    });
+    reduce.addEventListener?.(
+      'change',
+      (event) => {
+        if (!event.matches) return;
+        root.classList.add('reduced-motion');
+        root.classList.remove('motion-ok');
+        revealEverything();
+      },
+      { signal },
+    );
   } catch (error) {
     root.classList.remove('motion-ok');
     revealEverything();
@@ -212,7 +309,7 @@ function collectRevealTargets(): RevealTarget[] {
   return targets;
 }
 
-function setupReveals(gsap: Gsap): void {
+function setupReveals(gsap: Gsap, current: Session): void {
   const targets = collectRevealTargets();
   if (targets.length === 0) return;
 
@@ -249,6 +346,7 @@ function setupReveals(gsap: Gsap): void {
     },
     { rootMargin: REVEAL_ROOT_MARGIN },
   );
+  current.observers.push(observer);
 
   for (const { el } of pending.values()) gsap.set(el, { opacity: 0, y: 10 });
   for (const el of pending.keys()) observer.observe(el);

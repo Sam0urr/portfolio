@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
 import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
 import { SITE } from '../consts';
@@ -88,6 +89,11 @@ const pageTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
     <Font cssVariable="--font-body" preload={[{ subset: 'latin', style: 'normal' }]} />
     <Font cssVariable="--font-mono" />
 
+    <!-- Page-to-page navigation turns the page: the masthead stays put (Nav.astro), the
+         content cross-fades; fallback "animate" simulates it where the View Transitions
+         API is missing, and nothing animates under prefers-reduced-motion. The lifecycle
+         hooks live in scripts/transitions.ts. -->
+    <ClientRouter fallback="animate" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -98,9 +104,13 @@ const pageTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
     <Footer />
     <script>
       import { loadClarityWhenIdle } from '../scripts/clarity';
-      import { initMotion } from '../scripts/motion';
-      initMotion();
+      import { initTransitions } from '../scripts/transitions';
+      // Motion boots now (first document) and on astro:page-load (every client navigation),
+      // is torn down on astro:before-swap; the theme survives the swap; the router loads
+      // once the page has settled. See scripts/transitions.ts.
+      initTransitions();
       // Microsoft Clarity: after load + idle, so it never sits on the LCP or blocks first input.
+      // Loaded once per document load; Clarity follows client-side navigation itself.
       loadClarityWhenIdle();
       // Theme colour transitions switch on only after the first paint.
       requestAnimationFrame(() => {

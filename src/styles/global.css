@@ -1240,6 +1240,12 @@
     animation-delay: calc(150ms + var(--i, 0) * 90ms);
   }
   [data-load-reveal="rise"] { animation-name: reveal-rise; }
+  /* Reached by the client router (scripts/transitions.ts): the cross-fade is the arrival;
+     load reveals and the masthead rule would double it. Content is simply visible. */
+  html.client-nav [data-load-reveal],
+  html.client-nav .rule-draw {
+    animation: none;
+  }
   /* Footer mirrors the masthead: its rule draws when the footer reveals. */
   html.js.motion-ok [data-reveal].is-revealed .rule-draw-on-reveal {
     transform-origin: left center;

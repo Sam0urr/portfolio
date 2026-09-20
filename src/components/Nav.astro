@@ -14,7 +14,10 @@ const path = Astro.url.pathname;
 const isActive = (href: string) => path === href || path.startsWith(href);
 ---
 
-<header class:list={['masthead', { 'masthead-sticky': sticky }]}>
+<!-- Shared view-transition name + animate="none": the masthead neither fades nor morphs
+     between pages (it is not identical across pages — sticky + progress rule on notes —
+     so it is swapped, not persisted). -->
+<header class:list={['masthead', { 'masthead-sticky': sticky }]} transition:name="masthead" transition:animate="none">
   <div class="wrap">
     <div class="rule-double rule-draw" aria-hidden="true"></div>
     <div class="masthead-band">

@@ -59,12 +59,13 @@ function readUrlState(knownTags: string[]): { query: string; tags: string[] } {
 
 function writeUrlState(query: string, tags: string[]): void {
   if (typeof window === 'undefined') return;
-  const params = new URLSearchParams();
   const trimmed = query.trim();
-  if (trimmed) params.set(QUERY_PARAM, trimmed);
-  if (tags.length > 0) params.set(TAGS_PARAM, tags.join(','));
-  // Keep commas readable in the address bar.
-  const search = params.toString().replace(/%2C/gi, ',');
+  const pairs: string[] = [];
+  if (trimmed) pairs.push(`${QUERY_PARAM}=${encodeURIComponent(trimmed)}`);
+  // Commas stay readable in the address bar; spaces are %20, as in the tag links on notes
+  // (Note.astro), so arriving from one leaves the URL exactly as written.
+  if (tags.length > 0) pairs.push(`${TAGS_PARAM}=${tags.map(encodeURIComponent).join(',')}`);
+  const search = pairs.join('&');
   const next = `${window.location.pathname}${search ? `?${search}` : ''}${window.location.hash}`;
   const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   if (next !== current) {
