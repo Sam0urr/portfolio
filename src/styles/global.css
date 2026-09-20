@@ -34,10 +34,10 @@
 
   /* Type families. Astro's Fonts API overrides the same variables at runtime with
      the served families plus metric-adjusted fallbacks. */
-  --font-display: "Newsreader", "Iowan Old Style", Palatino, Georgia, serif;
-  --font-display--font-feature-settings: "kern", "liga", "onum";
-  --font-body: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
-  --font-body--font-feature-settings: "kern", "liga", "onum";
+  --font-display: "Syne", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  --font-display--font-feature-settings: "kern", "liga";
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-body--font-feature-settings: "kern", "liga", "calt";
   --font-mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
   --font-mono--font-feature-settings: "lnum", "tnum";
   --default-font-family: var(--font-body);
@@ -134,7 +134,7 @@
     font-family: var(--font-body);
     font-optical-sizing: auto;
     font-synthesis: none;
-    font-feature-settings: "kern", "liga", "onum";
+    font-feature-settings: "kern", "liga", "calt";
     hanging-punctuation: first;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -319,10 +319,10 @@
   }
   .ui-link:hover { color: var(--color-accent); }
 
-  /* Lede: Newsreader italic. */
+  /* Lede: the display face upright (Syne has no italic), a step above the prose. */
   .lede {
     font-family: var(--font-display);
-    font-style: italic;
+    font-weight: 400;
     font-size: var(--text-md);
     line-height: 1.5;
     max-width: var(--measure-prose);
@@ -917,7 +917,7 @@
     margin: var(--space-8) 0;
     padding-left: var(--space-4);
     border-left: 1px solid var(--color-accent);
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-style: italic;
     font-size: var(--text-md);
     line-height: 1.5;

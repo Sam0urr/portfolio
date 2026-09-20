@@ -118,7 +118,8 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
      the rule by a full 2rem (the one grid break) while the kicker stays clear of it. */
   .home-hero { padding-top: var(--space-8); }
   .home-hero .hero-plate { margin-top: calc(-1 * var(--space-16)); }
-  .hero-headline em { font-style: italic; }
+  /* Syne has no italic: the emphasised phrase takes the extended 700 weight instead. */
+  .hero-headline em { font-style: normal; font-weight: 700; }
 
   /* The plate breaks the rule over cols 9–12, so the dateline's text keeps to the
      headline's cols 1–8 on the same grid: "Updated …" ends where the plate begins. */
