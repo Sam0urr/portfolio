@@ -35,6 +35,7 @@ type ScrollTriggerStatic = ScrollTriggerModule['ScrollTrigger'];
 type LenisInstance = InstanceType<typeof import('lenis').default>;
 
 import { afterSettled } from './settled';
+import { setupStages } from './stages';
 
 const EASE_NAME = 'broadsheet';
 /** "top 88%": an element counts as entered once its top crosses 88% of the viewport height. */
@@ -205,7 +206,7 @@ async function start(root: HTMLElement, current: Session): Promise<void> {
     // The reader may have switched reduced motion on while we waited for idle.
     if (root.classList.contains('reduced-motion')) return;
 
-    const wantsParallax = document.querySelector('[data-parallax]') !== null;
+    const wantsParallax = document.querySelector('[data-parallax], [data-stage], [data-hero-stage]') !== null;
     const [{ default: Lenis }, { gsap }, { CustomEase }, scrollTriggerModule] = await Promise.all([
       import('lenis'),
       import('gsap'),
@@ -247,6 +248,7 @@ async function start(root: HTMLElement, current: Session): Promise<void> {
     const { signal } = current.controller;
     if (ScrollTrigger) {
       setupParallax(gsap, ScrollTrigger);
+      setupStages(gsap, ScrollTrigger, signal);
       // Late layout shifts (fonts, images) move trigger positions.
       window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true, signal });
       document.fonts?.ready

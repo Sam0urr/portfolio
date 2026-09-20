@@ -2,6 +2,7 @@
 import type { InferGetStaticPropsType } from 'astro';
 import { getCollection, render } from 'astro:content';
 import Project from '../../layouts/Project.astro';
+import { venserpolderStage } from '../../data/venserpolder-stage';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => !data.draft);
@@ -23,6 +24,6 @@ const facts = [
 ].filter((fact): fact is { term: string; detail: string } => Boolean(fact.detail));
 ---
 
-<Project entry={entry} facts={facts}>
+<Project entry={entry} facts={facts} stage={entry.id === 'amsterdam-climate-adaptation' ? venserpolderStage : undefined}>
   <Content />
 </Project>
