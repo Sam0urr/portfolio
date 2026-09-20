@@ -37,6 +37,18 @@ export default defineConfig({
       optimizedFallbacks: true,
     },
     {
+      // Home headline only — the serif with its italic phrase, kept from the first edition.
+      name: 'Newsreader',
+      cssVariable: '--font-headline',
+      provider: fontProviders.google(),
+      weights: [400],
+      styles: ['normal', 'italic'],
+      subsets: ['latin'],
+      fallbacks: ['Iowan Old Style', 'Palatino', 'Georgia', 'serif'],
+      optimizedFallbacks: true,
+      options: { experimental: { variableAxis: { opsz: [['6', '72']] } } },
+    },
+    {
       // Body — all prose; the 400–600 range covers <strong> (600).
       name: 'Inter',
       cssVariable: '--font-body',

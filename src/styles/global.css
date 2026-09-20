@@ -36,6 +36,8 @@
      the served families plus metric-adjusted fallbacks. */
   --font-display: "Syne", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
   --font-display--font-feature-settings: "kern", "liga";
+  --font-headline: "Newsreader", "Iowan Old Style", Palatino, Georgia, serif;
+  --font-headline--font-feature-settings: "kern", "liga", "onum";
   --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
   --font-body--font-feature-settings: "kern", "liga", "calt";
   --font-mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
@@ -305,6 +307,9 @@
     gap: var(--space-2) var(--space-6);
     padding-block: var(--space-3);
     border-bottom: var(--rule);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
   }
 
   /* Mono UI links: "All notes →", "Read →", "↓ PDF". No underline, accent on hover. */
@@ -414,12 +419,10 @@
     padding-block: 0.2em;
     padding-inline: 0.25rem;
     margin-inline: -0.25rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     font-size: var(--text-sm);
     font-weight: 500;
     line-height: 1.5;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--color-ink);
     text-decoration: none;
     white-space: nowrap;
@@ -493,11 +496,10 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-4) var(--space-6);
     padding-top: var(--space-4);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
     line-height: 1.6;
     color: var(--color-muted);
-    font-feature-settings: "lnum", "tnum";
   }
   .footer-grid p { margin: 0; }
   .footer-list { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: 0; padding: 0; list-style: none; }
@@ -516,11 +518,10 @@
     margin: var(--space-8) 0 0;
     padding-top: var(--space-3);
     border-top: var(--rule);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
     line-height: 1.6;
     color: var(--color-muted);
-    font-feature-settings: "lnum", "tnum";
   }
   @media (max-width: 39.9375rem) {
     .footer-grid { grid-template-columns: 1fr; }

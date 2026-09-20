@@ -10,8 +10,8 @@ import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import profile from '../assets/profile.jpg';
 import NoteCardStatic from '../components/NoteCardStatic.astro';
-import { BUILD_DATE, SITE } from '../consts';
-import { formatDate, readingTime, toISODate } from '../scripts/format';
+import { SITE } from '../consts';
+import { readingTime } from '../scripts/format';
 
 const recent = (await getCollection('notes', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -22,7 +22,6 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
   <p class="dateline home-dateline">
     <span class="home-dateline-text">
       <span>{SITE.dateline}</span>
-      <span>Updated <time datetime={toISODate(BUILD_DATE)}>{formatDate(BUILD_DATE)}</time></span>
     </span>
   </p>
 
@@ -118,8 +117,9 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
      the rule by a full 2rem (the one grid break) while the kicker stays clear of it. */
   .home-hero { padding-top: var(--space-8); }
   .home-hero .hero-plate { margin-top: calc(-1 * var(--space-16)); }
-  /* Syne has no italic: the emphasised phrase takes the extended 700 weight instead. */
-  .hero-headline em { font-style: normal; font-weight: 700; }
+  /* The headline keeps the first edition's serif and its italic phrase. */
+  .hero-headline { font-family: var(--font-headline); font-weight: 400; letter-spacing: -0.015em; }
+  .hero-headline em { font-style: italic; }
 
   /* The plate breaks the rule over cols 9–12, so the dateline's text keeps to the
      headline's cols 1–8 on the same grid: "Updated …" ends where the plate begins. */
