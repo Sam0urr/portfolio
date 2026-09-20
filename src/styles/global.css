@@ -342,11 +342,34 @@
 
   /* --- Masthead --------------------------------------------------------- */
   .masthead { padding-top: var(--space-4); }
+  /* A frosted layer the page scrolls under (a material, not an opaque bar): 82% paper
+     over a 12px blur; the band's hairline and the progress rule remain its edge. */
   .masthead-sticky {
     position: sticky;
     top: 0;
     z-index: 20;
-    background: var(--color-paper);
+    background: color-mix(in srgb, var(--color-paper) 82%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(140%);
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .masthead-sticky { background: var(--color-paper); }
+  }
+  @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+    .masthead-sticky {
+      background: var(--color-paper);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  /* Press feedback lands on pointer-down, not release: the control settles 3% while
+     held, 100ms out, and snaps back on release. Inline prose links are left alone. */
+  .nav-link:active,
+  .theme-toggle:active,
+  .chip:active {
+    transform: scale(0.97);
+    transition: transform 100ms ease-out;
   }
   .masthead-band {
     position: relative;
