@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ai-act-org-chart",
+    "status": "Drafting",
+    "title": "The AI Act Meets the Org Chart",
+    "teaser": "Compliance with the EU AI Act won't be settled in legal departments alone; it's as much an organisational design problem as a legal one."
+  },
+  {
+    "id": "csrd-first-reporting-cycle",
+    "status": "Researching",
+    "title": "CSRD's first reporting cycle: what the data is showing",
+    "teaser": "Reading the first wave of CSRD-aligned reports for signal vs. signalling."
+  },
+  {
+    "id": "beyond-the-eu-digital-regulation",
+    "status": "Planned",
+    "title": "Beyond the EU: where digital regulation is converging globally",
+    "teaser": "On Brussels-style frameworks finding their way into other jurisdictions."
+  }
+]

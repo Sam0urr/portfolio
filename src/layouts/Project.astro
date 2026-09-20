@@ -1,0 +1,81 @@
+---
+/**
+ * Project case study. Article header at the wide measure (kicker · title at 2xl ·
+ * lede) with a mono fact row between hairlines, then the body as project prose:
+ * text at the prose measure, figure grids running out to the frame with
+ * "Fig. n —" captions.
+ */
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import Prose from '../components/Prose.astro';
+
+interface Fact {
+  term: string;
+  detail: string;
+}
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  /** Fact-row cells (Location · Year · Role · Method); the page passes what it knows. */
+  facts?: Fact[];
+  kicker?: string;
+}
+
+const { entry, facts = [], kicker = 'Project' } = Astro.props;
+const { title, summary } = entry.data;
+---
+
+<Base title={title} description={summary} type="article">
+  <article class="project">
+    <header class:list={['project-header', { 'project-header-ruled': facts.length === 0 }]}>
+      <span class="kicker" data-load-reveal style="--i: 0">{kicker}</span>
+      <h1 class="project-title" data-load-reveal style="--i: 1">{title}</h1>
+      <p class="lede project-lede" data-load-reveal style="--i: 2">{summary}</p>
+      {
+        facts.length > 0 && (
+          <dl class="facts" data-load-reveal style="--i: 3">
+            {facts.map((fact) => (
+              <div>
+                <dt>{fact.term}</dt>
+                <dd>{fact.detail}</dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+    </header>
+    <Prose variant="project">
+      <slot />
+    </Prose>
+  </article>
+  <nav class="project-back" aria-label="Back to projects">
+    <a class="ui-link" href="/projects/">← All projects</a>
+  </nav>
+</Base>
+
+<style>
+  .project-header {
+    max-width: var(--measure-wide);
+    margin-bottom: var(--space-12);
+  }
+  .project-header-ruled {
+    padding-bottom: var(--space-6);
+    border-bottom: var(--rule);
+  }
+  .project-title {
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-2xl);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+  .project-lede {
+    margin: var(--space-6) 0 0;
+    max-width: var(--measure-wide);
+  }
+  .project-header .facts { margin-bottom: 0; }
+  .project-back {
+    margin-top: var(--space-16);
+    padding-top: var(--space-3);
+    border-top: var(--rule);
+  }
+</style>

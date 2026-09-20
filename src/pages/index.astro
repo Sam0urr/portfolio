@@ -1,0 +1,153 @@
+---
+/**
+ * Home: dateline, hero (kicker + headline on cols 1–8, portrait plate on 9–12),
+ * the introduction with its first paragraph as a lede, "§ 01 · Recent writing"
+ * as four ledger rows, closing on "All notes →".
+ * The introduction text is carried verbatim from the Hugo home (hugo.toml).
+ */
+import { getCollection } from 'astro:content';
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import profile from '../assets/profile.jpg';
+import NoteCardStatic from '../components/NoteCardStatic.astro';
+import { BUILD_DATE, SITE } from '../consts';
+import { formatDate, readingTime, toISODate } from '../scripts/format';
+
+const recent = (await getCollection('notes', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 4);
+---
+
+<Base title={SITE.homeTitle} description={SITE.description}>
+  <p class="dateline home-dateline">
+    <span class="home-dateline-text">
+      <span>{SITE.dateline}</span>
+      <span>Updated <time datetime={toISODate(BUILD_DATE)}>{formatDate(BUILD_DATE)}</time></span>
+    </span>
+  </p>
+
+  <section class="hero home-hero" aria-labelledby="hero-headline">
+    <div class="hero-text">
+      <span class="kicker" data-load-reveal style="--i: 0">Sam Lamrabte · Political economist &amp; analyst</span>
+      <h1 id="hero-headline" class="hero-headline" data-load-reveal style="--i: 1">
+        Political economy at the intersection of <em>regulation, technology, and markets.</em>
+      </h1>
+    </div>
+    <div class="hero-aside" data-load-reveal style="--i: 2">
+      <figure class="plate hero-plate" data-parallax>
+        <Picture
+          class="no-dim"
+          src={profile}
+          alt="Sam Lamrabte"
+          formats={['avif']}
+          fallbackFormat="webp"
+          width={1008}
+          widths={[336, 672, 1008]}
+          sizes="(max-width: 63.9375rem) 320px, 25vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <section class="intro" aria-label="Introduction">
+    <p class="lede" data-load-reveal style="--i: 3">
+      My name is Sam Lamrabte. I'm a young political economist and analyst interested in the macroeconomy,
+      geopolitics, financial markets, and the regulation shaping all three.
+    </p>
+    <div class="prose intro-prose" data-reveal>
+      <p>
+        This site is an introduction to who I am, and a record of what I'm reading, building, and working on. I tend
+        to spend my time reading about a topic, organising what I've read into notes, or playing with ideas and models
+        I'm trying to build — so a slightly more formal way of documenting that felt useful (perhaps for my own benefit
+        and retention as much as anything else).
+      </p>
+      <p>My <a href="/cv/">CV</a> provides the detail about my experience, interests, and accomplishments.</p>
+      <p>
+        The TLDR version: having gotten a taste for a range of problems through my studies in Amsterdam and my work
+        across international relations, public policy, research, and the private sector, I realised I couldn't look
+        past economics as my core interest. I kept circling the same question — how complex regulation and
+        political-economic forces actually shape the way institutions (and we) behave. Taking that seriously, I knew I
+        needed more training, and began with a minor in Economic Analysis in New York at the Bert W. Wasserman
+        Department of Economics and Finance (Zicklin School of Business, Baruch College, CUNY). The programme had a
+        heavy quantitative finance component, and the hours spent modelling asset returns stuck with me. Being in NYC,
+        surrounded by a more market-oriented educational culture, fortified my grasp of applied economics, but it also
+        sharpened my desire to get back to Europe, where I started my path and where systematic research and
+        structural analysis (and critique) are central. My Master's in Political Economy in Amsterdam let me examine
+        the field through several lenses at once: public policy, AI and data governance, computational and qualitative
+        research methods, and international regulatory systems.
+      </p>
+      <p>
+        The end result is that I'm building a career at the intersection of economics, politics, markets, and the
+        digital world drawing on both qualitative research and quantitative modelling. I'm interested in roles where
+        rigorous thinking and an appetite for complexity actually count; whether in research, strategy, policy, or
+        finance. In the meantime, I'm seeking any opportunity to keep thinking, writing, and modelling in this space,
+        and to keep sharpening the technical toolkit alongside it (the CFA being one current step).
+      </p>
+      <p>
+        Thanks for visiting, and if any part of this strikes a chord with you, please <a href={`mailto:${SITE.email}`}>reach out</a>!
+      </p>
+    </div>
+    <p class="intro-cv" data-reveal><a class="ui-link" href="/cv/">→ Read the CV</a></p>
+  </section>
+
+  <section class="section" aria-labelledby="recent-writing">
+    <h2 id="recent-writing" class="section-head">§ 01 · Recent writing</h2>
+    <ul class="rows" data-reveal-group>
+      {
+        recent.map((note) => (
+          <NoteCardStatic
+            slug={note.id}
+            title={note.data.title}
+            summary={note.data.summary}
+            date={note.data.date}
+            tags={note.data.tags}
+            readingTime={readingTime(note.body ?? '', 230)}
+          />
+        ))
+      }
+    </ul>
+    <p class="section-foot" data-reveal><a class="ui-link" href="/notes/">All notes →</a></p>
+  </section>
+</Base>
+
+<style>
+  /* The hero sits 2rem under the dateline; the plate is pulled up 4rem so it crosses
+     the rule by a full 2rem (the one grid break) while the kicker stays clear of it. */
+  .home-hero { padding-top: var(--space-8); }
+  .home-hero .hero-plate { margin-top: calc(-1 * var(--space-16)); }
+  .hero-headline em { font-style: italic; }
+
+  /* The plate breaks the rule over cols 9–12, so the dateline's text keeps to the
+     headline's cols 1–8 on the same grid: "Updated …" ends where the plate begins. */
+  .home-dateline {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+  .home-dateline-text {
+    grid-column: 1 / span 8;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-6);
+    min-width: 0;
+  }
+
+  .intro { margin-top: var(--space-16); }
+  .intro .lede { max-width: var(--measure-wide); }
+  .intro-prose { margin-top: var(--space-8); }
+  .intro-cv { margin: var(--space-8) 0 0; }
+
+  .section-foot { margin: var(--space-6) 0 0; }
+
+  @media (max-width: 63.9375rem) {
+    .home-hero .hero-plate { margin-top: 0; }
+    .home-dateline-text { grid-column: 1 / -1; }
+  }
+  @media (max-width: 47.9375rem) {
+    .intro { margin-top: var(--space-12); }
+  }
+</style>

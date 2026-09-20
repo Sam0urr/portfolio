@@ -1,0 +1,13 @@
+---
+import { getEntry, render } from 'astro:content';
+import Page from '../layouts/Page.astro';
+
+const entry = await getEntry('pages', 'publications');
+if (!entry) throw new Error('Missing content entry: pages/publications');
+const { Content, headings } = await render(entry);
+const description = entry.data.summary ?? 'Selected publications, reports and commentary by Sam Lamrabte.';
+---
+
+<Page title={entry.data.title} description={description} kicker={entry.data.kicker} lede={entry.data.summary} headings={headings}>
+  <Content />
+</Page>

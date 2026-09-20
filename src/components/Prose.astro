@@ -1,0 +1,24 @@
+---
+/**
+ * Wrapper for rendered Markdown/MDX: <div class="prose"><slot /></div>.
+ * variant: "page" (default, p margins) · "essay" (print paragraphing, § numerals)
+ *          · "cv" (wide measure, sticky numbered h2s, hairline rows)
+ *          · "project" (figures run wide, text keeps the prose measure, Fig. numbering)
+ */
+interface Props {
+  variant?: 'page' | 'essay' | 'cv' | 'project';
+  class?: string;
+}
+
+const { variant = 'page', class: className } = Astro.props;
+const variantClass = {
+  page: null,
+  essay: 'prose-essay',
+  cv: 'prose-cv',
+  project: 'prose-project figs-numbered',
+}[variant];
+---
+
+<div class:list={['prose', variantClass, className]}>
+  <slot />
+</div>

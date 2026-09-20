@@ -1,0 +1,121 @@
+---
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import Footer from '../components/Footer.astro';
+import Nav from '../components/Nav.astro';
+import { SITE } from '../consts';
+
+interface Props {
+  /** Page title. Rendered as "Title — Sam Lamrabte" unless it already contains the name. */
+  title: string;
+  description?: string;
+  /** Open Graph image: public path or absolute URL. Defaults to /images/profile.jpg. */
+  image?: string;
+  type?: 'website' | 'article';
+  /** Note pages: sticky masthead whose lower hairline becomes the reading-progress rule. */
+  progress?: boolean;
+  /** Article metadata for Open Graph (note pages). */
+  published?: Date;
+  updated?: Date;
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = SITE.ogImage,
+  type = 'website',
+  progress = false,
+  published,
+  updated,
+} = Astro.props;
+
+const site = Astro.site ?? new URL(SITE.url);
+const canonical = new URL(Astro.url.pathname, site);
+const ogImage = new URL(image, site);
+const pageTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Theme + capability flags before first paint: no flash, no hidden content without JS. -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        var theme = null;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.setAttribute('data-theme', theme);
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.classList.add('reduced-motion');
+        }
+      })();
+    </script>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical.href} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14120f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Notes`} href={new URL('rss.xml', site).href} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:alt" content={`${SITE.name}, Amsterdam`} />
+    {published && <meta property="article:published_time" content={published.toISOString()} />}
+    {updated && <meta property="article:modified_time" content={updated.toISOString()} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
+
+    <Font cssVariable="--font-display" preload={[{ subset: 'latin', style: 'normal' }]} />
+    <Font cssVariable="--font-body" preload={[{ subset: 'latin', style: 'normal' }]} />
+    <Font cssVariable="--font-mono" />
+
+    <!-- Page-to-page navigation turns the page: the masthead stays put (Nav.astro), the
+         content cross-fades; fallback "animate" simulates it where the View Transitions
+         API is missing, and nothing animates under prefers-reduced-motion. The lifecycle
+         hooks live in scripts/transitions.ts. -->
+    <ClientRouter fallback="animate" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav sticky={progress} progress={progress} />
+    <main id="main" class="wrap site-main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import { loadClarityWhenIdle } from '../scripts/clarity';
+      import { initTransitions } from '../scripts/transitions';
+      // Motion boots now (first document) and on astro:page-load (every client navigation),
+      // is torn down on astro:before-swap; the theme survives the swap; the router loads
+      // once the page has settled. See scripts/transitions.ts.
+      initTransitions();
+      // Microsoft Clarity: after load + idle, so it never sits on the LCP or blocks first input.
+      // Loaded once per document load; Clarity follows client-side navigation itself.
+      loadClarityWhenIdle();
+      // Theme colour transitions switch on only after the first paint.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => document.documentElement.classList.add('theme-ready'));
+      });
+    </script>
+  </body>
+</html>

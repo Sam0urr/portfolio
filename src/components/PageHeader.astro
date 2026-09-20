@@ -1,0 +1,26 @@
+---
+/**
+ * Prose-page / index header: mono kicker, Newsreader h1 (--text-xl) with an optional
+ * mono count ("6 entries"), optional lede, closed by a hairline.
+ * Each piece carries data-load-reveal so it fades in on load (CSS keyframes only).
+ */
+interface Props {
+  title: string;
+  kicker?: string;
+  count?: string;
+  lede?: string;
+  class?: string;
+}
+
+const { title, kicker, count, lede, class: className } = Astro.props;
+---
+
+<header class:list={['page-header', className]}>
+  {kicker && <span class="kicker" data-load-reveal style="--i: 0">{kicker}</span>}
+  <h1 data-load-reveal style="--i: 1">
+    {title}
+    {count && <span class="meta page-header-count">{count}</span>}
+  </h1>
+  {lede && <p class="lede" data-load-reveal style="--i: 2">{lede}</p>}
+  <slot />
+</header>

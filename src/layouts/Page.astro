@@ -1,0 +1,90 @@
+---
+/**
+ * Prose page: About, CV, Contact, References, Publications and the Projects index.
+ * Header (mono kicker · h1 at xl · optional lede), an in-page contents row when the
+ * entry has four or more h2 headings, then the rendered body inside <Prose>.
+ *
+ * Slots: default = the body; "before" = between the contents row and the body
+ * (Contact puts the address here); "after" = below the body (Projects appends rows).
+ */
+import type { MarkdownHeading } from 'astro';
+import Base from './Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Prose from '../components/Prose.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  kicker?: string;
+  lede?: string;
+  /** Headings from render(); a contents row appears when there are 4 or more h2s. */
+  headings?: MarkdownHeading[];
+  variant?: 'page' | 'essay' | 'cv' | 'project';
+  /** Optional mono count rendered after the title ("06 entries"). */
+  count?: string;
+}
+
+const { title, description, kicker, lede, headings = [], variant = 'page', count } = Astro.props;
+const sections = headings.filter((heading) => heading.depth === 2);
+const showContents = sections.length >= 4;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<Base title={title} description={description}>
+  <PageHeader title={title} kicker={kicker} lede={lede} count={count} />
+  {
+    showContents && (
+      <nav class="contents" aria-label="Contents">
+        <span class="kicker">Contents</span>
+        <ol class="contents-list">
+          {sections.map((heading, index) => (
+            <li>
+              <a href={`#${heading.slug}`}>
+                <span class="contents-n">{pad(index + 1)}</span>
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )
+  }
+  <slot name="before" />
+  <Prose variant={variant}>
+    <slot />
+  </Prose>
+  <slot name="after" />
+</Base>
+
+<style>
+  /* Contents row: mono, wrapped, between the header hairline and its own. */
+  .contents {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-8);
+    max-width: var(--measure-wide);
+    margin: calc(-1 * var(--space-6)) 0 var(--space-12);
+    padding-bottom: var(--space-4);
+    border-bottom: var(--rule);
+  }
+  .contents-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    font-feature-settings: "lnum", "tnum";
+  }
+  .contents-list a {
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: color 150ms var(--ease);
+  }
+  .contents-list a:hover { color: var(--color-accent); }
+  .contents-n { margin-right: 0.35em; color: var(--color-muted); }
+</style>

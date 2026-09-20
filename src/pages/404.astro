@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+
+<Base title="Page not found" description="There is no page at this address on samlamrabte.com.">
+  <PageHeader
+    kicker="404"
+    title="Page not found"
+    lede="There is nothing at this address. It may have moved when the site changed, or the link may be wrong."
+  />
+  <nav class="not-found-links" aria-label="Where to go instead">
+    <a class="ui-link" href="/">← Home</a>
+    <a class="ui-link" href="/notes/">Notes →</a>
+    <a class="ui-link" href="/projects/">Projects →</a>
+    <a class="ui-link" href="/cv/">CV →</a>
+  </nav>
+</Base>
+
+<style>
+  .not-found-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-8);
+    padding-block: var(--space-3);
+    border-top: var(--rule);
+    border-bottom: var(--rule);
+  }
+</style>
