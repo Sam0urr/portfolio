@@ -20,14 +20,14 @@
   --text-shadow-*: initial;
   --radius-*: initial;
 
-  /* Colour — light, warm paper (dark values are redefined below). */
-  --color-paper: #f7f3ec;
+  /* Colour — light: white page, warm ink and hairlines (dark values are redefined below). */
+  --color-paper: #ffffff;
   --color-ink: #1c1915;
   --color-muted: #5f584e;
   --color-line: #d8d0c2;
   --color-accent: #8f2b1c;
   --color-accent-soft: #f2e0d8;
-  --color-surface: #efe9df;
+  --color-surface: #f4f2ee;
 
   /* Chips only. Everything else is square. */
   --radius-xs: 2px;
