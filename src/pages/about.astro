@@ -1,7 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content';
 import Page from '../layouts/Page.astro';
-import { SITE } from '../consts';
 
 const entry = await getEntry('pages', 'about');
 if (!entry) throw new Error('Missing content entry: pages/about');
@@ -11,6 +10,6 @@ const description =
   'About Sam Lamrabte: an analyst and political economist working across technology governance, EU digital regulation and sustainability policy.';
 ---
 
-<Page title={entry.data.title} description={description} kicker={SITE.dateline} lede={entry.data.summary} headings={headings}>
+<Page title={entry.data.title} description={description} kicker={entry.data.kicker} lede={entry.data.summary} headings={headings}>
   <Content />
 </Page>

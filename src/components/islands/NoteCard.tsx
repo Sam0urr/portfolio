@@ -58,8 +58,8 @@ export function highlight(text: string, terms: string[] = []): ReactNode {
 }
 
 /**
- * One note as a hairline ledger row: mono date + read time, display-face title
- * linking to /notes/<slug>/, summary, tags on the right. Same markup and classes
+ * One note as a hairline ledger row: mono date + read time, display-face title (h3,
+ * under the "§ 01 · Notes" head) linking to /notes/<slug>/, summary, tags on the right. Same markup and classes
  * as NoteCardStatic.astro so the Notes index and the home page read as one ledger.
  */
 export default function NoteCard({ slug, title, summary, date, tags, readingTime, terms }: NoteCardProps) {
@@ -72,9 +72,9 @@ export default function NoteCard({ slug, title, summary, date, tags, readingTime
         {readingTime ? <span> · {readingTime} min</span> : null}
       </div>
       <div className="row-body">
-        <h2 className="row-title">
+        <h3 className="row-title">
           <a href={href}>{highlight(title, terms)}</a>
-        </h2>
+        </h3>
         {summary ? <p className="row-summary">{highlight(summary, terms)}</p> : null}
       </div>
       {tags.length > 0 ? (

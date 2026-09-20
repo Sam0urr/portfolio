@@ -2,7 +2,7 @@
 /**
  * Home: dateline, hero (kicker + headline on cols 1–8, portrait plate on 9–12),
  * the introduction with its first paragraph as a lede, "§ 01 · Recent writing"
- * as four ledger rows, and a short mono link row.
+ * as four ledger rows, closing on "All notes →".
  * The introduction text is carried verbatim from the Hugo home (hugo.toml).
  */
 import { getCollection } from 'astro:content';
@@ -109,18 +109,13 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
     </ul>
     <p class="section-foot" data-reveal><a class="ui-link" href="/notes/">All notes →</a></p>
   </section>
-
-  <nav class="section link-row" aria-label="Elsewhere on the site" data-reveal>
-    <a class="ui-link" href="/projects/">Projects →</a>
-    <a class="ui-link" href="/cv/">CV →</a>
-    <a class="ui-link" href="/cv.pdf">↓ CV (PDF)</a>
-    <a class="ui-link" href="/contact/">Contact →</a>
-  </nav>
 </Base>
 
 <style>
-  /* The hero sits close under the dateline so the plate (−2rem) breaks its rule. */
-  .home-hero { padding-top: var(--space-5); }
+  /* The hero sits 2rem under the dateline; the plate is pulled up 4rem so it crosses
+     the rule by a full 2rem (the one grid break) while the kicker stays clear of it. */
+  .home-hero { padding-top: var(--space-8); }
+  .home-hero .hero-plate { margin-top: calc(-1 * var(--space-16)); }
   .hero-headline em { font-style: italic; }
 
   .intro { margin-top: var(--space-16); }
@@ -130,15 +125,9 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 
   .section-foot { margin: var(--space-6) 0 0; }
 
-  .link-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-8);
-    padding-block: var(--space-3);
-    border-top: var(--rule);
-    border-bottom: var(--rule);
+  @media (max-width: 63.9375rem) {
+    .home-hero .hero-plate { margin-top: 0; }
   }
-
   @media (max-width: 47.9375rem) {
     .intro { margin-top: var(--space-12); }
   }

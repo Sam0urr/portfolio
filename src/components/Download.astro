@@ -3,16 +3,39 @@
  * Download row: "↓ Label" in mono between two hairlines. The arrow is the only icon
  * the site allows. PDFs open in the browser (no `download` attribute) so they can
  * be read before being saved.
+ *
+ * With `size`, the row reads "↓ Label (PDF, 201 KB)": the format comes from the
+ * extension and the size is read from the file under public/ at build time, so the
+ * number never drifts from the file that is actually served.
  */
+import { statSync } from 'node:fs';
+import { extname, join } from 'node:path';
+
 interface Props {
   href: string;
   label: string;
+  /** Append "(FORMAT, n KB)" measured from `public/<href>` at build time. */
+  size?: boolean;
 }
 
-const { href, label } = Astro.props;
+const { href, label, size = false } = Astro.props;
+
+let detail = '';
+if (size) {
+  const path = join(process.cwd(), 'public', href.replace(/^\//, ''));
+  let bytes: number;
+  try {
+    bytes = statSync(path).size;
+  } catch {
+    throw new Error(`Download: cannot measure ${href}; expected a file at ${path}`);
+  }
+  const format = extname(href).slice(1).toUpperCase();
+  const kb = Math.round(bytes / 1000);
+  detail = ` (${format}, ${kb} KB)`;
+}
 ---
 
 <a class="download" href={href}>
   <span class="download-mark" aria-hidden="true">↓</span>
-  <span>{label}</span>
+  <span>{label}{detail}</span>
 </a>

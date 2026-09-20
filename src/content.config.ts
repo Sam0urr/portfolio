@@ -15,8 +15,9 @@ const notes = defineCollection({
     date: z.coerce.date(),
     updated: z.coerce.date().optional(),
     summary: z.string(),
-    tags: z.array(z.string()),
-    keywords: z.array(z.string()).optional(),
+    /** Each tag renders as a chip button and a list item, so a blank one would ship an unlabeled control: fail the build instead. */
+    tags: z.array(z.string().trim().min(1)),
+    keywords: z.array(z.string().trim().min(1)).optional(),
     draft: z.boolean().default(false),
   }),
 });
@@ -26,7 +27,11 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     summary: z.string(),
+    /** Fact row (Location · Year · Role · Method); each cell renders only when set. */
+    location: z.string().optional(),
     year: z.number().int().optional(),
+    role: z.string().optional(),
+    method: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
@@ -36,6 +41,8 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string(),
     summary: z.string().optional(),
+    /** Mono line above the h1, specific to the page (the home dateline is not reused here). */
+    kicker: z.string().trim().min(1).optional(),
   }),
 });
 

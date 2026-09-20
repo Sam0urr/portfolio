@@ -11,8 +11,10 @@
  *   data-parallax           subtle scrub parallax, y −24 → +24 px (data-parallax="16" to change)
  *
  * Reduced motion, or no IntersectionObserver: only reading progress runs; nothing is
- * hidden, nothing is imported. Otherwise, once the page has loaded and the main thread
- * is idle, Lenis + GSAP load on demand and <html> gains .motion-ok. Reveals are driven
+ * hidden, nothing is imported. Otherwise, once the page has loaded, its first frame has
+ * been painted and the main thread is idle, Lenis + GSAP load on demand and <html> gains
+ * .motion-ok (the imports never precede the first paint, so they stay off the LCP path
+ * even when the network is instant). Reveals are driven
  * by one IntersectionObserver; ScrollTrigger is imported only for pages with a
  * [data-parallax] element (the home plate). If anything throws, every element is made
  * visible again.
@@ -30,6 +32,7 @@ const REVEAL_VIEWPORT_FRACTION = 0.88;
 const STAGGER_MS = 60;
 const STAGGER_CAP = 6;
 const IDLE_TIMEOUT_MS = 1500;
+const FIRST_PAINT_TIMEOUT_MS = 2000;
 
 let started = false;
 
@@ -42,10 +45,40 @@ export function initMotion(): void {
   const root = document.documentElement;
   if (root.classList.contains('reduced-motion') || !('IntersectionObserver' in window)) return;
 
-  // Off the critical path: nothing below the fold needs motion before the page has loaded.
-  const boot = () => void start(root);
-  if (document.readyState === 'complete') whenIdle(boot);
-  else window.addEventListener('load', () => whenIdle(boot), { once: true });
+  // Off the critical path: nothing below the fold needs motion before the page has loaded
+  // and painted.
+  const boot = () => afterFirstPaint(() => whenIdle(() => void start(root)));
+  if (document.readyState === 'complete') boot();
+  else window.addEventListener('load', boot, { once: true });
+}
+
+/**
+ * Runs once the first contentful paint has been presented (Paint Timing), so the motion
+ * imports never queue ahead of it; a frame later as a fallback, and no later than
+ * FIRST_PAINT_TIMEOUT_MS regardless.
+ */
+function afterFirstPaint(fn: () => void): void {
+  let done = false;
+  const run = () => {
+    if (done) return;
+    done = true;
+    fn();
+  };
+  try {
+    if (PerformanceObserver.supportedEntryTypes.includes('paint')) {
+      const observer = new PerformanceObserver((list) => {
+        if (list.getEntriesByName('first-contentful-paint').length === 0) return;
+        observer.disconnect();
+        run();
+      });
+      observer.observe({ type: 'paint', buffered: true });
+      window.setTimeout(run, FIRST_PAINT_TIMEOUT_MS);
+      return;
+    }
+  } catch {
+    // Fall through: no Paint Timing, use the next frame.
+  }
+  requestAnimationFrame(() => window.setTimeout(run, 0));
 }
 
 function whenIdle(fn: () => void): void {

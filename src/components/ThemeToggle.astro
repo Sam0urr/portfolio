@@ -1,12 +1,15 @@
 ---
 /**
  * "Night" / "Day" as a word in the nav. The visible word is CSS-generated from
- * [data-theme] so it is correct before any script runs; aria-label + aria-pressed
- * carry the accessible state. Hidden entirely when JS is unavailable.
+ * [data-theme] so it is correct before any script runs; aria-label carries the
+ * accessible name and is kept in step with the visible word ("Night theme" /
+ * "Day theme", WCAG 2.5.3 Label in Name) by apply() below. The label names the
+ * action, so the button carries no aria-pressed state (a pressed toggle must keep a
+ * stable name). Hidden entirely when JS is unavailable.
  */
 ---
 
-<button type="button" class="theme-toggle" aria-label="Dark theme" aria-pressed="false">
+<button type="button" class="theme-toggle" aria-label="Night theme">
   <span class="theme-toggle-word" aria-hidden="true"></span>
 </button>
 
@@ -26,12 +29,14 @@
     }
   };
   const current = (): Theme => (root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  // The accessible name contains the visible word (CSS ::before, see global.css).
+  const label = (theme: Theme) => (theme === 'dark' ? 'Day theme' : 'Night theme');
   const apply = (theme: Theme) => {
     root.setAttribute('data-theme', theme);
-    buttons.forEach((button) => button.setAttribute('aria-pressed', String(theme === 'dark')));
+    buttons.forEach((button) => button.setAttribute('aria-label', label(theme)));
   };
 
-  // Sync aria-pressed with the pre-paint state.
+  // Sync the label with the pre-paint state.
   apply(current());
 
   buttons.forEach((button) =>

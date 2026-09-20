@@ -1,7 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content';
 import Page from '../layouts/Page.astro';
-import { SITE } from '../consts';
 
 const entry = await getEntry('pages', 'cv');
 if (!entry) throw new Error('Missing content entry: pages/cv');
@@ -11,6 +10,6 @@ const description =
   'Curriculum vitae of Sam Lamrabte: education, experience, awards, certifications, projects and languages, with the full CV as a PDF.';
 ---
 
-<Page title={entry.data.title} description={description} kicker={SITE.dateline} lede={entry.data.summary} headings={headings} variant="cv">
+<Page title={entry.data.title} description={description} kicker={entry.data.kicker} lede={entry.data.summary} headings={headings} variant="cv">
   <Content />
 </Page>

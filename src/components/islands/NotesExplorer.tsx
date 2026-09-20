@@ -73,19 +73,20 @@ function writeUrlState(query: string, tags: string[]): void {
 }
 
 /**
- * Notes index: search + tag filter over a static list of notes, plus a
- * "Coming soon" section. Hydrated with client:visible; safe to render on the
- * server (no window access at module scope).
+ * Notes index: search + tag filter over a static list of notes ("§ 01 · Notes"),
+ * plus the "§ 02 · Forthcoming" drafts. Hydrated with client:visible; safe to
+ * render on the server (no window access at module scope).
  *
  * Styling reuses the shell's component classes (.field-rule, .chips/.chip,
- * .rows/.row, .section-head, .meta, .kicker, .ui-link) so the list is the same
+ * .rows/.row, .section-head, .meta, .lede, .ui-link) so the list is the same
  * ledger as the home page; Tailwind utilities only add vertical rhythm.
  */
 export default function NotesExplorer({ notes, upcoming }: Props) {
   const inputId = useId();
   const countId = useId();
   const tagsHeadingId = useId();
-  const comingSoonHeadingId = useId();
+  const ledgerHeadingId = useId();
+  const forthcomingHeadingId = useId();
 
   const allTags = useMemo(() => deriveTags(notes), [notes]);
 
@@ -136,16 +137,6 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
     );
   }
 
-  function clearAll() {
-    if (debounceTimer.current !== null) {
-      clearTimeout(debounceTimer.current);
-      debounceTimer.current = null;
-    }
-    setQuery('');
-    setDebouncedQuery('');
-    setSelectedTags([]);
-  }
-
   // Every term must appear somewhere in title + summary + tags (AND semantics).
   const terms = useMemo(() => normalise(debouncedQuery).split(' ').filter(Boolean), [debouncedQuery]);
 
@@ -172,18 +163,18 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
 
   return (
     <div className="notes-explorer">
-      {/* Search: a bare rule with a mono label above it. */}
+      {/* Search: a bare rule, mono placeholder; the label is for assistive tech only. */}
       <div className="mt-2">
-        <label htmlFor={inputId} className="kicker">
-          Search
+        <label htmlFor={inputId} className="sr-only">
+          Search notes
         </label>
         <input
           id={inputId}
           type="search"
-          className="field-rule mt-2"
+          className="field-rule"
           value={query}
           onChange={handleQueryChange}
-          placeholder="Title, summary or tag"
+          placeholder="Search notes…"
           autoComplete="off"
           spellCheck={false}
           aria-describedby={countId}
@@ -192,18 +183,11 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
 
       {/* Tag chips: multi-select, AND. */}
       {allTags.length > 0 ? (
-        <div className="mt-8">
-          <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-            <span id={tagsHeadingId} className="kicker">
-              Filter by tag
-            </span>
-            {selectedTags.length > 0 ? (
-              <button type="button" className="ui-link cursor-pointer" onClick={() => setSelectedTags([])}>
-                Clear tags
-              </button>
-            ) : null}
-          </div>
-          <ul aria-labelledby={tagsHeadingId} className="chips mt-3">
+        <div className="mt-6">
+          <span id={tagsHeadingId} className="sr-only">
+            Filter by tag
+          </span>
+          <ul aria-labelledby={tagsHeadingId} className="chips">
             {allTags.map((tag) => {
               const pressed = selectedTags.includes(tag);
               return (
@@ -215,59 +199,55 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
               );
             })}
           </ul>
+          {selectedTags.length > 0 ? (
+            <p className="mt-3 mb-0">
+              <button type="button" className="ui-link cursor-pointer" onClick={() => setSelectedTags([])}>
+                Clear tags →
+              </button>
+            </p>
+          ) : null}
         </div>
       ) : null}
 
-      {/* Result count (live region) */}
-      <p id={countId} aria-live="polite" aria-atomic="true" className="meta mt-10 mb-3">
-        {resultText}
-      </p>
-
       {/* The ledger */}
-      {shown > 0 ? (
-        <ul className="rows">
-          {filteredNotes.map((note) => (
-            <NoteCard
-              key={note.slug}
-              slug={note.slug}
-              title={note.title}
-              summary={note.summary}
-              date={note.date}
-              tags={note.tags}
-              readingTime={note.readingTime}
-              terms={terms}
-            />
-          ))}
-        </ul>
-      ) : (
-        <div className="rows">
-          <div className="row row-last row-muted">
-            <p className="row-meta">{total === 0 ? 'Nothing yet' : 'No match'}</p>
-            <div className="row-body">
-              <p className="row-title">{total === 0 ? 'No notes yet.' : 'No notes match that search.'}</p>
-              {isFiltering ? (
-                <p className="row-summary">
-                  Try a different word, or remove a tag.{' '}
-                  <button type="button" className="ui-link cursor-pointer" onClick={clearAll}>
-                    Clear search and tags →
-                  </button>
-                </p>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Coming soon */}
-      {upcoming.length > 0 ? (
-        <section className="section" aria-labelledby={comingSoonHeadingId}>
-          <h2 id={comingSoonHeadingId} className="section-head">
-            Coming soon
-          </h2>
-          <p className="meta mb-3">Drafts and topics I&rsquo;m working on next.</p>
+      <section className="section notes-ledger" aria-labelledby={ledgerHeadingId}>
+        <h2 id={ledgerHeadingId} className="section-head">
+          § 01 · Notes
+        </h2>
+        {/* Result count: a live region for assistive tech, visible only while filtering
+            (the h1 already carries the total). */}
+        <p id={countId} aria-live="polite" aria-atomic="true" className={isFiltering ? 'meta mb-4' : 'sr-only'}>
+          {resultText}
+        </p>
+        {shown > 0 ? (
           <ul className="rows">
+            {filteredNotes.map((note) => (
+              <NoteCard
+                key={note.slug}
+                slug={note.slug}
+                title={note.title}
+                summary={note.summary}
+                date={note.date}
+                tags={note.tags}
+                readingTime={note.readingTime}
+                terms={terms}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p className="lede">{total === 0 ? 'Nothing here yet.' : 'Nothing matches that yet.'}</p>
+        )}
+      </section>
+
+      {/* Forthcoming: drafts on surface, no links. */}
+      {upcoming.length > 0 ? (
+        <section className="section" aria-labelledby={forthcomingHeadingId}>
+          <h2 id={forthcomingHeadingId} className="section-head">
+            § 02 · Forthcoming
+          </h2>
+          <ul className="rows rows-forthcoming">
             {upcoming.map((item) => (
-              <li key={`${item.status}-${item.title}`} className="row row-muted">
+              <li key={`${item.status}-${item.title}`} className="row row-muted row-forthcoming">
                 <p className="row-meta">{item.status}</p>
                 <div className="row-body">
                   <h3 className="row-title">{item.title}</h3>

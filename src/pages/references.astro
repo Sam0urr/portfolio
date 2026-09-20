@@ -1,7 +1,6 @@
 ---
 import { getEntry, render } from 'astro:content';
 import Page from '../layouts/Page.astro';
-import { SITE } from '../consts';
 
 const entry = await getEntry('pages', 'references');
 if (!entry) throw new Error('Missing content entry: pages/references');
@@ -11,6 +10,6 @@ const description =
   'Written references for Sam Lamrabte from the UN Global Compact and Baruch College, and a UN certificate of appreciation, as PDFs.';
 ---
 
-<Page title={entry.data.title} description={description} kicker={SITE.dateline} lede={entry.data.summary} headings={headings}>
+<Page title={entry.data.title} description={description} kicker={entry.data.kicker} lede={entry.data.summary} headings={headings}>
   <Content />
 </Page>

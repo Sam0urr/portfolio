@@ -6,11 +6,11 @@
  *
  * `src` keeps the public-style path the content has always used ("/images/notes/x.png");
  * the file itself lives under src/assets/images/ and is served through astro:assets,
- * which emits width/height, a WebP srcset at `widths` and a `sizes` hint. Unknown
- * paths fail the build rather than shipping a broken image.
+ * which emits width/height, an AVIF srcset with a WebP fallback at `widths` and a
+ * `sizes` hint. Unknown paths fail the build rather than shipping a broken image.
  */
 import type { ImageMetadata } from 'astro';
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 
 interface Props {
   src: string;
@@ -21,8 +21,12 @@ interface Props {
   widths?: number[];
   /** `sizes` attribute; defaults to the prose measure (full width on phones). */
   sizes?: string;
-  /** Above the fold (a page's LCP image): eager + fetchpriority="high" instead of lazy. */
+  /** In the first viewport: loading="eager" instead of lazy. */
   eager?: boolean;
+  /** The page's LCP image: adds fetchpriority="high" (implies eager). Leave off for other in-view images. */
+  priority?: boolean;
+  /** Columns spanned inside a `.fig-grid` (12-column frame): 4 (default), 8 or 12. */
+  span?: 4 | 8 | 12;
 }
 
 const DEFAULT_WIDTHS = [440, 880, 1280];
@@ -33,7 +37,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 
-const { src, alt, class: className, caption, widths, sizes, eager = false } = Astro.props;
+const { src, alt, class: className, caption, widths, sizes, priority = false, eager = priority, span } = Astro.props;
 
 const key = '/src/assets/images/' + src.replace(/^\/?(images\/)?/, '');
 const imported = images[key]?.default;
@@ -54,16 +58,17 @@ const largest = widthList[widthList.length - 1];
 const hasCaption = Boolean(caption) || Astro.slots.has('default');
 ---
 
-<figure class:list={['fig', className]}>
-  <Image
+<figure class:list={['fig', span === 8 && 'span-8', span === 12 && 'span-12', className]}>
+  <Picture
     src={imported}
     alt={alt}
     width={largest}
     widths={widthList}
     sizes={sizes ?? DEFAULT_SIZES}
-    format="webp"
+    formats={['avif']}
+    fallbackFormat="webp"
     loading={eager ? 'eager' : 'lazy'}
-    fetchpriority={eager ? 'high' : undefined}
+    fetchpriority={priority ? 'high' : undefined}
     decoding="async"
   />
   {
