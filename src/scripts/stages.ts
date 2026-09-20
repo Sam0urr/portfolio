@@ -5,10 +5,10 @@
  *
  *   [data-stage]       case-study opening: sticky stage, one scene per viewport, layers
  *                      enter → hold → exit, scrubbed and fully reversible
- *   [data-hero-stage]  home hero: plate, tint plane and headline drift apart in depth
- *                      as the hero scrolls away
+ *   depth stages       home hero and About portrait: the plate recedes (sinks, shrinks,
+ *                      softens) while the text lifts as they scroll away
  *
- * Both add a light pointer parallax on fine-pointer devices only.
+ * All add a light pointer parallax on fine-pointer devices only.
  */
 import type { gsap as GsapType } from 'gsap';
 import type { ScrollTrigger as ScrollTriggerType } from 'gsap/ScrollTrigger';
@@ -21,7 +21,14 @@ const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)'
 export function setupStages(gsap: Gsap, ScrollTrigger: ScrollTriggerStatic, signal: AbortSignal): void {
   for (const wrap of document.querySelectorAll<HTMLElement>('[data-stage]')) setupProjectStage(wrap, gsap, signal);
   const hero = document.querySelector<HTMLElement>('[data-hero-stage]');
-  if (hero) setupHeroStage(hero, gsap, signal);
+  if (hero) setupDepthStage(gsap, signal, { area: hero, plate: '.hero-plate', text: '.hero-text', trigger: hero });
+  const about = document.querySelector<HTMLElement>('.about-photo');
+  if (about) {
+    const main = about.closest<HTMLElement>('main') ?? document.body;
+    // The portrait floats beside the opening paragraphs: it only starts to recede once
+    // the reader has scrolled it a quarter of the way up, so it never blurs mid-read.
+    setupDepthStage(gsap, signal, { area: main, plate: '.about-photo', text: '.page-header', trigger: about, start: 'top 25%' });
+  }
   ScrollTrigger.refresh();
 }
 
@@ -99,26 +106,35 @@ function setupProjectStage(wrap: HTMLElement, gsap: Gsap, signal: AbortSignal): 
   );
 }
 
-function setupHeroStage(hero: HTMLElement, gsap: Gsap, signal: AbortSignal): void {
-  const plate = hero.querySelector<HTMLElement>('.hero-plate');
-  const tint = hero.querySelector<HTMLElement>('.hero-tint');
-  // The text block, not the headline: the headline's load-reveal animation owns its transform.
-  const text = hero.querySelector<HTMLElement>('.hero-text');
-  if (!plate || !text) return;
+interface DepthStage {
+  /** Element that listens for pointer movement. */
+  area: HTMLElement;
+  /** The portrait plate: recedes as the trigger scrolls away. */
+  plate: string;
+  /** A text block that lifts away faster (the block, not a load-revealed child, whose
+      CSS animation owns its own transform). */
+  text: string;
+  trigger: HTMLElement;
+  start?: string;
+}
 
-  // As the hero leaves: the tint plane lags (deep), the plate recedes, the text lifts (near).
+function setupDepthStage(gsap: Gsap, signal: AbortSignal, stage: DepthStage): void {
+  const plate = stage.area.querySelector<HTMLElement>(stage.plate);
+  const text = stage.area.querySelector<HTMLElement>(stage.text);
+  if (!plate) return;
+
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
-    scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: 0.4 },
+    scrollTrigger: { trigger: stage.trigger, start: stage.start ?? 'top top', end: 'bottom top', scrub: 0.4 },
   });
-  if (tint) tl.to(tint, { y: 96, duration: 1 }, 0);
   tl.to(plate, { y: 48, scale: 0.94, autoAlpha: 0.55, filter: 'blur(4px)', duration: 1 }, 0);
-  tl.to(text, { y: -40, autoAlpha: 0.6, duration: 1 }, 0);
+  if (text) tl.to(text, { y: -40, autoAlpha: 0.6, duration: 1 }, 0);
 
   if (!finePointer()) return;
   const img = plate.querySelector<HTMLElement>('img');
+  if (!img) return;
   let frame = 0;
-  hero.addEventListener(
+  stage.area.addEventListener(
     'pointermove',
     (event) => {
       if (frame) return;
@@ -126,8 +142,7 @@ function setupHeroStage(hero: HTMLElement, gsap: Gsap, signal: AbortSignal): voi
         frame = 0;
         const dx = event.clientX / window.innerWidth - 0.5;
         const dy = event.clientY / window.innerHeight - 0.5;
-        if (img) gsap.to(img, { x: -dx * 14, y: -dy * 10, duration: 0.9, ease: 'power2.out', overwrite: 'auto' });
-        if (tint) gsap.to(tint, { x: dx * 10, duration: 1.1, ease: 'power2.out', overwrite: 'auto' });
+        gsap.to(img, { x: -dx * 14, y: -dy * 10, duration: 0.9, ease: 'power2.out', overwrite: 'auto' });
       });
     },
     { passive: true, signal },

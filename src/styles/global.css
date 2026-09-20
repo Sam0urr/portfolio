@@ -1138,7 +1138,7 @@
     width: 40%;
     max-width: 300px;
     margin: 0.25rem 0 var(--space-4) var(--space-6);
-    border: var(--rule);
+    overflow: hidden;
   }
   .about-photo img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border: 0; }
   /* About has no margin grid, but from 64rem the page is empty to the right of the

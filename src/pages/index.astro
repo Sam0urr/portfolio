@@ -33,7 +33,6 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
       </h1>
     </div>
     <div class="hero-aside" data-load-reveal style="--i: 2">
-      <div class="hero-tint" aria-hidden="true"></div>
       <figure class="plate hero-plate">
         <Picture
           class="no-dim"
@@ -116,16 +115,7 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 <style>
   /* The hero sits 2rem under the dateline; the plate starts level with the kicker. */
   .home-hero { padding-top: var(--space-8); }
-  .home-hero .hero-plate { margin-top: 0; }
-  /* A tint plane sits behind the plate, offset down-right; the script drifts it slower
-     than the plate as the hero scrolls away so the two read as different depths. */
-  .home-hero .hero-aside { position: relative; }
-  .hero-tint {
-    position: absolute;
-    inset: var(--space-5) calc(-1 * var(--space-5)) calc(-1 * var(--space-5)) var(--space-5);
-    background: var(--color-accent-soft);
-    z-index: -1;
-  }
+  .home-hero .hero-plate { margin-top: 0; border: 0; }
   /* The headline keeps the first edition's serif and its italic phrase. */
   .hero-headline { font-family: var(--font-headline); font-weight: 400; letter-spacing: -0.015em; }
   .hero-headline em { font-style: italic; }

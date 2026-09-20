@@ -206,7 +206,7 @@ async function start(root: HTMLElement, current: Session): Promise<void> {
     // The reader may have switched reduced motion on while we waited for idle.
     if (root.classList.contains('reduced-motion')) return;
 
-    const wantsParallax = document.querySelector('[data-parallax], [data-stage], [data-hero-stage]') !== null;
+    const wantsParallax = document.querySelector('[data-parallax], [data-stage], [data-hero-stage], .about-photo') !== null;
     const [{ default: Lenis }, { gsap }, { CustomEase }, scrollTriggerModule] = await Promise.all([
       import('lenis'),
       import('gsap'),
