@@ -8,7 +8,9 @@ tags: ["Artificial Intelligence", "Techno-optimism", "Governance", "Political Ec
 *Originally written as a creative commentary for the *Politics and Artificial Intelligence* course at the University of Amsterdam.*
 
 <figure class="note-side-photo">
-  <img src="/images/notes/edison-lightbulb.png" alt="An early Edison incandescent lightbulb with brass screw base." loading="lazy" decoding="async" />
+
+![An early Edison incandescent lightbulb with brass screw base.](../../assets/images/notes/edison-lightbulb.png)
+
 </figure>
 
 When [Thomas Edison's](https://en.wikipedia.org/wiki/Thomas_Edison) first lightbulb flashed to life in his lab [in 1879](https://en.wikipedia.org/wiki/Incandescent_light_bulb#Edison_and_Swan), it marked the beginning of a new era in which human ingenuity triumphed over darkness. That flash of light hinted at a time when electricity would then permeate every part of our society and power it silently, much like air. We are currently experiencing another epochal transition, quite similar, this one signaled by the muted hum of data centers and the gentle light of computer screens: the age of *artificial intelligence as a service* (AIaaS).

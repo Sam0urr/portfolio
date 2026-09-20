@@ -6,7 +6,9 @@
  * The introduction text is carried verbatim from the Hugo home (hugo.toml).
  */
 import { getCollection } from 'astro:content';
+import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import profile from '../assets/profile.jpg';
 import NoteCardStatic from '../components/NoteCardStatic.astro';
 import { BUILD_DATE, SITE } from '../consts';
 import { formatDate, readingTime, toISODate } from '../scripts/format';
@@ -31,12 +33,16 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
     </div>
     <div class="hero-aside" data-load-reveal style="--i: 2">
       <figure class="plate hero-plate" data-parallax>
-        <img
+        <Picture
           class="no-dim"
-          src="/images/profile.jpg"
+          src={profile}
           alt="Sam Lamrabte"
-          width="1822"
-          height="2418"
+          formats={['avif']}
+          fallbackFormat="webp"
+          width={1008}
+          widths={[336, 672, 1008]}
+          sizes="(max-width: 63.9375rem) 320px, 25vw"
+          loading="eager"
           fetchpriority="high"
           decoding="async"
         />

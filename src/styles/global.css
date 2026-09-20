@@ -649,6 +649,7 @@
     border: var(--rule);
   }
   .plate img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .plate > picture { display: contents; }
   /* Home portrait: 4:5 plate pulled up 2rem to break the dateline rule (the one grid break). */
   .hero-plate {
     aspect-ratio: 4 / 5;
@@ -1081,6 +1082,8 @@
   }
   .note-side-photo-left { float: left; margin: 0.25rem var(--space-6) var(--space-5) 0; }
   .note-side-photo img, .note-side-photo-left img { display: block; width: 100%; border: var(--rule); }
+  /* A Markdown image inside the figure (.md notes) arrives wrapped in a <p>: no prose margin there. */
+  .note-side-photo > p, .note-side-photo-left > p { margin: 0; }
   .note-side-photo figcaption, .note-side-photo-left figcaption { text-indent: 0; }
   /* Inside the article grid at ≥1200px the right-hand figure hangs into the margin. */
   @media (min-width: 75rem) {

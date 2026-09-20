@@ -11,7 +11,8 @@ const subsets = /** @type {[string, ...string[]]} */ (['latin', 'latin-ext']);
 export default defineConfig({
   site: 'https://samlamrabte.com',
   trailingSlash: 'always',
-  build: { format: 'directory' },
+  // One stylesheet for the whole site (~8 KB gz): inlined so no render-blocking request precedes first paint.
+  build: { format: 'directory', inlineStylesheets: 'always' },
 
   integrations: [mdx(), react(), sitemap()],
 

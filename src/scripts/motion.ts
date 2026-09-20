@@ -5,14 +5,17 @@
  *   data-reading-progress   element scaled X 0→1 by reading progress (runs in every mode;
  *                           progress is measured over [data-reading-target] if present,
  *                           else the whole document)
- *   data-reveal             fade/rise once when it enters (start "top 88%", 500 ms)
+ *   data-reveal             fade/rise once when it enters (top 88% of the viewport, 500 ms)
  *   data-reveal-delay="ms"  extra delay for that element (or for every child of a group)
  *   data-reveal-group       direct children are revealed with a 60 ms sibling stagger, capped at 6
  *   data-parallax           subtle scrub parallax, y −24 → +24 px (data-parallax="16" to change)
  *
  * Reduced motion, or no IntersectionObserver: only reading progress runs; nothing is
- * hidden, nothing is imported. Otherwise <html> gains .motion-ok and Lenis + GSAP
- * ScrollTrigger load on demand. If anything throws, every element is made visible again.
+ * hidden, nothing is imported. Otherwise, once the page has loaded and the main thread
+ * is idle, Lenis + GSAP load on demand and <html> gains .motion-ok. Reveals are driven
+ * by one IntersectionObserver; ScrollTrigger is imported only for pages with a
+ * [data-parallax] element (the home plate). If anything throws, every element is made
+ * visible again.
  */
 
 type GsapModule = typeof import('gsap');
@@ -21,9 +24,12 @@ type Gsap = GsapModule['gsap'];
 type ScrollTriggerStatic = ScrollTriggerModule['ScrollTrigger'];
 
 const EASE_NAME = 'broadsheet';
-const REVEAL_START = 'top 88%';
+/** "top 88%": an element counts as entered once its top crosses 88% of the viewport height. */
+const REVEAL_ROOT_MARGIN = '0px 0px -12% 0px';
+const REVEAL_VIEWPORT_FRACTION = 0.88;
 const STAGGER_MS = 60;
 const STAGGER_CAP = 6;
+const IDLE_TIMEOUT_MS = 1500;
 
 let started = false;
 
@@ -36,7 +42,15 @@ export function initMotion(): void {
   const root = document.documentElement;
   if (root.classList.contains('reduced-motion') || !('IntersectionObserver' in window)) return;
 
-  void start(root);
+  // Off the critical path: nothing below the fold needs motion before the page has loaded.
+  const boot = () => void start(root);
+  if (document.readyState === 'complete') whenIdle(boot);
+  else window.addEventListener('load', () => whenIdle(boot), { once: true });
+}
+
+function whenIdle(fn: () => void): void {
+  if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(fn, { timeout: IDLE_TIMEOUT_MS });
+  else window.setTimeout(fn, 1);
 }
 
 /* ---------------------------------------------------------------------------
@@ -82,14 +96,20 @@ function initReadingProgress(): void {
    --------------------------------------------------------------------------- */
 async function start(root: HTMLElement): Promise<void> {
   try {
-    const [{ default: Lenis }, { gsap }, { ScrollTrigger }, { CustomEase }] = await Promise.all([
+    // The reader may have switched reduced motion on while we waited for idle.
+    if (root.classList.contains('reduced-motion')) return;
+
+    const wantsParallax = document.querySelector('[data-parallax]') !== null;
+    const [{ default: Lenis }, { gsap }, { CustomEase }, scrollTriggerModule] = await Promise.all([
       import('lenis'),
       import('gsap'),
-      import('gsap/ScrollTrigger'),
       import('gsap/CustomEase'),
+      wantsParallax ? import('gsap/ScrollTrigger') : Promise.resolve(null),
     ]);
+    const ScrollTrigger = scrollTriggerModule?.ScrollTrigger ?? null;
 
-    gsap.registerPlugin(ScrollTrigger, CustomEase);
+    gsap.registerPlugin(CustomEase);
+    if (ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
     CustomEase.create(EASE_NAME, '0.22, 1, 0.36, 1');
 
     // Lenis drives native scroll; GSAP's ticker drives Lenis.
@@ -100,21 +120,31 @@ async function start(root: HTMLElement): Promise<void> {
       autoRaf: false,
       anchors: true,
     });
-    lenis.on('scroll', () => ScrollTrigger.update());
+    if (ScrollTrigger) lenis.on('scroll', () => ScrollTrigger.update());
     gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
 
     root.classList.add('motion-ok');
-    setupReveals(gsap, ScrollTrigger);
-    setupParallax(gsap, ScrollTrigger);
+    setupReveals(gsap);
 
-    // Late layout shifts (fonts, images) move trigger positions.
-    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
-    document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => {});
+    if (ScrollTrigger) {
+      setupParallax(gsap, ScrollTrigger);
+      // Late layout shifts (fonts, images) move trigger positions.
+      window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
+      document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => {});
+    }
 
     // Back/forward cache restores mid-page: make sure nothing stays hidden.
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) revealEverything();
+    });
+    // Reduced motion switched on mid-visit: show everything, stop hiding.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reduce.addEventListener?.('change', (event) => {
+      if (!event.matches) return;
+      root.classList.add('reduced-motion');
+      root.classList.remove('motion-ok');
+      revealEverything();
     });
   } catch (error) {
     root.classList.remove('motion-ok');
@@ -149,35 +179,46 @@ function collectRevealTargets(): RevealTarget[] {
   return targets;
 }
 
-function setupReveals(gsap: Gsap, ScrollTrigger: ScrollTriggerStatic): void {
-  const threshold = window.innerHeight * 0.88;
+function setupReveals(gsap: Gsap): void {
+  const targets = collectRevealTargets();
+  if (targets.length === 0) return;
 
-  for (const { el, delay } of collectRevealTargets()) {
-    const rect = el.getBoundingClientRect();
+  // Read every position first, then write: one layout pass instead of one per element.
+  const threshold = window.innerHeight * REVEAL_VIEWPORT_FRACTION;
+  const tops = targets.map(({ el }) => el.getBoundingClientRect().top);
+
+  const pending = new Map<Element, RevealTarget>();
+  targets.forEach((target, index) => {
     // Already on screen (or above it): show it, never blink it out first.
-    if (rect.top < threshold) {
-      el.classList.add('is-revealed');
-      continue;
-    }
+    if (tops[index] < threshold) target.el.classList.add('is-revealed');
+    else pending.set(target.el, target);
+  });
+  if (pending.size === 0) return;
 
-    gsap.set(el, { opacity: 0, y: 10 });
-    ScrollTrigger.create({
-      trigger: el,
-      start: REVEAL_START,
-      once: true,
-      onEnter: () => {
-        el.classList.add('is-revealed');
-        gsap.to(el, {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const target = pending.get(entry.target);
+        observer.unobserve(entry.target);
+        pending.delete(entry.target);
+        if (!target) continue;
+        target.el.classList.add('is-revealed');
+        gsap.to(target.el, {
           opacity: 1,
           y: 0,
           duration: 0.5,
-          delay: delay / 1000,
+          delay: target.delay / 1000,
           ease: EASE_NAME,
           clearProps: 'opacity,transform',
         });
-      },
-    });
-  }
+      }
+    },
+    { rootMargin: REVEAL_ROOT_MARGIN },
+  );
+
+  for (const { el } of pending.values()) gsap.set(el, { opacity: 0, y: 10 });
+  for (const el of pending.keys()) observer.observe(el);
 }
 
 function setupParallax(gsap: Gsap, ScrollTrigger: ScrollTriggerStatic): void {

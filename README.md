@@ -65,7 +65,7 @@ public/
   favicon.svg, robots.txt, CNAME
 ```
 
-Images are plain files under `public/images/` and are referenced by absolute path, for example `/images/notes/edison-lightbulb.png`. In MDX use the components:
+Images live under `src/assets/images/` and go through `astro:assets` (WebP srcset, width/height); content keeps referencing them by the same `/images/...` path, for example `/images/notes/edison-lightbulb.png`, which `<Img>` resolves. Only `public/images/profile.jpg` stays in `public/` (the Open Graph image). In MDX use the components:
 
 ```mdx
 import Img from '../../components/Img.astro'
