@@ -221,7 +221,7 @@ export default function NotesExplorer({ notes, upcoming }: Props) {
           {resultText}
         </p>
         {shown > 0 ? (
-          <ul className="rows">
+          <ul className={ready ? 'rows rows-live' : 'rows'}>
             {filteredNotes.map((note) => (
               <NoteCard
                 key={note.slug}

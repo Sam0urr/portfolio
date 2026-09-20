@@ -58,19 +58,22 @@ function setupProjectStage(wrap: HTMLElement, gsap: Gsap, signal: AbortSignal): 
     const caption = scene.querySelector<HTMLElement>('.scene-caption');
     const depth = (el: HTMLElement) => Number(el.dataset.depth) || 0.5;
     const last = i === scenes.length - 1;
+    // Each scene starts rising 0.12 before the previous one has finished fading, so the
+    // stage is never empty between scenes; the exit blur masks the double exposure.
+    const at = i === 0 ? 0 : i - 0.12;
 
     // Enter: far layers barely move, near layers rise further and settle later.
-    tl.fromTo(scene, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, i);
+    tl.fromTo(scene, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, at);
     for (const layer of layers) {
       const d = depth(layer);
       tl.fromTo(
         layer,
         { y: 40 + 80 * d, scale: 1.04 + 0.06 * d, filter: 'blur(6px)' },
         { y: 0, scale: 1, filter: 'blur(0px)', duration: 0.35 + 0.1 * d, ease: 'power2.out' },
-        i,
+        at,
       );
     }
-    if (caption) tl.fromTo(caption, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3 }, i + 0.12);
+    if (caption) tl.fromTo(caption, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.3 }, at + 0.12);
 
     // Hold until 0.62, then exit upwards with the same depth ordering; the last scene stays.
     if (!last) {
@@ -79,12 +82,25 @@ function setupProjectStage(wrap: HTMLElement, gsap: Gsap, signal: AbortSignal): 
         tl.to(layer, { y: -(30 + 70 * d), filter: 'blur(4px)', duration: 0.3, ease: 'power2.in' }, i + 0.62);
       }
       if (caption) tl.to(caption, { y: -16, autoAlpha: 0, duration: 0.2 }, i + 0.62);
-      tl.to(scene, { autoAlpha: 0, duration: 0.2 }, i + 0.74);
+      tl.to(scene, { autoAlpha: 0, duration: 0.22 }, i + 0.78);
     }
   });
 
   if (!finePointer()) return;
-  // Pointer parallax on the images themselves so it never fights the scroll transforms.
+  // Pointer parallax on the images themselves so it never fights the scroll transforms;
+  // quickTo setters are built once so a pointer move never allocates a tween.
+  const followers = Array.from(wrap.querySelectorAll<HTMLElement>('.layer')).flatMap((layer) => {
+    const img = layer.firstElementChild as HTMLElement | null;
+    if (!img) return [];
+    const d = Number(layer.dataset.depth) || 0.5;
+    return [
+      {
+        d,
+        x: gsap.quickTo(img, 'x', { duration: 0.8, ease: 'power2.out' }),
+        y: gsap.quickTo(img, 'y', { duration: 0.8, ease: 'power2.out' }),
+      },
+    ];
+  });
   let frame = 0;
   stage.addEventListener(
     'pointermove',
@@ -95,10 +111,9 @@ function setupProjectStage(wrap: HTMLElement, gsap: Gsap, signal: AbortSignal): 
         const rect = stage.getBoundingClientRect();
         const dx = (event.clientX - rect.left) / rect.width - 0.5;
         const dy = (event.clientY - rect.top) / rect.height - 0.5;
-        for (const layer of wrap.querySelectorAll<HTMLElement>('.layer')) {
-          const d = Number(layer.dataset.depth) || 0.5;
-          const img = layer.firstElementChild as HTMLElement | null;
-          if (img) gsap.to(img, { x: -dx * 18 * d, y: -dy * 12 * d, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
+        for (const f of followers) {
+          f.x(-dx * 18 * f.d);
+          f.y(-dy * 12 * f.d);
         }
       });
     },
@@ -133,6 +148,8 @@ function setupDepthStage(gsap: Gsap, signal: AbortSignal, stage: DepthStage): vo
   if (!finePointer()) return;
   const img = plate.querySelector<HTMLElement>('img');
   if (!img) return;
+  const toX = gsap.quickTo(img, 'x', { duration: 0.9, ease: 'power2.out' });
+  const toY = gsap.quickTo(img, 'y', { duration: 0.9, ease: 'power2.out' });
   let frame = 0;
   stage.area.addEventListener(
     'pointermove',
@@ -142,7 +159,8 @@ function setupDepthStage(gsap: Gsap, signal: AbortSignal, stage: DepthStage): vo
         frame = 0;
         const dx = event.clientX / window.innerWidth - 0.5;
         const dy = event.clientY / window.innerHeight - 0.5;
-        gsap.to(img, { x: -dx * 14, y: -dy * 10, duration: 0.9, ease: 'power2.out', overwrite: 'auto' });
+        toX(-dx * 14);
+        toY(-dy * 10);
       });
     },
     { passive: true, signal },

@@ -122,7 +122,6 @@ const { scenes, label } = Astro.props;
     /* The sources are 300–640 px wide: never grow a layer past its pixels. */
     width: min(var(--w), 40rem);
     max-width: none;
-    will-change: transform, filter;
   }
   :global(html.motion-ok) .stage-wrap.is-live .layer img { box-shadow: 0 1px 0 var(--color-line); }
   :global(html.motion-ok) .stage-wrap.is-live .scene-caption {

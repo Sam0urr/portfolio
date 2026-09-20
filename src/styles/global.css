@@ -235,11 +235,14 @@
   .lenis [data-lenis-prevent] { overscroll-behavior: contain; }
   .lenis.lenis-smooth iframe { pointer-events: none; }
 
+  /* Reduced motion: fewer and gentler, not none. Keyframes (all of them move things)
+     collapse; declared transitions keep their duration but may only touch colour or
+     opacity, so the theme crossfade and link/chip feedback survive while movement snaps. */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-property: color, background-color, border-color, text-decoration-color, opacity !important;
       scroll-behavior: auto !important;
     }
   }
@@ -1256,5 +1259,17 @@
   html.js.motion-ok:not(.reduced-motion) [data-reveal]:not(.is-revealed),
   html.js.motion-ok:not(.reduced-motion) [data-reveal-group] > :not(.is-revealed) {
     opacity: 0;
+  }
+
+  /* Notes filter: rows that (re)enter the list rise in; removed rows leave instantly.
+     The island adds .rows-live after mount, so server-rendered rows never animate on load. */
+  .rows-live > .row {
+    transition: opacity 150ms var(--ease), transform 150ms var(--ease);
+  }
+  @starting-style {
+    .rows-live > .row {
+      opacity: 0;
+      transform: translateY(4px);
+    }
   }
 }
