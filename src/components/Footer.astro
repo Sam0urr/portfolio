@@ -1,11 +1,12 @@
 ---
-import { NAV, SITE } from '../consts';
+import { BUILD_DATE, NAV, SITE } from '../consts';
+import { formatDate, toISODate } from '../scripts/format';
 
 /**
- * Footer: double rule, three mono xs columns (one under 640px) — colophon line,
- * the six routes, external links — then the set-in line with the year.
+ * Footer: double rule, three columns (one under 640px) — colophon line,
+ * the six routes, external links — then the set-in line with the build date and year.
  */
-const year = new Date().getFullYear();
+const year = BUILD_DATE.getFullYear();
 ---
 
 <footer class="site-footer" data-reveal>
@@ -24,8 +25,8 @@ const year = new Date().getFullYear();
           }
         </ul>
       </nav>
-      <p><a href={SITE.linkedin} rel="me">LinkedIn</a> · <a href={`mailto:${SITE.email}`}>Email</a> · <a href="/rss.xml">RSS</a> · <a href="/cv.pdf">CV (PDF)</a></p>
+      <p><a href={SITE.linkedin} rel="me">LinkedIn</a> · <a href={`mailto:${SITE.email}`}>Email</a> · <a href="/cv.pdf">CV (PDF)</a></p>
     </div>
-    <p class="footer-line">Set in Newsreader, Source Serif and IBM Plex Mono · © {year} · Built with <a href="https://astro.build/">Astro</a></p>
+    <p class="footer-line">Updated <time datetime={toISODate(BUILD_DATE)}>{formatDate(BUILD_DATE)}</time> · Set in Newsreader, Syne, Inter and IBM Plex Mono · © {year} · Built with <a href="https://astro.build/">Astro</a></p>
   </div>
 </footer>

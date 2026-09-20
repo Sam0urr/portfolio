@@ -18,6 +18,8 @@ interface Props {
   /** Article metadata for Open Graph (note pages). */
   published?: Date;
   updated?: Date;
+  /** Keep the page out of search engines (astro.config.mjs also drops it from the sitemap). */
+  noindex?: boolean;
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   progress = false,
   published,
   updated,
+  noindex = false,
 } = Astro.props;
 
 const site = Astro.site ?? new URL(SITE.url);
@@ -64,10 +67,12 @@ const pageTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
     <meta name="author" content={SITE.author} />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical.href} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <!-- Browser chrome colour: one per scheme for the first paint; ThemeToggle.astro then
+         keeps both in step with the Night/Day choice. -->
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14120f" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Notes`} href={new URL('rss.xml', site).href} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <meta property="og:type" content={type} />
@@ -86,6 +91,8 @@ const pageTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
     <meta name="twitter:image" content={ogImage.href} />
 
     <Font cssVariable="--font-display" preload={[{ subset: 'latin', style: 'normal' }]} />
+    <!-- The serif is on every page (wordmark) and in the home's first viewport (headline). -->
+    <Font cssVariable="--font-headline" preload={[{ subset: 'latin', style: 'normal' }]} />
     <Font cssVariable="--font-body" preload={[{ subset: 'latin', style: 'normal' }]} />
     <Font cssVariable="--font-mono" />
 

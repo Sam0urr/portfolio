@@ -1,0 +1,160 @@
+---
+/**
+ * Cinematic opening for a case study: one sticky stage, one scene per scroll
+ * viewport, each scene a few depth layers that enter, hold and exit under scroll
+ * (src/scripts/stages.ts). Without JS or under reduced motion the same markup is a
+ * plain stacked list of figures — nothing depends on the script to be readable.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface StageLayer {
+  src: ImageMetadata;
+  alt: string;
+  /** 0 = farthest back (moves least), 1 = nearest the reader (moves most). */
+  depth: number;
+  /** Position and width as a percentage of the stage. */
+  x: number;
+  y: number;
+  w: number;
+}
+
+export interface StageScene {
+  id: string;
+  title: string;
+  caption: string;
+  layers: StageLayer[];
+}
+
+interface Props {
+  scenes: StageScene[];
+  label: string;
+}
+
+const { scenes, label } = Astro.props;
+---
+
+<section class="stage-wrap" data-stage aria-label={label} style={`--scenes: ${scenes.length}`}>
+  <div class="stage">
+    {
+      scenes.map((scene, i) => (
+        <figure class="scene" data-scene={i} id={`scene-${scene.id}`}>
+          <div class="scene-layers">
+            {scene.layers.map((layer) => (
+              <div class="layer" data-depth={layer.depth} style={`--x: ${layer.x}%; --y: ${layer.y}%; --w: ${layer.w}%`}>
+                <Image
+                  src={layer.src}
+                  alt={layer.alt}
+                  width={layer.src.width}
+                  widths={[320, 640]}
+                  sizes="(max-width: 47.9375rem) 80vw, 40vw"
+                  format="webp"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </div>
+            ))}
+          </div>
+          <figcaption class="scene-caption">
+            <span class="kicker">
+              {String(i + 1).padStart(2, '0')} · {scene.title}
+            </span>
+            <p>{scene.caption}</p>
+          </figcaption>
+        </figure>
+      ))
+    }
+    <div class="stage-progress" aria-hidden="true"><span></span></div>
+  </div>
+</section>
+
+<style>
+  /* Static form (no JS, reduced motion, or before the script runs): a stacked list. */
+  .stage-wrap { margin: var(--space-10) 0 var(--space-12); }
+  .scene { margin: 0 0 var(--space-10); }
+  .scene-layers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+  .layer { flex: 1 1 14rem; max-width: 32rem; }
+  .layer img { display: block; width: 100%; height: auto; border: var(--rule); }
+  .scene-caption { margin-top: var(--space-3); max-width: var(--measure-prose); }
+  .scene-caption p {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-muted);
+  }
+  .stage-progress { display: none; }
+
+  /* Live form: the script adds .is-live once the timeline exists. */
+  :global(html.motion-ok) .stage-wrap.is-live {
+    height: calc(var(--scenes) * 100vh + 40vh);
+    margin-block: var(--space-6) var(--space-12);
+  }
+  :global(html.motion-ok) .stage-wrap.is-live .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    border-block: var(--rule);
+  }
+  :global(html.motion-ok) .stage-wrap.is-live .scene {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+  :global(html.motion-ok) .stage-wrap.is-live .scene-layers {
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+  :global(html.motion-ok) .stage-wrap.is-live .layer {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    /* The sources are 300–640 px wide: never grow a layer past its pixels. */
+    width: min(var(--w), 40rem);
+    max-width: none;
+  }
+  :global(html.motion-ok) .stage-wrap.is-live .layer img { box-shadow: 0 1px 0 var(--color-line); }
+  :global(html.motion-ok) .stage-wrap.is-live .scene-caption {
+    position: absolute;
+    left: var(--space-6);
+    bottom: var(--space-8);
+    max-width: 26rem;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-paper);
+    border: var(--rule);
+  }
+  :global(html.motion-ok) .stage-wrap.is-live .stage-progress {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--color-line);
+  }
+  :global(html.motion-ok) .stage-wrap.is-live .stage-progress span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--color-accent);
+  }
+  @media (max-width: 47.9375rem) {
+    :global(html.motion-ok) .stage-wrap.is-live .layer { width: calc(var(--w) * 1.35); }
+    :global(html.motion-ok) .stage-wrap.is-live .scene-caption {
+      left: var(--space-4);
+      right: var(--space-4);
+      bottom: var(--space-6);
+      max-width: none;
+    }
+  }
+</style>

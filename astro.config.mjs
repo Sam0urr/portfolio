@@ -14,64 +14,68 @@ export default defineConfig({
   // One stylesheet for the whole site (~8 KB gz): inlined so no render-blocking request precedes first paint.
   build: { format: 'directory', inlineStylesheets: 'always' },
 
-  integrations: [mdx(), react(), sitemap()],
+  integrations: [
+    mdx(),
+    react(),
+    // /publications/ stays reachable but unlisted (and noindex) until its entries are real.
+    sitemap({ filter: (page) => !page.endsWith('/publications/') }),
+  ],
 
   redirects: {
     '/notes/brexit-lobbying-transparency/': '/notes/lobbying-after-brexit/',
     '/analysis/': '/notes/',
   },
 
-  // Fonts API. Google serves variable fonts with only the requested axes, so the
-  // optical-size axis is requested explicitly (unifont's experimental `variableAxis`);
-  // the served files keep `opsz` and `font-optical-sizing: auto` does the rest.
+  // Fonts API. Google serves variable fonts with only the requested axes, so Inter's
+  // optical-size axis is requested explicitly (unifont's experimental `variableAxis`).
+  // Syne has no italic and no opsz: emphasis inside display text is carried by weight.
   fonts: [
     {
-      // Display — wordmark (500), headings, pull quotes.
-      name: 'Newsreader',
+      // Display — wordmark (500), headings, note titles, ledes; 700 for the hero emphasis.
+      name: 'Syne',
       cssVariable: '--font-display',
       provider: fontProviders.google(),
-      weights: ['400 500'],
+      weights: ['400 800'],
       styles: ['normal'],
-      subsets,
-      fallbacks: ['Iowan Old Style', 'Palatino', 'Georgia', 'serif'],
+      subsets: ['latin'],
+      fallbacks: ['Avenir Next', 'Helvetica Neue', 'Arial', 'sans-serif'],
       optimizedFallbacks: true,
-      options: { experimental: { variableAxis: { opsz: [['6', '72']] } } },
     },
     {
-      // Display italic — ledes, blockquotes, the headline's italic phrase.
+      // Home headline only — the serif with its italic phrase, kept from the first edition.
       name: 'Newsreader',
-      cssVariable: '--font-display',
+      cssVariable: '--font-headline',
       provider: fontProviders.google(),
       weights: [400],
-      styles: ['italic'],
-      subsets,
+      styles: ['normal', 'italic'],
+      subsets: ['latin'],
       fallbacks: ['Iowan Old Style', 'Palatino', 'Georgia', 'serif'],
       optimizedFallbacks: true,
       options: { experimental: { variableAxis: { opsz: [['6', '72']] } } },
     },
     {
       // Body — all prose; the 400–600 range covers <strong> (600).
-      name: 'Source Serif 4',
+      name: 'Inter',
       cssVariable: '--font-body',
       provider: fontProviders.google(),
       weights: ['400 600'],
       styles: ['normal'],
       subsets,
-      fallbacks: ['Charter', 'Iowan Old Style', 'Georgia', 'serif'],
+      fallbacks: ['Helvetica Neue', 'Arial', 'sans-serif'],
       optimizedFallbacks: true,
-      options: { experimental: { variableAxis: { opsz: [['8', '60']] } } },
+      options: { experimental: { variableAxis: { opsz: [['14', '32']] } } },
     },
     {
-      // Body italic — 400 only.
-      name: 'Source Serif 4',
+      // Body italic — 400 only (blockquotes, <em>).
+      name: 'Inter',
       cssVariable: '--font-body',
       provider: fontProviders.google(),
       weights: [400],
       styles: ['italic'],
       subsets,
-      fallbacks: ['Charter', 'Iowan Old Style', 'Georgia', 'serif'],
+      fallbacks: ['Helvetica Neue', 'Arial', 'sans-serif'],
       optimizedFallbacks: true,
-      options: { experimental: { variableAxis: { opsz: [['8', '60']] } } },
+      options: { experimental: { variableAxis: { opsz: [['14', '32']] } } },
     },
     {
       // Meta — nav, kickers, dates, bylines, chips, captions, footer (500 = uppercase labels).

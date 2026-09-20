@@ -8,6 +8,8 @@ const { Content, headings } = await render(entry);
 const description = entry.data.summary ?? 'Selected publications, reports and commentary by Sam Lamrabte.';
 ---
 
-<Page title={entry.data.title} description={description} kicker={entry.data.kicker} lede={entry.data.summary} headings={headings}>
+{/* The entries are still placeholders: the URL stays (it is part of the site contract) but the
+    page is noindex here and left out of the sitemap in astro.config.mjs until they are real. */}
+<Page title={entry.data.title} description={description} kicker={entry.data.kicker} lede={entry.data.summary} headings={headings} noindex>
   <Content />
 </Page>

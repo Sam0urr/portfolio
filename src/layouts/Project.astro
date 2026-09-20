@@ -8,6 +8,7 @@
 import type { CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
 import Prose from '../components/Prose.astro';
+import ProjectStage, { type StageScene } from '../components/ProjectStage.astro';
 
 interface Fact {
   term: string;
@@ -19,9 +20,11 @@ interface Props {
   /** Fact-row cells (Location · Year · Role · Method); the page passes what it knows. */
   facts?: Fact[];
   kicker?: string;
+  /** Optional cinematic opening (scroll-driven scenes) shown before the body. */
+  stage?: StageScene[];
 }
 
-const { entry, facts = [], kicker = 'Project' } = Astro.props;
+const { entry, facts = [], kicker = 'Project', stage } = Astro.props;
 const { title, summary } = entry.data;
 ---
 
@@ -44,6 +47,7 @@ const { title, summary } = entry.data;
         )
       }
     </header>
+    {stage && stage.length > 0 && <ProjectStage scenes={stage} label={`${title} — in pictures`} />}
     <Prose variant="project">
       <slot />
     </Prose>

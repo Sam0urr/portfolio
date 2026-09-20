@@ -3,7 +3,7 @@ import { formatDate, toISODate } from '../scripts/format';
 
 /**
  * One note as a hairline row (server-rendered): mono date + read time column,
- * Newsreader title linking to /notes/<slug>/, summary, muted tags.
+ * Display-face title linking to /notes/<slug>/, summary, muted tags.
  * Put rows inside <ul class="rows" data-reveal-group> (or <div class="rows">).
  */
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
   tags: string[];
   /** Minutes; rendered as "· 9 min" after the date. */
   readingTime?: number;
-  /** Heading level for the title (h3 by default; h2 on the Notes index). */
+  /** Heading level for the title: h3 under a "§ n" section head (default), h2 otherwise. */
   as?: 'h2' | 'h3';
   /** Render as <li> (inside <ul class="rows">) or <article>. */
   tag?: 'li' | 'article';
@@ -38,7 +38,17 @@ const href = `/notes/${slug}/`;
 <Tag class:list={['row', className]}>
   <div class="row-meta">
     <time datetime={toISODate(date)}>{formatDate(date)}</time>
-    {readingTime ? <span> · {readingTime} min</span> : null}
+    <!-- Separator inline under 768px, hidden from 768px where the read time takes its own line. -->
+    {
+      readingTime ? (
+        <span class="row-meta-time">
+          <span class="row-meta-sep" aria-hidden="true">
+            {' · '}
+          </span>
+          {readingTime} min
+        </span>
+      ) : null
+    }
   </div>
   <div class="row-body">
     <Heading class="row-title"><a href={href}>{title}</a></Heading>

@@ -19,7 +19,7 @@ import { join, resolve, sep } from 'node:path';
 import process from 'node:process';
 
 const DIST = resolve(process.cwd(), 'dist');
-const LIVE_SITEMAP = process.env.LIVE_SITEMAP ?? 'https://samlamrabte.com/sitemap.xml';
+const LIVE_SITEMAP = process.env.LIVE_SITEMAP ?? 'https://samlamrabte.com/sitemap-index.xml';
 
 const CONTRACT_PAGES = [
   '/',
@@ -39,7 +39,6 @@ const CONTRACT_PAGES = [
   '/publications/',
 ];
 const CONTRACT_FILES = [
-  'rss.xml',
   'sitemap-index.xml',
   'robots.txt',
   'CNAME',

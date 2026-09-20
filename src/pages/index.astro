@@ -10,8 +10,8 @@ import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import profile from '../assets/profile.jpg';
 import NoteCardStatic from '../components/NoteCardStatic.astro';
-import { BUILD_DATE, SITE } from '../consts';
-import { formatDate, readingTime, toISODate } from '../scripts/format';
+import { SITE } from '../consts';
+import { readingTime } from '../scripts/format';
 
 const recent = (await getCollection('notes', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -19,14 +19,9 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 ---
 
 <Base title={SITE.homeTitle} description={SITE.description}>
-  <p class="dateline home-dateline">
-    <span class="home-dateline-text">
-      <span>{SITE.dateline}</span>
-      <span>Updated <time datetime={toISODate(BUILD_DATE)}>{formatDate(BUILD_DATE)}</time></span>
-    </span>
-  </p>
+  <p class="dateline">{SITE.dateline}</p>
 
-  <section class="hero home-hero" aria-labelledby="hero-headline">
+  <section class="hero home-hero" aria-labelledby="hero-headline" data-hero-stage>
     <div class="hero-text">
       <span class="kicker" data-load-reveal style="--i: 0">Sam Lamrabte · Political economist &amp; analyst</span>
       <h1 id="hero-headline" class="hero-headline" data-load-reveal style="--i: 1">
@@ -34,7 +29,7 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
       </h1>
     </div>
     <div class="hero-aside" data-load-reveal style="--i: 2">
-      <figure class="plate hero-plate" data-parallax>
+      <figure class="plate hero-plate">
         <Picture
           class="no-dim"
           src={profile}
@@ -114,27 +109,12 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 </Base>
 
 <style>
-  /* The hero sits 2rem under the dateline; the plate is pulled up 4rem so it crosses
-     the rule by a full 2rem (the one grid break) while the kicker stays clear of it. */
+  /* The hero sits 2rem under the dateline; the plate starts level with the kicker. */
   .home-hero { padding-top: var(--space-8); }
-  .home-hero .hero-plate { margin-top: calc(-1 * var(--space-16)); }
+  .home-hero .hero-plate { margin-top: 0; border: 0; }
+  /* The headline keeps the first edition's serif and its italic phrase. */
+  .hero-headline { font-family: var(--font-headline); font-weight: 400; letter-spacing: -0.015em; }
   .hero-headline em { font-style: italic; }
-
-  /* The plate breaks the rule over cols 9–12, so the dateline's text keeps to the
-     headline's cols 1–8 on the same grid: "Updated …" ends where the plate begins. */
-  .home-dateline {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--space-6);
-  }
-  .home-dateline-text {
-    grid-column: 1 / span 8;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: var(--space-2) var(--space-6);
-    min-width: 0;
-  }
 
   .intro { margin-top: var(--space-16); }
   .intro .lede { max-width: var(--measure-wide); }
@@ -145,7 +125,6 @@ const recent = (await getCollection('notes', ({ data }) => !data.draft))
 
   @media (max-width: 63.9375rem) {
     .home-hero .hero-plate { margin-top: 0; }
-    .home-dateline-text { grid-column: 1 / -1; }
   }
   @media (max-width: 47.9375rem) {
     .intro { margin-top: var(--space-12); }
