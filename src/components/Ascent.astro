@@ -1,0 +1,248 @@
+---
+/**
+ * The Ascent: the About page's experience section as a vertical governance-altitude
+ * axis. Stations descend from global to private sector, one rung per level, so the
+ * column reads top-down as reverse-chronological by start date and, as height, as an
+ * ascent through the stack. Each station is a native <details>: the top one arrives
+ * open, the rest disclose their paragraph on click. No script, so it survives the
+ * view-transition router untouched; hover and open states are CSS.
+ *
+ * Markup: <ol> of stations. Each is a mono altitude label on the axis, then a <details>
+ * whose <summary> carries organisation (with the +/− glyph attached to its last word),
+ * role and period, and whose body holds the paragraph and, where one exists, an output
+ * link ("Global Affairs Unpacked →"). Two stations on one rung share a printed label:
+ * the second keeps it for screen readers only, so the axis still shows four rungs.
+ * Below 64rem the label sits above the summary, the axis on the column's left edge and
+ * the text at the indent the bullet list used to have. From 64rem the section takes the
+ * wide measure (the right edge .prose-cv and the contents row use) so the labels can
+ * hold a right-aligned column beside the axis, as the site's .row idiom does, and the
+ * station text keeps the prose measure to the right of it.
+ */
+import { stations } from '../data/experience';
+---
+
+<ol class="ascent" role="list" aria-label="Experience, by level of governance">
+  {
+    stations.map((s, i) => (
+      <li class="ascent-station" data-altitude={s.altitude}>
+        <span class:list={['kicker', 'ascent-altitude', { 'ascent-altitude-repeat': i > 0 && stations[i - 1].altitude === s.altitude }]}>
+          {s.label}
+        </span>
+        <details class="ascent-details" open={i === 0}>
+          <summary class="ascent-summary">
+            <span class="ascent-org">{s.org}<span class="ascent-glyph" aria-hidden="true" /></span>
+            <span class="meta ascent-meta">
+              <span class="ascent-role">{s.role}</span>{' '}
+              <span class="ascent-period">· {s.period}</span>
+            </span>
+          </summary>
+          <div class="ascent-content">
+            <p class="ascent-body">{s.body}</p>
+            {s.output && (
+              <a class="ui-link ascent-link" href={s.output.href}>
+                {s.output.label} →
+              </a>
+            )}
+          </div>
+        </details>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .ascent {
+    /* Node diameter; the axis hairline runs through its centre. */
+    --node: 0.5rem;
+    /* Axis x from the station's left edge: the node's left edge sits on the column edge. */
+    --axis: calc(var(--node) / 2);
+    /* Node centre from the station's top: the middle of the label's line box. */
+    --node-y: calc(var(--text-xs) * 1.5 / 2);
+    clear: both;
+    margin: var(--space-6) 0 var(--space-12);
+    padding: 0;
+    list-style: none;
+  }
+
+  .ascent-station {
+    position: relative;
+    margin: 0;
+    padding: 0 0 var(--space-8) 1.25em;
+  }
+  .ascent-station:last-child { padding-bottom: 0; }
+
+  /* The axis: one hairline per station, joined end to end. It starts at the first node
+     and ends at the last, so the column is a segment, not an infinite line. */
+  .ascent-station::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--axis) - 0.5px);
+    width: 1px;
+    background: var(--color-line);
+  }
+  .ascent-station:first-child::after { top: var(--node-y); }
+  .ascent-station:last-child::after { bottom: auto; height: var(--node-y); }
+
+  /* The node: muted at rest (as on the journey-arc strip below), ink under the pointer
+     while closed, the one accent wherever a station is open. It paints over the hairline. */
+  .ascent-station::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--node-y) - var(--node) / 2);
+    left: calc(var(--axis) - var(--node) / 2);
+    width: var(--node);
+    height: var(--node);
+    border-radius: 50%;
+    background: var(--color-muted);
+    transition: background-color 150ms var(--ease), transform 150ms var(--ease);
+  }
+  .ascent-station:has(> .ascent-details:not([open]) > .ascent-summary:hover)::before,
+  .ascent-station:has(> .ascent-details:not([open]) > .ascent-summary:focus-visible)::before {
+    background: var(--color-ink);
+    transform: scale(1.25);
+  }
+  .ascent-station:has(> .ascent-details[open] > .ascent-summary)::before {
+    background: var(--color-accent);
+    transform: scale(1.25);
+  }
+
+  /* Altitude label: the site's .kicker voice, never hyphenated. */
+  .ascent-altitude {
+    hyphens: manual;
+    -webkit-hyphens: manual;
+  }
+  /* A repeated altitude (two roles on one rung) prints once: the second station keeps
+     the label for assistive tech, sits a step closer to the first, and puts its node on
+     the organisation line, which is now its top line. */
+  .ascent-altitude-repeat {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .ascent-station:has(> .ascent-altitude-repeat) { --node-y: calc(var(--text-base) * 1.35 / 2); }
+  .ascent-station:has(+ .ascent-station > .ascent-altitude-repeat) { padding-bottom: var(--space-6); }
+
+  .ascent-details { margin-top: var(--space-1); }
+  .ascent-station:has(> .ascent-altitude-repeat) > .ascent-details { margin-top: 0; }
+
+  /* Summary: organisation over the mono role · period line. The native marker is
+     replaced, not removed: a "+" hangs off the organisation's last word ("more" in every
+     language the page is read in) and becomes "−" when the station is open. The glyph is
+     an empty aria-hidden span so no browser reads it out and none needs the alt-text
+     syntax for generated content. */
+  .ascent-summary {
+    display: block;
+    cursor: pointer;
+    list-style: none;
+    hyphens: manual;
+    -webkit-hyphens: manual;
+  }
+  .ascent-summary::-webkit-details-marker { display: none; }
+
+  .ascent-org {
+    display: block;
+    font-weight: 600;
+    font-size: var(--text-base);
+    line-height: 1.35;
+    color: var(--color-ink);
+    text-wrap: pretty;
+  }
+  .ascent-glyph {
+    display: inline-block;
+    margin-left: 0.5em;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-muted);
+    transition: color 150ms var(--ease);
+  }
+  .ascent-glyph::before { content: "+"; }
+  .ascent-details[open] .ascent-glyph::before { content: "−"; }
+  .ascent-summary:hover .ascent-glyph { color: var(--color-ink); }
+
+  .ascent-meta {
+    display: block;
+    margin-top: var(--space-1);
+  }
+  /* The period moves as one unit when the line wraps, so "·" never ends a line. */
+  .ascent-period { white-space: nowrap; }
+
+  /* Body: the paragraph the bullet used to carry, at the prose size. */
+  .ascent-content {
+    margin-top: var(--space-3);
+    padding-bottom: var(--space-2);
+  }
+  .ascent-body {
+    margin: 0;
+    line-height: 1.55;
+  }
+  .ascent-link {
+    display: inline-block;
+    margin-top: var(--space-3);
+  }
+
+  /* The one authored moment: the panel eases open and shut where the browser can
+     interpolate to auto (Chrome 131+); elsewhere it snaps. The clip box is widened by
+     half a step on the left and the content padded back, so the output link's focus
+     ring is never cut. */
+  .ascent-details { interpolate-size: allow-keywords; }
+  .ascent-details::details-content {
+    block-size: 0;
+    overflow: clip;
+    margin-inline-start: calc(-1 * var(--space-2));
+    padding-inline-start: var(--space-2);
+    transition: block-size 220ms var(--ease), content-visibility 220ms allow-discrete;
+  }
+  .ascent-details[open]::details-content { block-size: auto; }
+  /* The site's reduced-motion rule reaches every element and ::before/::after, but not
+     this pseudo-element, so it is switched off here. */
+  @media (prefers-reduced-motion: reduce) {
+    .ascent-details::details-content { transition: none; }
+  }
+
+  /* From 64rem: labels right-aligned in a column wide enough for the longest one, the
+     axis down the middle of the house row gap, the text at the prose measure. The block
+     grows rightwards to the wide measure, as .prose-cv and the contents row do. */
+  @media (min-width: 64rem) {
+    .ascent {
+      --col: 10.5rem;
+      --gap: var(--space-6);
+      --axis: calc(var(--col) + var(--gap) / 2);
+      /* Node centre on the organisation's first line, which the label shares. */
+      --node-y: calc(var(--text-base) * 1.35 / 2);
+      width: var(--measure-wide);
+      max-width: none;
+    }
+    .ascent-station {
+      display: grid;
+      grid-template-columns: var(--col) minmax(0, 1fr);
+      column-gap: var(--gap);
+      align-items: baseline;
+      padding-left: 0;
+    }
+    .ascent-altitude { text-align: right; }
+    .ascent-details {
+      grid-column: 2;
+      margin-top: 0;
+    }
+  }
+
+  @media print {
+    .ascent { width: auto; }
+    .ascent-station::before,
+    .ascent-station::after,
+    .ascent-glyph { display: none; }
+    .ascent-station { break-inside: avoid; }
+    /* Open every station on paper where the browser lets a stylesheet do it. */
+    .ascent-details::details-content {
+      content-visibility: visible;
+      block-size: auto;
+    }
+  }
+</style>
