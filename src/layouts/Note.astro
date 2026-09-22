@@ -54,7 +54,7 @@ const tagHref = (tag: string) => `/notes/?tags=${encodeURIComponent(tag)}`;
           </ul>
         )
       }
-      <h1 class="note-title" data-load-reveal="rise" style="--i: 1">{title}</h1>
+      <h1 class="note-title" data-load-reveal style="--i: 1">{title}</h1>
       {summary && <p class="lede note-lede" data-load-reveal style="--i: 2">{summary}</p>}
       <p class="byline note-byline" data-load-reveal style="--i: 3">
         By {SITE.author} · <time datetime={dateISO}>{formatDate(date)}</time>

@@ -28,21 +28,10 @@ export default defineConfig({
 
   // Fonts API. Google serves variable fonts with only the requested axes, so Inter's
   // optical-size axis is requested explicitly (unifont's experimental `variableAxis`).
-  // Syne has no italic and no opsz: emphasis inside display text is carried by weight.
   fonts: [
     {
-      // Display — wordmark (500), headings, note titles, ledes; 700 for the hero emphasis.
-      name: 'Syne',
-      cssVariable: '--font-display',
-      provider: fontProviders.google(),
-      weights: ['400 800'],
-      styles: ['normal'],
-      subsets: ['latin'],
-      fallbacks: ['Avenir Next', 'Helvetica Neue', 'Arial', 'sans-serif'],
-      optimizedFallbacks: true,
-    },
-    {
-      // Home headline only — the serif with its italic phrase, kept from the first edition.
+      // Display — wordmark, page titles, headings, ledes and the home headline, whose
+      // italic phrase is the real italic.
       name: 'Newsreader',
       cssVariable: '--font-headline',
       provider: fontProviders.google(),
