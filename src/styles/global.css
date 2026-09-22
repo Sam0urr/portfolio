@@ -1281,6 +1281,13 @@
   html.js.motion-ok:not(.reduced-motion) [data-reveal-group] > :not(.is-revealed) {
     opacity: 0;
   }
+  /* Entry titles (Page.astro `revealHeadings`): the ones on screen at load rise in after
+     the header, staggered; the rest are scroll reveals owned by motion.ts. */
+  html.js.motion-ok:not(.reduced-motion) .reveal-headings h2:not(.is-revealed) { opacity: 0; }
+  .reveal-headings h2 { animation: reveal-up 600ms var(--ease) both; animation-delay: 420ms; }
+  .reveal-headings h2:nth-of-type(2) { animation-delay: 510ms; }
+  .reveal-headings h2:nth-of-type(3) { animation-delay: 600ms; }
+  .reveal-headings h2:nth-of-type(n + 4) { animation-delay: 690ms; }
 
   /* Notes filter: rows that (re)enter the list rise in; removed rows leave instantly.
      The island adds .rows-live after mount, so server-rendered rows never animate on load. */

@@ -24,9 +24,11 @@ interface Props {
   count?: string;
   /** Keep the page out of search engines (see Base). */
   noindex?: boolean;
+  /** Entry titles (h2) rise in with the header and reveal on scroll (Projects, References). */
+  revealHeadings?: boolean;
 }
 
-const { title, description, kicker, lede, headings = [], variant = 'page', count, noindex = false } = Astro.props;
+const { title, description, kicker, lede, headings = [], variant = 'page', count, noindex = false, revealHeadings = false } = Astro.props;
 const sections = headings.filter((heading) => heading.depth === 2);
 const showContents = sections.length >= 4;
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -52,7 +54,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     )
   }
   <slot name="before" />
-  <Prose variant={variant}>
+  <Prose variant={variant} class={revealHeadings ? 'reveal-headings' : undefined}>
     <slot />
   </Prose>
   <slot name="after" />
