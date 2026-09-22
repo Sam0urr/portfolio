@@ -300,6 +300,12 @@ function collectRevealTargets(): RevealTarget[] {
     targets.push({ el, delay: parseDelay(el.dataset.revealDelay) });
     seen.add(el);
   }
+  // Entry titles on pages that opt in (Page.astro `revealHeadings`): each h2 is a target.
+  for (const el of document.querySelectorAll<HTMLElement>('.reveal-headings h2')) {
+    if (seen.has(el)) continue;
+    targets.push({ el, delay: 0 });
+    seen.add(el);
+  }
   for (const group of document.querySelectorAll<HTMLElement>('[data-reveal-group]')) {
     const base = parseDelay(group.dataset.revealDelay);
     Array.from(group.children).forEach((child, index) => {
@@ -376,7 +382,7 @@ function setupParallax(gsap: Gsap, ScrollTrigger: ScrollTriggerStatic): void {
 }
 
 function revealEverything(): void {
-  const selector = '[data-reveal], [data-reveal-group] > *';
+  const selector = '[data-reveal], [data-reveal-group] > *, .reveal-headings h2';
   for (const el of document.querySelectorAll<HTMLElement>(selector)) {
     el.classList.add('is-revealed');
     el.style.opacity = '';

@@ -90,8 +90,7 @@ const pageTitle = title.includes(SITE.name) ? title : `${title} — ${SITE.name}
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage.href} />
 
-    <Font cssVariable="--font-display" preload={[{ subset: 'latin', style: 'normal' }]} />
-    <!-- The serif is on every page (wordmark) and in the home's first viewport (headline). -->
+    <!-- The serif is on every page: wordmark, title and headings. -->
     <Font cssVariable="--font-headline" preload={[{ subset: 'latin', style: 'normal' }]} />
     <Font cssVariable="--font-body" preload={[{ subset: 'latin', style: 'normal' }]} />
     <Font cssVariable="--font-mono" />

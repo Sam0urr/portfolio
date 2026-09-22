@@ -15,10 +15,9 @@
  *   - Module scripts run once per document load, so motion is torn down on
  *     `astro:before-swap` and re-initialised on `astro:page-load` (idempotent: a second
  *     call while a motion session exists is a no-op).
- *   - [data-load-reveal] / .rule-draw keyframes are for the first paint; on a client
- *     navigation they would double up with the cross-fade. `html.client-nav` (set on the
- *     incoming document) turns them off; the class stays for the document's life because
- *     removing it would start those keyframes late.
+ *   - .rule-draw (the masthead rule) draws on the first paint only: the masthead persists
+ *     across client navigations, so `html.client-nav` (set on the incoming document) keeps it
+ *     from redrawing; load reveals do play again. The class stays for the document's life.
  */
 import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
 import { initMotion, teardownMotion } from './motion';
