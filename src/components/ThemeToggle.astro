@@ -36,7 +36,7 @@
   // The accessible name contains the visible word (CSS ::before, see global.css).
   const label = (theme: Theme) => (theme === 'dark' ? 'Day theme' : 'Night theme');
   // Paper colours from global.css; the browser chrome follows the choice, not the OS.
-  const PAPER: Record<Theme, string> = { light: '#ffffff', dark: '#14120f' };
+  const PAPER: Record<Theme, string> = { light: '#fdfcfa', dark: '#14120f' };
   const apply = (theme: Theme) => {
     root.setAttribute('data-theme', theme);
     for (const button of buttons()) button.setAttribute('aria-label', label(theme));

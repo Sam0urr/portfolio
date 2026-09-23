@@ -68,14 +68,15 @@ export default defineConfig({
     },
     {
       // Meta — nav, kickers, dates, bylines, chips, captions, footer (500 = uppercase labels).
-      name: 'IBM Plex Mono',
+      name: 'Inter',
       cssVariable: '--font-mono',
       provider: fontProviders.google(),
       weights: [400, 500],
       styles: ['normal'],
       subsets,
-      fallbacks: ['SF Mono', 'Menlo', 'Consolas', 'monospace'],
+      fallbacks: ['Helvetica Neue', 'Arial', 'sans-serif'],
       optimizedFallbacks: true,
+      options: { experimental: { variableAxis: { opsz: [['14', '32']] } } },
     },
   ],
 

@@ -21,7 +21,7 @@
   --radius-*: initial;
 
   /* Colour — light: white page, warm ink and hairlines (dark values are redefined below). */
-  --color-paper: #ffffff;
+  --color-paper: #fdfcfa;
   --color-ink: #1c1915;
   --color-muted: #5f584e;
   --color-line: #d8d0c2;
@@ -38,7 +38,7 @@
   --font-headline--font-feature-settings: "kern", "liga", "onum";
   --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
   --font-body--font-feature-settings: "kern", "liga", "calt";
-  --font-mono: "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+  --font-mono: "Inter", "Helvetica Neue", Arial, sans-serif;
   --font-mono--font-feature-settings: "lnum", "tnum";
   --default-font-family: var(--font-body);
   --default-mono-font-family: var(--font-mono);
@@ -56,6 +56,7 @@
   --text-lg--line-height: 1.3;
   --text-xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem); /* h2, page h1 */
   --text-xl--line-height: 1.2;
+  --text-xl--letter-spacing: -0.01em;
   --text-2xl: clamp(2.25rem, 1.6rem + 3vw, 3.5rem); /* note h1 */
   --text-2xl--line-height: 1.1;
   --text-2xl--letter-spacing: -0.015em;
@@ -373,7 +374,13 @@
      held, 100ms out, and snaps back on release. Inline prose links are left alone. */
   .nav-link:active,
   .theme-toggle:active,
-  .chip:active {
+  .chip:active,
+  .wordmark:active,
+  .ui-link:active,
+  .download:active,
+  .cv-download:active,
+  .row-title a:active,
+  .pager-title:active {
     transform: scale(0.97);
     transition: transform 100ms ease-out;
   }
@@ -456,12 +463,13 @@
   .theme-toggle-word::before,
   .theme-toggle-word::after {
     grid-area: 1 / 1;
-    transition: opacity 200ms var(--ease);
+    transform: translateY(0);
+    transition: opacity 200ms var(--ease), transform 200ms var(--ease);
   }
   .theme-toggle-word::before { content: "Night"; }
-  .theme-toggle-word::after { content: "Day"; opacity: 0; }
-  [data-theme="dark"] .theme-toggle-word::before { opacity: 0; }
-  [data-theme="dark"] .theme-toggle-word::after { opacity: 1; }
+  .theme-toggle-word::after { content: "Day"; opacity: 0; transform: translateY(2px); }
+  [data-theme="dark"] .theme-toggle-word::before { opacity: 0; transform: translateY(2px); }
+  [data-theme="dark"] .theme-toggle-word::after { opacity: 1; transform: translateY(0); }
   html:not(.js) .theme-toggle { display: none; }
 
   /* Reading progress: the band's lower hairline filling with oxblood (scaled by motion.ts). */
