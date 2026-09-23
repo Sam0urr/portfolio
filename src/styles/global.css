@@ -393,7 +393,8 @@
     border-bottom: var(--rule);
   }
   .wordmark {
-    font-family: var(--font-headline);
+    /* The 500 subset first; --font-headline (400) catches any glyph outside it. */
+    font-family: var(--font-wordmark), var(--font-headline);
     font-size: var(--text-md);
     font-weight: 500;
     line-height: 1.3;
